@@ -117,20 +117,20 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXE_OUTPUTS += \
-can.out \
+test_can.out \
 
 EXE_OUTPUTS__QUOTED += \
-"can.out" \
+"test_can.out" \
 
 
 # All Target
-all: can.out
+all: test_can.out
 
 # Tool invocations
-can.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
+test_can.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: ARM Linker'
-	"c:/ti/ccsv6/tools/compiler/arm_5.1.11/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 --abi=eabi -me -O2 -g --gcc --define=ccs="ccs" --define=PART_TM4C123GH6PGE --define=TARGET_IS_TM4C123_RB1 --diag_warning=225 --display_error_number --diag_wrap=off --gen_func_subsections=on --ual -z --stack_size=512 -m"can_ccs.map" --heap_size=0 -i"c:/ti/ccsv6/tools/compiler/arm_5.1.11/lib" -i"c:/ti/ccsv6/tools/compiler/arm_5.1.11/include" --reread_libs --warn_sections --display_error_number --diag_wrap=off --xml_link_info="can_linkInfo.xml" --rom_model -o "can.out" $(ORDERED_OBJS)
+	"c:/ti/ccsv6/tools/compiler/arm_5.1.11/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 --abi=eabi -me -O2 -g --gcc --define=ccs="ccs" --define=PART_TM4C123GH6PGE --define=TARGET_IS_TM4C123_RB1 --diag_warning=225 --display_error_number --diag_wrap=off --gen_func_subsections=on --ual -z --stack_size=512 -m"can_ccs.map" --heap_size=0 -i"c:/ti/ccsv6/tools/compiler/arm_5.1.11/lib" -i"c:/ti/ccsv6/tools/compiler/arm_5.1.11/include" --reread_libs --warn_sections --display_error_number --diag_wrap=off --xml_link_info="test_can_linkInfo.xml" --rom_model -o "test_can.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	@$(MAKE) --no-print-directory post-build
@@ -144,7 +144,7 @@ clean:
 	-@echo ' '
 
 post-build:
-	-"c:/ti/ccsv6/utils/tiobj2bin/tiobj2bin" "can.out" "can.bin" "c:/ti/ccsv6/tools/compiler/arm_5.1.11/bin/armofd" "c:/ti/ccsv6/tools/compiler/arm_5.1.11/bin/armhex" "c:/ti/ccsv6/utils/tiobj2bin/mkhex4bin"
+	-"c:/ti/ccsv6/utils/tiobj2bin/tiobj2bin" "test_can.out" "test_can.bin" "c:/ti/ccsv6/tools/compiler/arm_5.1.11/bin/armofd" "c:/ti/ccsv6/tools/compiler/arm_5.1.11/bin/armhex" "c:/ti/ccsv6/utils/tiobj2bin/mkhex4bin"
 	-@echo ' '
 
 .PHONY: all clean dependents
