@@ -1,0 +1,22 @@
+PROJECT_NAME := $(notdir $(USER_PROJECT))
+
+"${CCE_INSTALL_ROOT}/utils/tiobj2bin/tiobj2bin" "${BuildArtifactFileName}" "${BuildArtifactFileBaseName}.bin" "${CG_TOOL_ROOT}/bin/armofd" "${CG_TOOL_ROOT}/bin/armhex" "${CCE_INSTALL_ROOT}/utils/tiobj2bin/mkhex4bin"
+
+"${CG_TOOL_ROOT}/include"
+"${SW_ROOT}/examples/boards/ek-tm4c123gxl"
+"${SW_ROOT}"
+
+"libc.a"
+"${SW_ROOT}/driverlib/ccs/Debug/driverlib.lib"
+"${SW_ROOT}/usblib/ccs/Debug/usblib.lib"
+
+"${CG_TOOL_ROOT}/lib"
+"${CG_TOOL_ROOT}/include"
+
+ccs="ccs"
+PART_TM4C123GH6PM
+TARGET_IS_TM4C123_RB1
+UART_BUFFERED
+
+-mv7M4 --code_state=16 --float_support=FPv4SPD16 --abi=eabi -me -O2 -g --gcc --define=ccs="ccs" --define=PART_TM4C123GH6PM --define=TARGET_IS_TM4C123_RB1 --define=UART_BUFFERED --diag_warning=225 --display_error_number --diag_wrap=off --gen_func_subsections=on --ual -z --stack_size=2048 -m"qs-rgb_ccs.map" --heap_size=0 -i"c:/ti/ccsv6/tools/compiler/arm_5.1.11/lib" -i"c:/ti/ccsv6/tools/compiler/arm_5.1.11/include" --reread_libs --warn_sections --display_error_number --diag_wrap=off --xml_link_info="stepper_drv8711_linkInfo.xml" --rom_model
+

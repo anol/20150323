@@ -1,0 +1,656 @@
+******************************************************************************
+                  TI ARM Linker PC v5.1.11                     
+******************************************************************************
+>> Linked Mon Mar 23 14:49:28 2015
+
+OUTPUT FILE NAME:   <test_display.out>
+ENTRY POINT SYMBOL: "_c_int00"  address: 00002bc1
+
+
+MEMORY CONFIGURATION
+
+         name            origin    length      used     unused   attr    fill
+----------------------  --------  ---------  --------  --------  ----  --------
+  FLASH                 00000000   00040000  0000339c  0003cc64  R  X
+  SRAM                  20000000   00008000  000008e9  00007717  RW X
+
+
+SEGMENT ALLOCATION MAP
+
+run origin  load origin   length   init length attrs members
+----------  ----------- ---------- ----------- ----- -------
+00000000    00000000    000033a0   000033a0    r-x
+  00000000    00000000    0000026c   0000026c    r-- .intvecs
+  0000026c    0000026c    00002c38   00002c38    r-x .text
+  00002ea4    00002ea4    0000041c   0000041c    r-- .const
+  000032c0    000032c0    00000004   00000004    r-- .init_array
+  000032c8    000032c8    000000d8   000000d8    r-- .cinit
+20000000    20000000    000008f0   00000000    rw-
+  20000000    20000000    000005d9   00000000    rw- .bss
+  200005dc    200005dc    00000200   00000000    rw- .stack
+  200007dc    200007dc    00000108   00000000    rw- .data
+  200008e8    200008e8    00000008   00000000    rw- .sysmem
+
+
+SECTION ALLOCATION MAP
+
+ output                                  attributes/
+section   page    origin      length       input sections
+--------  ----  ----------  ----------   ----------------
+.intvecs   0    00000000    0000026c     
+                  00000000    0000026c     tm4c123gh6pm_startup_ccs.obj (.intvecs)
+
+.text      0    0000026c    00002c38     
+                  0000026c    00000c84     ustdlib.obj (.text)
+                  00000ef0    00000900     uartstdio.obj (.text)
+                  000017f0    00000438     ssi_display.obj (.text)
+                  00001c28    000003dc     rtsv7M4_T_le_v4SPD16_eabi.lib : memory.obj (.text)
+                  00002004    00000264     adc_potmeter.obj (.text)
+                  00002268    000001d0     main.obj (.text)
+                  00002438    00000130     driverlib.lib : gpio.obj (.text:GPIOPadConfigSet)
+                  00002568    00000118                   : sysctl.obj (.text:SysCtlClockGet)
+                  00002680    0000010c     commands.obj (.text)
+                  0000278c    000000f4     rtsv7M4_T_le_v4SPD16_eabi.lib : dtor_list.obj (.text)
+                  00002880    000000bc                                   : typeinfo_.obj (.text)
+                  0000293c    000000ac     cmdline.obj (.text)
+                  000029e8    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.obj (.text)
+                  00002a84    00000094                                   : auto_init.obj (.text)
+                  00002b18    0000005e                                   : copy_decompress_rle.obj (.text)
+                  00002b76    00000002                                   : i_div0.obj (.text)
+                  00002b78    00000048     driverlib.lib : gpio.obj (.text:GPIOPinConfigure)
+                  00002bc0    00000048     rtsv7M4_T_le_v4SPD16_eabi.lib : boot.obj (.text)
+                  00002c08    00000044                                   : cpy_tbl.obj (.text)
+                  00002c4c    00000044                                   : exit.obj (.text)
+                  00002c90    00000042     driverlib.lib : ssi.obj (.text:SSIConfigSetExpClk)
+                  00002cd2    00000040     rtsv7M4_T_le_v4SPD16_eabi.lib : u_divt2.obj (.text)
+                  00002d12    00000002     --HOLE-- [fill = 0]
+                  00002d14    00000034     driverlib.lib : sysctl.obj (.text:SysCtlPeripheralEnable)
+                  00002d48    0000002a                   : gpio.obj (.text:GPIODirModeSet)
+                  00002d72    00000018                   : adc.obj (.text:ADCClockConfigSet)
+                  00002d8a    00000002     --HOLE-- [fill = 0]
+                  00002d8c    00000018     rtsv7M4_T_le_v4SPD16_eabi.lib : args_main.obj (.text)
+                  00002da4    00000018                                   : strcmp.obj (.text)
+                  00002dbc    00000014     driverlib.lib : systick.obj (.text:SysTickEnable)
+                  00002dd0    00000014                   : systick.obj (.text:SysTickIntEnable)
+                  00002de4    00000014     rtsv7M4_T_le_v4SPD16_eabi.lib : _lock.obj (.text)
+                  00002df8    00000012     driverlib.lib : gpio.obj (.text:GPIOPinTypeUART)
+                  00002e0a    00000012     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_zero_init.obj (.text:decompress:ZI)
+                  00002e1c    00000010     driverlib.lib : systick.obj (.text:SysTickPeriodSet)
+                  00002e2c    0000000e                   : ssi.obj (.text:SSIDataPutNonBlocking)
+                  00002e3a    0000000e     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_none.obj (.text:decompress:none)
+                  00002e48    0000000c     driverlib.lib : cpu.obj (.text:CPUcpsie)
+                  00002e54    0000000c     tm4c123gh6pm_startup_ccs.obj (.text)
+                  00002e60    0000000a     driverlib.lib : interrupt.obj (.text:IntMasterEnable)
+                  00002e6a    0000000a                   : ssi.obj (.text:SSIIntDisable)
+                  00002e74    0000000a                   : ssi.obj (.text:SSIIntStatus)
+                  00002e7e    00000008                   : ssi.obj (.text:SSIIntEnable)
+                  00002e86    00000008     rtsv7M4_T_le_v4SPD16_eabi.lib : delete.obj (.text)
+                  00002e8e    00000006     driverlib.lib : sysctl.obj (.text:SysCtlDelay)
+                  00002e94    00000006                   : uart.obj (.text:UARTClockSourceSet)
+                  00002e9a    00000006     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_rle.obj (.text:decompress:rle24)
+                  00002ea0    00000004     driverlib.lib : ssi.obj (.text:SSIIntClear)
+
+.const     0    00002ea4    0000041c     
+                  00002ea4    000000b2     commands.obj (.const:.string)
+                  00002f56    00000002     rtsv7M4_T_le_v4SPD16_eabi.lib : typeinfo_.obj (.const:.typeinfo:_ZTSe)
+                  00002f58    00000090     driverlib.lib : gpio.obj (.const:g_pui32GPIOBaseAddrs)
+                  00002fe8    0000006c                   : sysctl.obj (.const:g_pui32Xtals)
+                  00003054    00000030     ustdlib.obj (.const:g_psDaysToMonth)
+                  00003084    00000028     rtsv7M4_T_le_v4SPD16_eabi.lib : typeinfo_.obj (.const:.typeinfo:_ZTSN10__cxxabiv123__fundamental_type_infoE)
+                  000030ac    00000028     uartstdio.obj (.const)
+                  000030d4    00000025     rtsv7M4_T_le_v4SPD16_eabi.lib : typeinfo_.obj (.const:.typeinfo:_ZTSN10__cxxabiv120__si_class_type_infoE)
+                  000030f9    00000024                                   : typeinfo_.obj (.const:.typeinfo:_ZTSN10__cxxabiv119__pointer_type_infoE)
+                  0000311d    00000022                                   : typeinfo_.obj (.const:.typeinfo:_ZTSN10__cxxabiv117__class_type_infoE)
+                  0000313f    00000022                                   : typeinfo_.obj (.const:.typeinfo:_ZTSN10__cxxabiv117__pbase_type_infoE)
+                  00003161    00000003     --HOLE-- [fill = 0]
+                  00003164    0000001c     ustdlib.obj (.const)
+                  00003180    00000015     ssi_display.obj (.const:.typeinfo:_ZTSN4aeo111ssi_displayE)
+                  00003195    00000012     ssi_display.obj (.const:.string)
+                  000031a7    00000001     --HOLE-- [fill = 0]
+                  000031a8    00000012     uartstdio.obj (.const:.string)
+                  000031ba    00000002     --HOLE-- [fill = 0]
+                  000031bc    00000012     ustdlib.obj (.const:.string)
+                  000031ce    00000011     adc_potmeter.obj (.const:.typeinfo:_ZTSN4aeo18potmeterE)
+                  000031df    00000001     --HOLE-- [fill = 0]
+                  000031e0    00000010     rtsv7M4_T_le_v4SPD16_eabi.lib : typeinfo_.obj (.const:.typeinfo:_ZTIPKe)
+                  000031f0    00000010                                   : typeinfo_.obj (.const:_ZTVN10__cxxabiv117__class_type_infoE)
+                  00003200    00000010                                   : typeinfo_.obj (.const:_ZTVN10__cxxabiv119__pointer_type_infoE)
+                  00003210    00000010                                   : typeinfo_.obj (.const:_ZTVN10__cxxabiv120__si_class_type_infoE)
+                  00003220    00000010                                   : typeinfo_.obj (.const:_ZTVN10__cxxabiv123__fundamental_type_infoE)
+                  00003230    00000010     ssi_display.obj (.const:_ZTVN4aeo111ssi_displayE)
+                  00003240    00000010     adc_potmeter.obj (.const:_ZTVN4aeo18potmeterE)
+                  00003250    0000000d     rtsv7M4_T_le_v4SPD16_eabi.lib : typeinfo_.obj (.const:.typeinfo:_ZTSSt9type_info)
+                  0000325d    00000003     --HOLE-- [fill = 0]
+                  00003260    0000000c                                   : typeinfo_.obj (.const:.typeinfo:_ZTIN10__cxxabiv117__class_type_infoE)
+                  0000326c    0000000c                                   : typeinfo_.obj (.const:.typeinfo:_ZTIN10__cxxabiv117__pbase_type_infoE)
+                  00003278    0000000c                                   : typeinfo_.obj (.const:.typeinfo:_ZTIN10__cxxabiv119__pointer_type_infoE)
+                  00003284    0000000c                                   : typeinfo_.obj (.const:.typeinfo:_ZTIN10__cxxabiv120__si_class_type_infoE)
+                  00003290    0000000c                                   : typeinfo_.obj (.const:.typeinfo:_ZTIN10__cxxabiv123__fundamental_type_infoE)
+                  0000329c    00000008     ssi_display.obj (.const:.typeinfo:_ZTIN4aeo111ssi_displayE)
+                  000032a4    00000008     adc_potmeter.obj (.const:.typeinfo:_ZTIN4aeo18potmeterE)
+                  000032ac    00000008     rtsv7M4_T_le_v4SPD16_eabi.lib : typeinfo_.obj (.const:.typeinfo:_ZTISt9type_info)
+                  000032b4    00000008                                   : typeinfo_.obj (.const:.typeinfo:_ZTIe)
+                  000032bc    00000004                                   : typeinfo_.obj (.const:.typeinfo:_ZTSPKe)
+
+.init_array 
+*          0    000032c0    00000004     
+                  000032c0    00000004     main.obj (.init_array)
+
+.cinit     0    000032c8    000000d8     
+                  000032c8    000000b4     (.cinit..data.load) [load image, compression = rle]
+                  0000337c    0000000c     (__TI_handler_table)
+                  00003388    00000008     (.cinit..bss.load) [load image, compression = zero_init]
+                  00003390    00000010     (__TI_cinit_table)
+
+.bss       0    20000000    000005d9     UNINITIALIZED
+                  20000000    00000400     uartstdio.obj (.bss:g_pcUARTTxBuffer)
+                  20000400    00000080     main.obj (.bss:g_cInput)
+                  20000480    00000080     uartstdio.obj (.bss:g_pcUARTRxBuffer)
+                  20000500    00000054     main.obj (.bss:oDisplay1)
+                  20000554    00000054     main.obj (.bss:oDisplay2)
+                  200005a8    00000024     cmdline.obj (.bss:g_ppcArgv)
+                  200005cc    00000004     (.common:_ZSt16__dummy_typeinfo)
+                  200005d0    00000004     (.common:__dso_handle)
+                  200005d4    00000004     (.common:g_ui32PortNum)
+                  200005d8    00000001     (.common:g_bDisableEcho)
+
+.stack     0    200005dc    00000200     UNINITIALIZED
+                  200005dc    00000200     --HOLE--
+
+.data      0    200007dc    00000108     UNINITIALIZED
+                  200007dc    00000048     commands.obj (.data:g_psCmdTable)
+                  20000824    0000002c     ssi_display.obj (.data:_ZN4aeo112Display_SSI1E)
+                  20000850    0000002c     ssi_display.obj (.data:_ZN4aeo112Display_SSI3E)
+                  2000087c    00000015     uartstdio.obj (.data)
+                  20000891    00000003     --HOLE--
+                  20000894    00000014     ssi_display.obj (.data)
+                  200008a8    00000010     adc_potmeter.obj (.data)
+                  200008b8    0000000c     rtsv7M4_T_le_v4SPD16_eabi.lib : memory.obj (.data)
+                  200008c4    00000008                                   : _lock.obj (.data)
+                  200008cc    00000008                                   : exit.obj (.data)
+                  200008d4    00000004     main.obj (.data)
+                  200008d8    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : dtor_list.obj (.data)
+                  200008dc    00000004                                   : stkdepth_vars.obj (.data)
+                  200008e0    00000004     ustdlib.obj (.data)
+
+.sysmem    0    200008e8    00000008     UNINITIALIZED
+                  200008e8    00000008     rtsv7M4_T_le_v4SPD16_eabi.lib : memory.obj (.sysmem)
+
+
+LINKER GENERATED COPY TABLES
+
+__TI_cinit_table @ 00003390 records: 2, size/record: 8, table size: 16
+	.data: load addr=000032c8, load size=000000b4 bytes, run addr=200007dc, run size=00000108 bytes, compression=rle
+	.bss: load addr=00003388, load size=00000008 bytes, run addr=20000000, run size=000005d9 bytes, compression=zero_init
+
+
+LINKER GENERATED HANDLER TABLE
+
+__TI_handler_table @ 0000337c records: 3, size/record: 4, table size: 12
+	index: 0, handler: __TI_decompress_rle24
+	index: 1, handler: __TI_decompress_none
+	index: 2, handler: __TI_zero_init
+
+
+GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
+
+address    name
+--------   ----
+00002d73   ADCClockConfigSet
+00002c4d   C$$EXIT
+00002e49   CPUcpsie
+0000293d   CmdLineProcess
+00002d49   GPIODirModeSet
+00002439   GPIOPadConfigSet
+00002b79   GPIOPinConfigure
+00002df9   GPIOPinTypeUART
+00002e61   IntMasterEnable
+00002005   OnADCInterrupt
+000017f1   OnSSI1Interrupt
+00001803   OnSSI3Interrupt
+00002e55   ResetISR
+000032c0   SHT$$INIT_ARRAY$$Base
+000032c4   SHT$$INIT_ARRAY$$Limit
+00002c91   SSIConfigSetExpClk
+00002e2d   SSIDataPutNonBlocking
+00002ea1   SSIIntClear
+00002e6b   SSIIntDisable
+00002e7f   SSIIntEnable
+00002e75   SSIIntStatus
+00002569   SysCtlClockGet
+00002e8f   SysCtlDelay
+00002d15   SysCtlPeripheralEnable
+00002dbd   SysTickEnable
+00002dd1   SysTickIntEnable
+000022a5   SysTickIntHandler
+00002e1d   SysTickPeriodSet
+00002e95   UARTClockSourceSet
+00001639   UARTEchoSet
+000015d3   UARTFlushRx
+000015fb   UARTFlushTx
+00001579   UARTPeek
+00001557   UARTRxBytesAvail
+00000ff7   UARTStdioConfig
+00001665   UARTStdioIntHandler
+00001565   UARTTxBytesFree
+000011d1   UARTgetc
+00001155   UARTgets
+00001533   UARTprintf
+00001239   UARTvprintf
+000010af   UARTwrite
+000022af   _Z10Initializev
+00002709   _Z13CMD_set_scaleiPPc
+00002269   _Z13ConfigureUARTv
+000026e1   _Z14CMD_set_dialeriPPc
+00002731   _Z8CMD_diagiPPc
+00002681   _Z8CMD_helpiPPc
+0000230b   _Z8MainLoopv
+000026d3   _Z9CMD_dummyiPPc
+0000292d   _ZN10__cxxabiv116__enum_type_infoD0Ev
+0000292b   _ZN10__cxxabiv116__enum_type_infoD1Ev
+0000292b   _ZN10__cxxabiv116__enum_type_infoD2Ev
+00002923   _ZN10__cxxabiv117__array_type_infoD0Ev
+00002921   _ZN10__cxxabiv117__array_type_infoD1Ev
+00002921   _ZN10__cxxabiv117__array_type_infoD2Ev
+00002919   _ZN10__cxxabiv117__class_type_infoD0Ev
+00002917   _ZN10__cxxabiv117__class_type_infoD1Ev
+00002917   _ZN10__cxxabiv117__class_type_infoD2Ev
+0000290f   _ZN10__cxxabiv117__pbase_type_infoD0Ev
+0000290d   _ZN10__cxxabiv117__pbase_type_infoD1Ev
+0000290d   _ZN10__cxxabiv117__pbase_type_infoD2Ev
+00002905   _ZN10__cxxabiv119__pointer_type_infoD0Ev
+00002903   _ZN10__cxxabiv119__pointer_type_infoD1Ev
+00002903   _ZN10__cxxabiv119__pointer_type_infoD2Ev
+000028fb   _ZN10__cxxabiv120__function_type_infoD0Ev
+000028f9   _ZN10__cxxabiv120__function_type_infoD1Ev
+000028f9   _ZN10__cxxabiv120__function_type_infoD2Ev
+000028f1   _ZN10__cxxabiv120__si_class_type_infoD0Ev
+000028ef   _ZN10__cxxabiv120__si_class_type_infoD1Ev
+000028ef   _ZN10__cxxabiv120__si_class_type_infoD2Ev
+000028e7   _ZN10__cxxabiv121__vmi_class_type_infoD0Ev
+000028e5   _ZN10__cxxabiv121__vmi_class_type_infoD1Ev
+000028e5   _ZN10__cxxabiv121__vmi_class_type_infoD2Ev
+000028dd   _ZN10__cxxabiv123__fundamental_type_infoD0Ev
+000028db   _ZN10__cxxabiv123__fundamental_type_infoD1Ev
+000028db   _ZN10__cxxabiv123__fundamental_type_infoD2Ev
+000028d3   _ZN10__cxxabiv129__pointer_to_member_type_infoD0Ev
+000028d1   _ZN10__cxxabiv129__pointer_to_member_type_infoD1Ev
+000028d1   _ZN10__cxxabiv129__pointer_to_member_type_infoD2Ev
+0000187f   _ZN4aeo111ssi_display10InitializeEv
+20000894   _ZN4aeo111ssi_display10m_nCounterE
+200008a0   _ZN4aeo111ssi_display10m_pTheSSI1E
+200008a4   _ZN4aeo111ssi_display10m_pTheSSI3E
+00001af5   _ZN4aeo111ssi_display11OnInterruptEv
+20000898   _ZN4aeo111ssi_display13m_nEotCounterE
+00001b49   _ZN4aeo111ssi_display14Digit2SegmentsEjjb
+2000089c   _ZN4aeo111ssi_display18m_nOverflowCounterE
+00001a0d   _ZN4aeo111ssi_display3SetEii
+00001b2b   _ZN4aeo111ssi_display4DiagEv
+00001bb9   _ZN4aeo111ssi_display8LoadFIFOEv
+000019ab   _ZN4aeo111ssi_display9TerminateEv
+00001815   _ZN4aeo111ssi_displayC1ENS0_9device_idE
+00001815   _ZN4aeo111ssi_displayC2ENS0_9device_idE
+00001869   _ZN4aeo111ssi_displayD0Ev
+00001855   _ZN4aeo111ssi_displayD1Ev
+00001855   _ZN4aeo111ssi_displayD2Ev
+20000824   _ZN4aeo112Display_SSI1E
+20000850   _ZN4aeo112Display_SSI3E
+0000206f   _ZN4aeo18potmeter10InitializeEv
+200008a8   _ZN4aeo18potmeter10m_nCounterE
+00002133   _ZN4aeo18potmeter11OnInterruptEv
+200008b0   _ZN4aeo18potmeter14m_nReadCounterE
+000021f5   _ZN4aeo18potmeter15GetErrorCounterEv
+200008ac   _ZN4aeo18potmeter15m_nErrorCounterE
+200008b4   _ZN4aeo18potmeter16m_pTheOneAndOnlyE
+0000220d   _ZN4aeo18potmeter4DiagEv
+000021c1   _ZN4aeo18potmeter7TriggerEv
+000021d5   _ZN4aeo18potmeter8GetValueEv
+00002105   _ZN4aeo18potmeter9TerminateEv
+00002017   _ZN4aeo18potmeterC1Ev
+00002017   _ZN4aeo18potmeterC2Ev
+00002059   _ZN4aeo18potmeterD0Ev
+00002035   _ZN4aeo18potmeterD1Ev
+00002035   _ZN4aeo18potmeterD2Ev
+00002893   _ZNKSt9type_info4nameEv
+000028c3   _ZNKSt9type_info6beforeERKS_
+000028ad   _ZNKSt9type_infoeqERKS_
+00002897   _ZNKSt9type_infoneERKS_
+0000288b   _ZNSt9type_infoD0Ev
+00002889   _ZNSt9type_infoD1Ev
+00002889   _ZNSt9type_infoD2Ev
+200005cc   _ZSt16__dummy_typeinfo
+00002881   _ZSt21__gen_dummy_typeinfosv
+00003260   _ZTIN10__cxxabiv117__class_type_infoE
+0000326c   _ZTIN10__cxxabiv117__pbase_type_infoE
+00003278   _ZTIN10__cxxabiv119__pointer_type_infoE
+00003284   _ZTIN10__cxxabiv120__si_class_type_infoE
+00003290   _ZTIN10__cxxabiv123__fundamental_type_infoE
+0000329c   _ZTIN4aeo111ssi_displayE
+000032a4   _ZTIN4aeo18potmeterE
+000031e0   _ZTIPKe
+000032ac   _ZTISt9type_info
+000032b4   _ZTIe
+0000311d   _ZTSN10__cxxabiv117__class_type_infoE
+0000313f   _ZTSN10__cxxabiv117__pbase_type_infoE
+000030f9   _ZTSN10__cxxabiv119__pointer_type_infoE
+000030d4   _ZTSN10__cxxabiv120__si_class_type_infoE
+00003084   _ZTSN10__cxxabiv123__fundamental_type_infoE
+00003180   _ZTSN4aeo111ssi_displayE
+000031ce   _ZTSN4aeo18potmeterE
+000032bc   _ZTSPKe
+00003250   _ZTSSt9type_info
+00002f56   _ZTSe
+000031f0   _ZTVN10__cxxabiv117__class_type_infoE
+00003200   _ZTVN10__cxxabiv119__pointer_type_infoE
+00003210   _ZTVN10__cxxabiv120__si_class_type_infoE
+00003220   _ZTVN10__cxxabiv123__fundamental_type_infoE
+00003230   _ZTVN4aeo111ssi_displayE
+00003240   _ZTVN4aeo18potmeterE
+00002e87   _ZdlPv
+200007dc   __STACK_END
+00000200   __STACK_SIZE
+200007dc   __STACK_TOP
+00000008   __SYSMEM_SIZE
+00003390   __TI_CINIT_Base
+000033a0   __TI_CINIT_Limit
+0000337c   __TI_Handler_Table_Base
+00003388   __TI_Handler_Table_Limit
+00000001   __TI_args_main
+00002a85   __TI_auto_init
+200008cc   __TI_cleanup_ptr
+00002e3b   __TI_decompress_none
+00002e9b   __TI_decompress_rle24
+200008d0   __TI_dtors_ptr
+00000000   __TI_static_base__
+00002e0b   __TI_zero_init
+000027e5   __aeabi_atexit
+00002b77   __aeabi_idiv0
+000029e9   __aeabi_memcpy
+000029e9   __aeabi_memcpy4
+000029e9   __aeabi_memcpy8
+00002cd3   __aeabi_uidiv
+00002cd3   __aeabi_uidivmod
+ffffffff   __binit__
+ffffffff   __c_args__
+000027d3   __cxa_atexit
+0000278d   __cxa_finalize
+000027cd   __cxa_ia64_exit
+200005d0   __dso_handle
+200005dc   __stack
+00002373   __sti___8_main_cpp_35882b73
+00002d8d   _args_main
+00002bc1   _c_int00
+200008c4   _lock
+00002df3   _nop
+00002deb   _register_lock
+00002de5   _register_unlock
+200008e8   _sys_memory
+200008c8   _unlock
+00002c51   abort
+000027d7   atexit
+ffffffff   binit
+00001fcd   calloc
+00002c09   copy_in
+00002c59   exit
+00001d1d   free
+00000000   g_pfnVectors
+200007dc   g_psCmdTable
+00002361   main
+200008dc   main_func_sp
+00001cb5   malloc
+00001ee9   memalign
+000029e9   memcpy
+00001c29   minit
+20000500   oDisplay1
+20000554   oDisplay2
+00001ddd   realloc
+00002da5   strcmp
+00000751   ulocaltime
+0000094f   umktime
+00000ec9   urand
+00000721   usnprintf
+000006ef   usprintf
+00000eb9   usrand
+00000e31   ustrcasecmp
+00000ea5   ustrcmp
+00000d35   ustrlen
+00000d8d   ustrncasecmp
+00000e45   ustrncmp
+0000026d   ustrncpy
+00000d57   ustrstr
+00000afd   ustrtof
+000009c5   ustrtoul
+000002c5   uvsnprintf
+
+
+GLOBAL SYMBOLS: SORTED BY Symbol Address 
+
+address    name
+--------   ----
+00000000   __TI_static_base__
+00000000   g_pfnVectors
+00000001   __TI_args_main
+00000008   __SYSMEM_SIZE
+00000200   __STACK_SIZE
+0000026d   ustrncpy
+000002c5   uvsnprintf
+000006ef   usprintf
+00000721   usnprintf
+00000751   ulocaltime
+0000094f   umktime
+000009c5   ustrtoul
+00000afd   ustrtof
+00000d35   ustrlen
+00000d57   ustrstr
+00000d8d   ustrncasecmp
+00000e31   ustrcasecmp
+00000e45   ustrncmp
+00000ea5   ustrcmp
+00000eb9   usrand
+00000ec9   urand
+00000ff7   UARTStdioConfig
+000010af   UARTwrite
+00001155   UARTgets
+000011d1   UARTgetc
+00001239   UARTvprintf
+00001533   UARTprintf
+00001557   UARTRxBytesAvail
+00001565   UARTTxBytesFree
+00001579   UARTPeek
+000015d3   UARTFlushRx
+000015fb   UARTFlushTx
+00001639   UARTEchoSet
+00001665   UARTStdioIntHandler
+000017f1   OnSSI1Interrupt
+00001803   OnSSI3Interrupt
+00001815   _ZN4aeo111ssi_displayC1ENS0_9device_idE
+00001815   _ZN4aeo111ssi_displayC2ENS0_9device_idE
+00001855   _ZN4aeo111ssi_displayD1Ev
+00001855   _ZN4aeo111ssi_displayD2Ev
+00001869   _ZN4aeo111ssi_displayD0Ev
+0000187f   _ZN4aeo111ssi_display10InitializeEv
+000019ab   _ZN4aeo111ssi_display9TerminateEv
+00001a0d   _ZN4aeo111ssi_display3SetEii
+00001af5   _ZN4aeo111ssi_display11OnInterruptEv
+00001b2b   _ZN4aeo111ssi_display4DiagEv
+00001b49   _ZN4aeo111ssi_display14Digit2SegmentsEjjb
+00001bb9   _ZN4aeo111ssi_display8LoadFIFOEv
+00001c29   minit
+00001cb5   malloc
+00001d1d   free
+00001ddd   realloc
+00001ee9   memalign
+00001fcd   calloc
+00002005   OnADCInterrupt
+00002017   _ZN4aeo18potmeterC1Ev
+00002017   _ZN4aeo18potmeterC2Ev
+00002035   _ZN4aeo18potmeterD1Ev
+00002035   _ZN4aeo18potmeterD2Ev
+00002059   _ZN4aeo18potmeterD0Ev
+0000206f   _ZN4aeo18potmeter10InitializeEv
+00002105   _ZN4aeo18potmeter9TerminateEv
+00002133   _ZN4aeo18potmeter11OnInterruptEv
+000021c1   _ZN4aeo18potmeter7TriggerEv
+000021d5   _ZN4aeo18potmeter8GetValueEv
+000021f5   _ZN4aeo18potmeter15GetErrorCounterEv
+0000220d   _ZN4aeo18potmeter4DiagEv
+00002269   _Z13ConfigureUARTv
+000022a5   SysTickIntHandler
+000022af   _Z10Initializev
+0000230b   _Z8MainLoopv
+00002361   main
+00002373   __sti___8_main_cpp_35882b73
+00002439   GPIOPadConfigSet
+00002569   SysCtlClockGet
+00002681   _Z8CMD_helpiPPc
+000026d3   _Z9CMD_dummyiPPc
+000026e1   _Z14CMD_set_dialeriPPc
+00002709   _Z13CMD_set_scaleiPPc
+00002731   _Z8CMD_diagiPPc
+0000278d   __cxa_finalize
+000027cd   __cxa_ia64_exit
+000027d3   __cxa_atexit
+000027d7   atexit
+000027e5   __aeabi_atexit
+00002881   _ZSt21__gen_dummy_typeinfosv
+00002889   _ZNSt9type_infoD1Ev
+00002889   _ZNSt9type_infoD2Ev
+0000288b   _ZNSt9type_infoD0Ev
+00002893   _ZNKSt9type_info4nameEv
+00002897   _ZNKSt9type_infoneERKS_
+000028ad   _ZNKSt9type_infoeqERKS_
+000028c3   _ZNKSt9type_info6beforeERKS_
+000028d1   _ZN10__cxxabiv129__pointer_to_member_type_infoD1Ev
+000028d1   _ZN10__cxxabiv129__pointer_to_member_type_infoD2Ev
+000028d3   _ZN10__cxxabiv129__pointer_to_member_type_infoD0Ev
+000028db   _ZN10__cxxabiv123__fundamental_type_infoD1Ev
+000028db   _ZN10__cxxabiv123__fundamental_type_infoD2Ev
+000028dd   _ZN10__cxxabiv123__fundamental_type_infoD0Ev
+000028e5   _ZN10__cxxabiv121__vmi_class_type_infoD1Ev
+000028e5   _ZN10__cxxabiv121__vmi_class_type_infoD2Ev
+000028e7   _ZN10__cxxabiv121__vmi_class_type_infoD0Ev
+000028ef   _ZN10__cxxabiv120__si_class_type_infoD1Ev
+000028ef   _ZN10__cxxabiv120__si_class_type_infoD2Ev
+000028f1   _ZN10__cxxabiv120__si_class_type_infoD0Ev
+000028f9   _ZN10__cxxabiv120__function_type_infoD1Ev
+000028f9   _ZN10__cxxabiv120__function_type_infoD2Ev
+000028fb   _ZN10__cxxabiv120__function_type_infoD0Ev
+00002903   _ZN10__cxxabiv119__pointer_type_infoD1Ev
+00002903   _ZN10__cxxabiv119__pointer_type_infoD2Ev
+00002905   _ZN10__cxxabiv119__pointer_type_infoD0Ev
+0000290d   _ZN10__cxxabiv117__pbase_type_infoD1Ev
+0000290d   _ZN10__cxxabiv117__pbase_type_infoD2Ev
+0000290f   _ZN10__cxxabiv117__pbase_type_infoD0Ev
+00002917   _ZN10__cxxabiv117__class_type_infoD1Ev
+00002917   _ZN10__cxxabiv117__class_type_infoD2Ev
+00002919   _ZN10__cxxabiv117__class_type_infoD0Ev
+00002921   _ZN10__cxxabiv117__array_type_infoD1Ev
+00002921   _ZN10__cxxabiv117__array_type_infoD2Ev
+00002923   _ZN10__cxxabiv117__array_type_infoD0Ev
+0000292b   _ZN10__cxxabiv116__enum_type_infoD1Ev
+0000292b   _ZN10__cxxabiv116__enum_type_infoD2Ev
+0000292d   _ZN10__cxxabiv116__enum_type_infoD0Ev
+0000293d   CmdLineProcess
+000029e9   __aeabi_memcpy
+000029e9   __aeabi_memcpy4
+000029e9   __aeabi_memcpy8
+000029e9   memcpy
+00002a85   __TI_auto_init
+00002b77   __aeabi_idiv0
+00002b79   GPIOPinConfigure
+00002bc1   _c_int00
+00002c09   copy_in
+00002c4d   C$$EXIT
+00002c51   abort
+00002c59   exit
+00002c91   SSIConfigSetExpClk
+00002cd3   __aeabi_uidiv
+00002cd3   __aeabi_uidivmod
+00002d15   SysCtlPeripheralEnable
+00002d49   GPIODirModeSet
+00002d73   ADCClockConfigSet
+00002d8d   _args_main
+00002da5   strcmp
+00002dbd   SysTickEnable
+00002dd1   SysTickIntEnable
+00002de5   _register_unlock
+00002deb   _register_lock
+00002df3   _nop
+00002df9   GPIOPinTypeUART
+00002e0b   __TI_zero_init
+00002e1d   SysTickPeriodSet
+00002e2d   SSIDataPutNonBlocking
+00002e3b   __TI_decompress_none
+00002e49   CPUcpsie
+00002e55   ResetISR
+00002e61   IntMasterEnable
+00002e6b   SSIIntDisable
+00002e75   SSIIntStatus
+00002e7f   SSIIntEnable
+00002e87   _ZdlPv
+00002e8f   SysCtlDelay
+00002e95   UARTClockSourceSet
+00002e9b   __TI_decompress_rle24
+00002ea1   SSIIntClear
+00002f56   _ZTSe
+00003084   _ZTSN10__cxxabiv123__fundamental_type_infoE
+000030d4   _ZTSN10__cxxabiv120__si_class_type_infoE
+000030f9   _ZTSN10__cxxabiv119__pointer_type_infoE
+0000311d   _ZTSN10__cxxabiv117__class_type_infoE
+0000313f   _ZTSN10__cxxabiv117__pbase_type_infoE
+00003180   _ZTSN4aeo111ssi_displayE
+000031ce   _ZTSN4aeo18potmeterE
+000031e0   _ZTIPKe
+000031f0   _ZTVN10__cxxabiv117__class_type_infoE
+00003200   _ZTVN10__cxxabiv119__pointer_type_infoE
+00003210   _ZTVN10__cxxabiv120__si_class_type_infoE
+00003220   _ZTVN10__cxxabiv123__fundamental_type_infoE
+00003230   _ZTVN4aeo111ssi_displayE
+00003240   _ZTVN4aeo18potmeterE
+00003250   _ZTSSt9type_info
+00003260   _ZTIN10__cxxabiv117__class_type_infoE
+0000326c   _ZTIN10__cxxabiv117__pbase_type_infoE
+00003278   _ZTIN10__cxxabiv119__pointer_type_infoE
+00003284   _ZTIN10__cxxabiv120__si_class_type_infoE
+00003290   _ZTIN10__cxxabiv123__fundamental_type_infoE
+0000329c   _ZTIN4aeo111ssi_displayE
+000032a4   _ZTIN4aeo18potmeterE
+000032ac   _ZTISt9type_info
+000032b4   _ZTIe
+000032bc   _ZTSPKe
+000032c0   SHT$$INIT_ARRAY$$Base
+000032c4   SHT$$INIT_ARRAY$$Limit
+0000337c   __TI_Handler_Table_Base
+00003388   __TI_Handler_Table_Limit
+00003390   __TI_CINIT_Base
+000033a0   __TI_CINIT_Limit
+20000500   oDisplay1
+20000554   oDisplay2
+200005cc   _ZSt16__dummy_typeinfo
+200005d0   __dso_handle
+200005dc   __stack
+200007dc   __STACK_END
+200007dc   __STACK_TOP
+200007dc   g_psCmdTable
+20000824   _ZN4aeo112Display_SSI1E
+20000850   _ZN4aeo112Display_SSI3E
+20000894   _ZN4aeo111ssi_display10m_nCounterE
+20000898   _ZN4aeo111ssi_display13m_nEotCounterE
+2000089c   _ZN4aeo111ssi_display18m_nOverflowCounterE
+200008a0   _ZN4aeo111ssi_display10m_pTheSSI1E
+200008a4   _ZN4aeo111ssi_display10m_pTheSSI3E
+200008a8   _ZN4aeo18potmeter10m_nCounterE
+200008ac   _ZN4aeo18potmeter15m_nErrorCounterE
+200008b0   _ZN4aeo18potmeter14m_nReadCounterE
+200008b4   _ZN4aeo18potmeter16m_pTheOneAndOnlyE
+200008c4   _lock
+200008c8   _unlock
+200008cc   __TI_cleanup_ptr
+200008d0   __TI_dtors_ptr
+200008dc   main_func_sp
+200008e8   _sys_memory
+ffffffff   __binit__
+ffffffff   __c_args__
+ffffffff   binit
+
+[225 symbols]

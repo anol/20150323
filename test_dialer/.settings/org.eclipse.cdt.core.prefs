@@ -1,0 +1,8 @@
+eclipse.preferences.version=1
+environment/project/com.ti.ccstudio.buildDefinitions.TMS470.Debug.686819750/append=true
+environment/project/com.ti.ccstudio.buildDefinitions.TMS470.Debug.686819750/appendContributed=true
+environment/project/com.ti.ccstudio.buildDefinitions.TMS470.Release.998322134/PROJECT_NAME/delimiter=;
+environment/project/com.ti.ccstudio.buildDefinitions.TMS470.Release.998322134/PROJECT_NAME/operation=append
+environment/project/com.ti.ccstudio.buildDefinitions.TMS470.Release.998322134/PROJECT_NAME/value=${PROJECT_NAME}
+environment/project/com.ti.ccstudio.buildDefinitions.TMS470.Release.998322134/append=true
+environment/project/com.ti.ccstudio.buildDefinitions.TMS470.Release.998322134/appendContributed=true
