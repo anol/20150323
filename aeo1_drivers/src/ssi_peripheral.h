@@ -30,16 +30,14 @@ public:
 public:
 	virtual void Initialize();
 	virtual void OnInterrupt();
+	void Terminate();
+	void LoadFIFO();
 
 public:
 	static ssi_peripheral* m_pTheSSI0;
 	static ssi_peripheral* m_pTheSSI1;
 	static ssi_peripheral* m_pTheSSI2;
 	static ssi_peripheral* m_pTheSSI3;
-
-private:
-	void Terminate();
-	void LoadFIFO();
 
 protected:
 	enum {
