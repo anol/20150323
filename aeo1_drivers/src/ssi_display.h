@@ -21,6 +21,7 @@ public:
 public:
 	void Initialize();
 	void Set(int32_t nValue, int nDecimals = 0);
+	void Set(const char* zString);
 
 private:
 	uint32_t Digit2Segments(uint32_t nIndex, uint32_t nValue,

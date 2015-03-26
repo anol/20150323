@@ -12,12 +12,21 @@ namespace aeo1 {
 
 class qei_sensor {
 public:
+	enum configuration {
+		DefaultConfiguration = (QEI_CONFIG_CAPTURE_A | QEI_CONFIG_NO_RESET
+				| QEI_CONFIG_QUADRATURE | QEI_CONFIG_NO_SWAP),
+		SwapPins = (QEI_CONFIG_CAPTURE_A | QEI_CONFIG_NO_RESET
+				| QEI_CONFIG_QUADRATURE | QEI_CONFIG_SWAP)
+	};
 	enum device_id {
 		QEI0, QEI1
 	};
 
 public:
-	qei_sensor(device_id nDevice);
+	typedef void (*OnIndex)(void);
+
+public:
+	qei_sensor(device_id nDevice, configuration nConfig = DefaultConfiguration);
 	virtual ~qei_sensor();
 
 public:
@@ -27,6 +36,7 @@ public:
 
 private:
 	device_id m_nDevice;
+	configuration m_nConfig;
 };
 
 } /* namespace aeo1 */

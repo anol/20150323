@@ -34,7 +34,8 @@
 //--------------------------------
 aeo1::ssi_display g_oDisplay1(aeo1::ssi_display::SSI1);
 aeo1::ssi_display g_oDisplay2(aeo1::ssi_display::SSI3);
-aeo1::qei_sensor g_oRotaryDialer(aeo1::qei_sensor::QEI0);
+aeo1::qei_sensor g_oRotaryDialer(aeo1::qei_sensor::QEI0,
+		aeo1::qei_sensor::SwapPins);
 aeo1::qei_sensor g_oLinearScale(aeo1::qei_sensor::QEI1);
 static char g_zInput[APP_INPUT_BUF_SIZE];
 //--------------------------------
@@ -49,8 +50,20 @@ void ConfigureUART(void) {
 }
 //--------------------------------
 extern "C" void SysTickIntHandler(void) {
-	g_oDisplay1.Set(g_oRotaryDialer.Get() / 2);
-	g_oDisplay2.Set(g_oLinearScale.Get());
+	static int32_t nOldDialer = 0;
+	static int32_t nOldScale = 0;
+	int32_t nNewDialer = g_oRotaryDialer.Get() / 2;
+	int32_t nNewScale = g_oLinearScale.Get();
+	if (nNewDialer > nOldDialer) {
+		g_oDisplay1.Set("UP");
+	} else if (nNewDialer < nOldDialer) {
+		g_oDisplay1.Set("DOWN");
+	}
+	nOldDialer = nNewDialer;
+	if (nOldScale != nNewScale) {
+		g_oDisplay2.Set(nNewScale, 2);
+		nOldScale = nNewScale;
+	}
 }
 //--------------------------------
 void Initialize() {
@@ -61,7 +74,9 @@ void Initialize() {
 	ConfigureUART();
 	//
 	g_oDisplay1.Initialize();
+	g_oDisplay1.Set("--------");
 	g_oDisplay2.Initialize();
+	g_oDisplay2.Set(0, 2);
 	g_oRotaryDialer.Initialize();
 	g_oLinearScale.Initialize();
 	//

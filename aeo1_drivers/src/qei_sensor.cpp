@@ -24,17 +24,16 @@ namespace aeo1 {
 //--------------------------------
 const uint32_t MaxPosition = 100000000;
 //--------------------------------
-qei_sensor::qei_sensor(device_id nDevice) :
-		m_nDevice(nDevice) {
+qei_sensor::qei_sensor(device_id nDevice,
+		configuration nConfig /* =DefaultConfiguration */) :
+		m_nDevice(nDevice), m_nConfig(nConfig) {
 }
 //--------------------------------
 qei_sensor::~qei_sensor() {
 
 }
 //--------------------------------
-static void ConfigureQei0() {
-	const uint32_t ui32Config = (QEI_CONFIG_CAPTURE_A | QEI_CONFIG_RESET_IDX
-			| QEI_CONFIG_QUADRATURE | QEI_CONFIG_NO_SWAP);
+static void ConfigureQei0(uint32_t nConfig) {
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_QEI0);
@@ -52,13 +51,11 @@ static void ConfigureQei0() {
 	GPIOPinConfigure(GPIO_PF4_IDX0);
 	GPIOPinConfigure(GPIO_PD6_PHA0);
 	GPIOPinConfigure(GPIO_PD7_PHB0);
-	QEIConfigure(QEI0_BASE, ui32Config, MaxPosition);
+	QEIConfigure(QEI0_BASE, nConfig, MaxPosition);
 	QEIEnable(QEI0_BASE);
 }
 //--------------------------------
-static void ConfigureQei1() {
-	const uint32_t ui32Config = (QEI_CONFIG_CAPTURE_A | QEI_CONFIG_NO_RESET
-			| QEI_CONFIG_QUADRATURE | QEI_CONFIG_NO_SWAP);
+static void ConfigureQei1(uint32_t nConfig) {
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_QEI1);
 	GPIOPadConfigSet(GPIO_PORTC_BASE, GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,
@@ -67,17 +64,17 @@ static void ConfigureQei1() {
 	GPIOPinConfigure(GPIO_PC4_IDX1);
 	GPIOPinConfigure(GPIO_PC5_PHA1);
 	GPIOPinConfigure(GPIO_PC6_PHB1);
-	QEIConfigure(QEI1_BASE, ui32Config, MaxPosition);
+	QEIConfigure(QEI1_BASE, nConfig, MaxPosition);
 	QEIEnable(QEI1_BASE);
 }
 //--------------------------------
 void qei_sensor::Initialize() {
 	switch (m_nDevice) {
 	case QEI0:
-		ConfigureQei0();
+		ConfigureQei0(m_nConfig);
 		break;
 	case QEI1:
-		ConfigureQei1();
+		ConfigureQei1(m_nConfig);
 		break;
 	default:
 		break;
@@ -92,7 +89,6 @@ static int32_t GetValue(uint32_t ui32Base) {
 	} else {
 		nValue = -((int32_t) (MaxPosition - nPostion));
 	}
-//	nValue /= 2;
 	return nValue;
 }
 //--------------------------------

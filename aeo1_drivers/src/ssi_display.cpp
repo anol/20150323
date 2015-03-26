@@ -7,6 +7,7 @@
 //--------------------------------
 #include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
 #include "inc/hw_memmap.h"
 #include "driverlib/rom.h"
 #include "driverlib/rom_map.h"
@@ -20,12 +21,13 @@
 #include "inc/tm4c123gh6pm.h"
 //--------------------------------
 #include "ssi_display.h"
+#include "alpha7segment.h"
 //--------------------------------
 namespace aeo1 {
 //--------------------------------
 ssi_display::ssi_display(ssi_peripheral::device_id nDevice) :
 		ssi_peripheral(nDevice), m_bEmpty(false) {
-	Set(0);
+	memset(m_nDataTx, 0, sizeof(m_nDataTx));
 }
 //--------------------------------
 ssi_display::~ssi_display() {
@@ -72,6 +74,28 @@ void ssi_display::Set(int32_t nValue, int nDecimals) {
 		}
 		nValue /= 10;
 		nDecimals--;
+	}
+	if (m_bEmpty) {
+		LoadFIFO();
+	}
+}
+//--------------------------------
+void ssi_display::Set(const char* zString) {
+	for (int nGpc = BufferSize; 0 < nGpc; nGpc--) {
+		int nSymbolNumber = nGpc-1;
+		uint8_t nCode;
+		if (zString && *zString) {
+			char cSymbol = *zString++;
+			nCode = Alpha7Segment(cSymbol);
+			if ('.' == *zString) {
+				zString++;
+				nCode |= alpha7segment_dot;
+			}
+		} else {
+			nCode = alpha7segment_space;
+		}
+		nCode = ~nCode;
+		m_nDataTx[nSymbolNumber] = (nCode << 8) | (1 << nSymbolNumber);
 	}
 	if (m_bEmpty) {
 		LoadFIFO();
