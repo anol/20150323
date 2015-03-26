@@ -1,1 +1,1 @@
-"./src/adc_potmeter.obj" "./src/qei_sensor.obj" "./src/ssi_display.obj" "./src/ssi_peripheral.obj" 
+"./src/adc_potmeter.obj" "./src/alpha7segment.obj" "./src/qei_sensor.obj" "./src/ssi_display.obj" "./src/ssi_peripheral.obj" 

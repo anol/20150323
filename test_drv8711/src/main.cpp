@@ -49,7 +49,7 @@ void ConfigureUART(void) {
 }
 //--------------------------------
 extern "C" void SysTickIntHandler(void) {
-	g_oDisplay1.Set(g_oRotaryDialer.Get());
+	g_oDisplay1.Set(g_oRotaryDialer.Get() / 2);
 	g_oDisplay2.Set(g_oLinearScale.Get());
 }
 //--------------------------------

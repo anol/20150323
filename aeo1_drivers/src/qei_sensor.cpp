@@ -92,7 +92,7 @@ static int32_t GetValue(uint32_t ui32Base) {
 	} else {
 		nValue = -((int32_t) (MaxPosition - nPostion));
 	}
-	nValue /= 2;
+//	nValue /= 2;
 	return nValue;
 }
 //--------------------------------
