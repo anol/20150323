@@ -4,15 +4,15 @@
 
 SHELL = cmd.exe
 
-CG_TOOL_ROOT := c:/ti/ccsv6/tools/compiler/arm_5.1.11
+CG_TOOL_ROOT := C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.3
 
 ORDERED_OBJS += \
-$(GEN_CMDS__FLAG) \
 "./can.obj" \
 "./startup_ccs.obj" \
 "./utils/uartstdio.obj" \
 "./drivers/cfal96x64x16.obj" \
 "../can_ccs.cmd" \
+$(GEN_CMDS__FLAG) \
 -l"libc.a" \
 -l"C:/ti/TivaWare_C_Series-2.1.0.12573/examples/boards/dk-tm4c123g/can/ccs/../../../../../driverlib/ccs/Debug/driverlib.lib" \
 -l"C:/ti/TivaWare_C_Series-2.1.0.12573/examples/boards/dk-tm4c123g/can/ccs/../../../../../grlib/ccs/Debug/grlib.lib" \
@@ -57,11 +57,11 @@ endif
 ifneq ($(strip $(C67_DEPS)),)
 -include $(C67_DEPS)
 endif
-ifneq ($(strip $(C??_DEPS)),)
--include $(C??_DEPS)
-endif
 ifneq ($(strip $(CLA_DEPS)),)
 -include $(CLA_DEPS)
+endif
+ifneq ($(strip $(C??_DEPS)),)
+-include $(C??_DEPS)
 endif
 ifneq ($(strip $(CPP_DEPS)),)
 -include $(CPP_DEPS)
@@ -90,6 +90,9 @@ endif
 ifneq ($(strip $(C43_DEPS)),)
 -include $(C43_DEPS)
 endif
+ifneq ($(strip $(INO_DEPS)),)
+-include $(INO_DEPS)
+endif
 ifneq ($(strip $(S67_DEPS)),)
 -include $(S67_DEPS)
 endif
@@ -101,6 +104,9 @@ ifneq ($(strip $(S43_DEPS)),)
 endif
 ifneq ($(strip $(OPT_DEPS)),)
 -include $(OPT_DEPS)
+endif
+ifneq ($(strip $(PDE_DEPS)),)
+-include $(PDE_DEPS)
 endif
 ifneq ($(strip $(S64_DEPS)),)
 -include $(S64_DEPS)
@@ -130,7 +136,7 @@ all: test_can.out
 test_can.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: ARM Linker'
-	"c:/ti/ccsv6/tools/compiler/arm_5.1.11/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 --abi=eabi -me -O2 -g --gcc --define=ccs="ccs" --define=PART_TM4C123GH6PGE --define=TARGET_IS_TM4C123_RB1 --diag_warning=225 --display_error_number --diag_wrap=off --gen_func_subsections=on --ual -z --stack_size=512 -m"can_ccs.map" --heap_size=0 -i"c:/ti/ccsv6/tools/compiler/arm_5.1.11/lib" -i"c:/ti/ccsv6/tools/compiler/arm_5.1.11/include" --reread_libs --warn_sections --display_error_number --diag_wrap=off --xml_link_info="test_can_linkInfo.xml" --rom_model -o "test_can.out" $(ORDERED_OBJS)
+	"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.3/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 --abi=eabi -me -O2 -g --gcc --define=ccs="ccs" --define=PART_TM4C123GH6PGE --define=TARGET_IS_TM4C123_RB1 --diag_warning=225 --display_error_number --diag_wrap=off --gen_func_subsections=on --ual -z --stack_size=512 -m"can_ccs.map" --heap_size=0 -i"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.3/lib" -i"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.3/include" --reread_libs --warn_sections --display_error_number --diag_wrap=off --xml_link_info="test_can_linkInfo.xml" --rom_model -o "test_can.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	@$(MAKE) --no-print-directory post-build
@@ -144,7 +150,7 @@ clean:
 	-@echo ' '
 
 post-build:
-	-"c:/ti/ccsv6/utils/tiobj2bin/tiobj2bin" "test_can.out" "test_can.bin" "c:/ti/ccsv6/tools/compiler/arm_5.1.11/bin/armofd" "c:/ti/ccsv6/tools/compiler/arm_5.1.11/bin/armhex" "c:/ti/ccsv6/utils/tiobj2bin/mkhex4bin"
+	-"C:/ti/ccsv6/utils/tiobj2bin/tiobj2bin" "test_can.out" "test_can.bin" "C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.3/bin/armofd" "C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.3/bin/armhex" "C:/ti/ccsv6/utils/tiobj2bin/mkhex4bin"
 	-@echo ' '
 
 .PHONY: all clean dependents

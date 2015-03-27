@@ -24,6 +24,9 @@
 #include "utils/cmdline.h"
 //--------------------------------
 #include "ssi_display.h"
+#include "ssi_drv8711.h"
+#include "gpio_stepper.h"
+#include "pwm_stepper.h"
 #include "qei_sensor.h"
 //--------------------------------
 #define APP_SYSTICKS_PER_SEC 32

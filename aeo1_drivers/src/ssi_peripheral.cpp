@@ -7,6 +7,7 @@
 //--------------------------------
 #include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
 #include "inc/hw_memmap.h"
 #include "driverlib/rom.h"
 #include "driverlib/rom_map.h"
@@ -124,6 +125,8 @@ ssi_peripheral::ssi_peripheral(device_id nDevice) :
 								SSI1_Specification :
 								((ssi_peripheral::SSI2 == nDevice) ?
 										SSI2_Specification : SSI3_Specification))) {
+	memset(m_nDataTx, 0, sizeof(m_nDataTx));
+	memset(m_nDataRx, 0, sizeof(m_nDataRx));
 }
 //--------------------------------
 ssi_peripheral::~ssi_peripheral() {

@@ -7,7 +7,6 @@
 //--------------------------------
 #include <stdbool.h>
 #include <stdint.h>
-#include <string.h>
 #include "inc/hw_memmap.h"
 #include "driverlib/rom.h"
 #include "driverlib/rom_map.h"
@@ -27,7 +26,6 @@ namespace aeo1 {
 //--------------------------------
 ssi_display::ssi_display(ssi_peripheral::device_id nDevice) :
 		ssi_peripheral(nDevice), m_bEmpty(false) {
-	memset(m_nDataTx, 0, sizeof(m_nDataTx));
 }
 //--------------------------------
 ssi_display::~ssi_display() {
