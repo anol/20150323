@@ -14,6 +14,14 @@ class drv8711 {
 public:
 	drv8711();
 	virtual ~drv8711();
+
+public:
+	void Initialize();
+
+private:
+	ssi_drv8711 m_oSsiDrv8711;
+	gpio_stepper m_oGpioStepper;
+	pwm_stepper m_oPwmStepper;
 };
 
 } /* namespace aeo1 */

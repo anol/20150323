@@ -24,10 +24,8 @@
 #include "utils/cmdline.h"
 //--------------------------------
 #include "ssi_display.h"
-#include "ssi_drv8711.h"
-#include "gpio_stepper.h"
-#include "pwm_stepper.h"
 #include "qei_sensor.h"
+#include "drv8711.h"
 //--------------------------------
 #define APP_SYSTICKS_PER_SEC 32
 #define APP_INPUT_BUF_SIZE 128
@@ -35,11 +33,12 @@
 #define STRINGIZE_NX(A) #A
 #define STRINGIZE(A) STRINGIZE_NX(A)
 //--------------------------------
-aeo1::ssi_display g_oDisplay1(aeo1::ssi_display::SSI1);
-aeo1::ssi_display g_oDisplay2(aeo1::ssi_display::SSI3);
+aeo1::ssi_display g_oDialerDisplay(aeo1::ssi_display::SSI1);
+aeo1::ssi_display g_oScaleDisplay(aeo1::ssi_display::SSI3);
 aeo1::qei_sensor g_oRotaryDialer(aeo1::qei_sensor::QEI0,
 		aeo1::qei_sensor::SwapPins);
 aeo1::qei_sensor g_oLinearScale(aeo1::qei_sensor::QEI1);
+aeo1::drv8711 g_oDrv8711;
 static char g_zInput[APP_INPUT_BUF_SIZE];
 //--------------------------------
 void ConfigureUART(void) {
@@ -58,13 +57,13 @@ extern "C" void SysTickIntHandler(void) {
 	int32_t nNewDialer = g_oRotaryDialer.Get() / 2;
 	int32_t nNewScale = g_oLinearScale.Get();
 	if (nNewDialer > nOldDialer) {
-		g_oDisplay1.Set("UP");
+		g_oDialerDisplay.Set("UP");
 	} else if (nNewDialer < nOldDialer) {
-		g_oDisplay1.Set("DOWN");
+		g_oDialerDisplay.Set("DOWN");
 	}
 	nOldDialer = nNewDialer;
 	if (nOldScale != nNewScale) {
-		g_oDisplay2.Set(nNewScale, 2);
+		g_oScaleDisplay.Set(nNewScale, 2);
 		nOldScale = nNewScale;
 	}
 }
@@ -76,12 +75,13 @@ void Initialize() {
 	SYSCTL_OSC_MAIN);
 	ConfigureUART();
 	//
-	g_oDisplay1.Initialize();
-	g_oDisplay1.Set("--------");
-	g_oDisplay2.Initialize();
-	g_oDisplay2.Set(0, 2);
+	g_oDialerDisplay.Initialize();
+	g_oDialerDisplay.Set("--------");
+	g_oScaleDisplay.Initialize();
+	g_oScaleDisplay.Set(0, 2);
 	g_oRotaryDialer.Initialize();
 	g_oLinearScale.Initialize();
+	g_oDrv8711.Initialize();
 	//
 	SysTickPeriodSet(SysCtlClockGet() / APP_SYSTICKS_PER_SEC);
 	SysTickEnable();
