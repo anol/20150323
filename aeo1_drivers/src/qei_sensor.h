@@ -32,6 +32,7 @@ public:
 public:
 	void Initialize();
 	int32_t Get();
+	bool GetIndex();
 	void Set( int32_t nValue );
 	void Zero();
 	void Diag();

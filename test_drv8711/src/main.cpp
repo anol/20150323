@@ -42,21 +42,6 @@ aeo1::qei_sensor g_oLinearScale(aeo1::qei_sensor::QEI1);
 aeo1::drv8711 g_oDrv8711;
 static char g_zInput[APP_INPUT_BUF_SIZE];
 //--------------------------------
-int CMD_help(int argc, char **argv) {
-	int32_t i32Index;
-	(void) argc;
-	(void) argv;
-	i32Index = 0;
-	UARTprintf("\nAvailable Commands\n------------------\n\n");
-	while (g_psCmdTable[i32Index].pcCmd) {
-		UARTprintf("%17s %s\n", g_psCmdTable[i32Index].pcCmd,
-				g_psCmdTable[i32Index].pcHelp);
-		i32Index++;
-	}
-	UARTprintf("\n");
-	return (0);
-}
-//--------------------------------
 int CMD_zero(int argc, char **argv) {
 	g_oLinearScale.Zero();
 	g_oScaleDisplay.Set(0, 2);
@@ -118,9 +103,28 @@ int CMD_diag(int argc, char **argv) {
 	return (0);
 }
 //--------------------------------
+int CMD_help(int argc, char **argv) {
+	int32_t i32Index;
+	(void) argc;
+	(void) argv;
+	i32Index = 0;
+	UARTprintf("\nAvailable Commands\n------------------\n\n");
+	while (g_psCmdTable[i32Index].pcCmd) {
+		UARTprintf("%17s %s\n", g_psCmdTable[i32Index].pcCmd,
+				g_psCmdTable[i32Index].pcHelp);
+		i32Index++;
+	}
+	UARTprintf("\n");
+	return (0);
+}
+//--------------------------------
 tCmdLineEntry g_psCmdTable[] = {
 
-{ "help", CMD_help, " : Display list of commands" },
+{ "////////", CMD_help, "" },
+
+{ "--------", CMD_help, "" },
+
+{ "________", CMD_help, "" },
 
 { "null", CMD_zero, " : Zero the DRO" },
 
@@ -140,7 +144,31 @@ tCmdLineEntry g_psCmdTable[] = {
 
 { "diag", CMD_diag, " : Show diagnostic information" },
 
+{ "help", CMD_help, " : Display list of commands" },
+
 { 0, 0, 0 } };
+//--------------------------------
+void OnDialer(int nEvent) {
+	const int32_t CmdTableSize = (sizeof(g_psCmdTable) / sizeof(tCmdLineEntry))
+			- 2;
+	static int32_t i32Index = 0;
+	if (0 < nEvent) {
+		i32Index++;
+		if (CmdTableSize <= i32Index) {
+			i32Index = 0;
+		}
+		g_oDialerDisplay.Set(g_psCmdTable[i32Index].pcCmd);
+	} else if (0 > nEvent) {
+		i32Index--;
+		if (0 > i32Index) {
+			i32Index = CmdTableSize;
+		}
+		g_oDialerDisplay.Set(g_psCmdTable[i32Index].pcCmd);
+	} else {
+		tCmdLineEntry* psCmdEntry = &g_psCmdTable[i32Index];
+		psCmdEntry->pfnCmd(0, 0);
+	}
+}
 //--------------------------------
 void ConfigureUART(void) {
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
@@ -155,14 +183,23 @@ void ConfigureUART(void) {
 extern "C" void SysTickIntHandler(void) {
 	static int32_t nOldDialer = 0;
 	static int32_t nOldScale = 0;
+	static bool bOldDialerIndex = false;
+	static bool bOldScaleIndex = false;
 	int32_t nNewDialer = g_oRotaryDialer.Get() / 2;
 	int32_t nNewScale = g_oLinearScale.Get();
+	bool bNewDialerIndex = g_oRotaryDialer.GetIndex();
+	bool bNewScaleIndex = g_oLinearScale.GetIndex();
 	if (nNewDialer > nOldDialer) {
-		g_oDialerDisplay.Set("UP");
+		OnDialer(+1);
 	} else if (nNewDialer < nOldDialer) {
-		g_oDialerDisplay.Set("DOWN");
+		OnDialer(-1);
+	} else if (bOldDialerIndex != bNewDialerIndex) {
+		if (bNewDialerIndex) {
+			OnDialer(0);
+		}
 	}
 	nOldDialer = nNewDialer;
+	bOldDialerIndex = bNewDialerIndex;
 	if (nOldScale != nNewScale) {
 		g_oScaleDisplay.Set(nNewScale, 2);
 		nOldScale = nNewScale;

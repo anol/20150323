@@ -82,6 +82,17 @@ void qei_sensor::Initialize() {
 	}
 }
 //--------------------------------
+bool qei_sensor::GetIndex() {
+	switch (m_nDevice) {
+	case QEI0:
+		return GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_4) ? true : false;
+	case QEI1:
+		return GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4) ? true : false;
+	default:
+		return false;
+	}
+}
+//--------------------------------
 int32_t qei_sensor::Get() {
 	uint32_t nPosition = QEIPositionGet(m_ui32Base);
 	int32_t nValue;
@@ -104,6 +115,7 @@ void qei_sensor::Set(int32_t nValue) {
 }
 //--------------------------------
 void qei_sensor::Zero() {
+	QEIPositionSet(m_ui32Base, 0);
 }
 //--------------------------------
 void qei_sensor::Diag() {
