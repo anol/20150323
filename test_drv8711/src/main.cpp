@@ -41,6 +41,7 @@ aeo1::qei_sensor g_oRotaryDialer(aeo1::qei_sensor::QEI0,
 aeo1::qei_sensor g_oLinearScale(aeo1::qei_sensor::QEI1);
 aeo1::drv8711 g_oDrv8711;
 static char g_zInput[APP_INPUT_BUF_SIZE];
+static uint32_t g_nMenuMode = 0;
 //--------------------------------
 int CMD_zero(int argc, char **argv) {
 	g_oLinearScale.Zero();
@@ -120,12 +121,6 @@ int CMD_help(int argc, char **argv) {
 //--------------------------------
 tCmdLineEntry g_psCmdTable[] = {
 
-{ "////////", CMD_help, "" },
-
-{ "--------", CMD_help, "" },
-
-{ "________", CMD_help, "" },
-
 { "null", CMD_zero, " : Zero the DRO" },
 
 { "set", CMD_set, " : Set the DRO" },
@@ -148,25 +143,107 @@ tCmdLineEntry g_psCmdTable[] = {
 
 { 0, 0, 0 } };
 //--------------------------------
-void OnDialer(int nEvent) {
-	const int32_t CmdTableSize = (sizeof(g_psCmdTable) / sizeof(tCmdLineEntry))
-			- 2;
+int MNU_set(int argc, char **argv) {
+	(void) argc;
+	(void) argv;
+	g_nMenuMode = 1;
+	g_oRotaryDialer.Set(g_oLinearScale.Get());
+	return (0);
+}
+//--------------------------------
+int MNU_feed(int argc, char **argv) {
+	(void) argc;
+	(void) argv;
+	g_nMenuMode = 2;
+	g_oRotaryDialer.Zero();
+	return (0);
+}
+//--------------------------------
+int MNU_move(int argc, char **argv) {
+	(void) argc;
+	(void) argv;
+	g_nMenuMode = 3;
+	g_oRotaryDialer.Zero();
+	return (0);
+}
+//--------------------------------
+tCmdLineEntry g_psRotaryMenu[] = {
+
+{ "////////", CMD_help, "" },
+
+{ "--------", CMD_help, "" },
+
+{ "________", CMD_help, "" },
+
+{ "null", CMD_zero, " : Zero the DRO" },
+
+{ "set ....", MNU_set, " : Set the DRO" },
+
+{ "halt", CMD_halt, " : Halt (breake) the motor" },
+
+{ "feed ....", MNU_feed, " : Feed by speed (micrometers per second)" },
+
+{ "move ....", MNU_move, " : Move by lenght (micrometers)" },
+
+{ "idle", CMD_idle, " : Idle (free) the motor" },
+
+{ "stop", CMD_stop, " : Stop feed or move" },
+
+{ 0, 0, 0 } };
+//--------------------------------
+void OnMenuDialer(int nEvent) {
+	const int32_t RotaryMenuSize = (sizeof(g_psRotaryMenu)
+			/ sizeof(tCmdLineEntry)) - 2;
 	static int32_t i32Index = 0;
-	if (0 < nEvent) {
+	if (1 == nEvent) {
 		i32Index++;
-		if (CmdTableSize <= i32Index) {
+		if (RotaryMenuSize <= i32Index) {
 			i32Index = 0;
 		}
-		g_oDialerDisplay.Set(g_psCmdTable[i32Index].pcCmd);
-	} else if (0 > nEvent) {
+		g_oDialerDisplay.Set(g_psRotaryMenu[i32Index].pcCmd);
+	} else if (-1 == nEvent) {
 		i32Index--;
 		if (0 > i32Index) {
-			i32Index = CmdTableSize;
+			i32Index = RotaryMenuSize;
 		}
-		g_oDialerDisplay.Set(g_psCmdTable[i32Index].pcCmd);
-	} else {
-		tCmdLineEntry* psCmdEntry = &g_psCmdTable[i32Index];
+	}
+	g_oDialerDisplay.Set(g_psRotaryMenu[i32Index].pcCmd);
+	if (0 == nEvent) {
+		tCmdLineEntry* psCmdEntry = &g_psRotaryMenu[i32Index];
 		psCmdEntry->pfnCmd(0, 0);
+	}
+}
+//--------------------------------
+bool OnNumberDialer(int nEvent) {
+	if (nEvent) {
+		g_oDialerDisplay.Set(g_oRotaryDialer.Get() / 2);
+		return false;
+	} else {
+		g_nMenuMode = 0;
+		return true;
+	}
+}
+//--------------------------------
+void OnDialer(int nEvent) {
+	switch (g_bMenuMode) {
+	case 0:
+		OnMenuDialer(nEvent);
+		break;
+	case 1:
+		if (OnNumberDialer(nEvent)) {
+			g_oLinearScale.Set(g_oRotaryDialer.Get() / 2);
+			OnMenuDialer(2);
+		}
+		break;
+	case 2:
+		OnNumberDialer(nEvent);
+		break;
+	case 3:
+		OnNumberDialer(nEvent);
+		break;
+	default:
+		OnMenuDialer(nEvent);
+		break;
 	}
 }
 //--------------------------------
