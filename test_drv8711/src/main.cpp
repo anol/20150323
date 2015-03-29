@@ -28,7 +28,7 @@
 #include "qei_sensor.h"
 #include "drv8711.h"
 //--------------------------------
-#define APP_SYSTICKS_PER_SEC 32
+#define APP_SYSTICKS_PER_SEC 50
 #define APP_INPUT_BUF_SIZE 128
 //--------------------------------
 #define STRINGIZE_NX(A) #A
@@ -147,7 +147,7 @@ int MNU_set(int argc, char **argv) {
 	(void) argc;
 	(void) argv;
 	g_nMenuMode = 1;
-	g_oRotaryDialer.Set(g_oLinearScale.Get());
+	g_oRotaryDialer.Set(g_oLinearScale.Get() * 2);
 	return (0);
 }
 //--------------------------------
@@ -193,7 +193,7 @@ tCmdLineEntry g_psRotaryMenu[] = {
 //--------------------------------
 void OnMenuDialer(int nEvent) {
 	const int32_t RotaryMenuSize = (sizeof(g_psRotaryMenu)
-			/ sizeof(tCmdLineEntry)) - 2;
+			/ sizeof(tCmdLineEntry)) - 1;
 	static int32_t i32Index = 0;
 	if (1 == nEvent) {
 		i32Index++;
@@ -216,7 +216,7 @@ void OnMenuDialer(int nEvent) {
 //--------------------------------
 bool OnNumberDialer(int nEvent) {
 	if (nEvent) {
-		g_oDialerDisplay.Set(g_oRotaryDialer.Get() / 2);
+		g_oDialerDisplay.Set(g_oRotaryDialer.Get() / 2, 2);
 		return false;
 	} else {
 		g_nMenuMode = 0;
@@ -225,7 +225,7 @@ bool OnNumberDialer(int nEvent) {
 }
 //--------------------------------
 void OnDialer(int nEvent) {
-	switch (g_bMenuMode) {
+	switch (g_nMenuMode) {
 	case 0:
 		OnMenuDialer(nEvent);
 		break;
@@ -261,7 +261,7 @@ extern "C" void SysTickIntHandler(void) {
 	static int32_t nOldDialer = 0;
 	static int32_t nOldScale = 0;
 	static bool bOldDialerIndex = false;
-	static bool bOldScaleIndex = false;
+//	static bool bOldScaleIndex = false;
 	int32_t nNewDialer = g_oRotaryDialer.Get() / 2;
 	int32_t nNewScale = g_oLinearScale.Get();
 	bool bNewDialerIndex = g_oRotaryDialer.GetIndex();
