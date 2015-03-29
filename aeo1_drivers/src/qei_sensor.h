@@ -32,7 +32,7 @@ public:
 public:
 	void Initialize();
 	int32_t Get();
-	static void Diag();
+	void Diag();
 
 private:
 	device_id m_nDevice;

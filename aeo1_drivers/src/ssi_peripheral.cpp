@@ -22,27 +22,32 @@
 //--------------------------------
 #include "ssi_peripheral.h"
 //--------------------------------
+static aeo1::ssi_peripheral* g_pTheSSI0 = 0;
+static aeo1::ssi_peripheral* g_pTheSSI1 = 0;
+static aeo1::ssi_peripheral* g_pTheSSI2 = 0;
+static aeo1::ssi_peripheral* g_pTheSSI3 = 0;
+//--------------------------------
 extern "C" void OnSSI0Interrupt(void) {
-	if (aeo1::ssi_peripheral::m_pTheSSI0) {
-		aeo1::ssi_peripheral::m_pTheSSI0->OnInterrupt();
+	if (g_pTheSSI0) {
+		g_pTheSSI0->OnInterrupt();
 	}
 }
 //--------------------------------
 extern "C" void OnSSI1Interrupt(void) {
-	if (aeo1::ssi_peripheral::m_pTheSSI1) {
-		aeo1::ssi_peripheral::m_pTheSSI1->OnInterrupt();
+	if (g_pTheSSI1) {
+		g_pTheSSI1->OnInterrupt();
 	}
 }
 //--------------------------------
 extern "C" void OnSSI2Interrupt(void) {
-	if (aeo1::ssi_peripheral::m_pTheSSI2) {
-		aeo1::ssi_peripheral::m_pTheSSI2->OnInterrupt();
+	if (g_pTheSSI2) {
+		g_pTheSSI2->OnInterrupt();
 	}
 }
 //--------------------------------
 extern "C" void OnSSI3Interrupt(void) {
-	if (aeo1::ssi_peripheral::m_pTheSSI3) {
-		aeo1::ssi_peripheral::m_pTheSSI3->OnInterrupt();
+	if (g_pTheSSI3) {
+		g_pTheSSI3->OnInterrupt();
 	}
 }
 //--------------------------------
@@ -110,11 +115,6 @@ ssi_specification SSI3_Specification
 		};
 
 //--------------------------------
-ssi_peripheral* ssi_peripheral::m_pTheSSI0 = 0;
-ssi_peripheral* ssi_peripheral::m_pTheSSI1 = 0;
-ssi_peripheral* ssi_peripheral::m_pTheSSI2 = 0;
-ssi_peripheral* ssi_peripheral::m_pTheSSI3 = 0;
-//--------------------------------
 ssi_peripheral::ssi_peripheral(device_id nDevice) :
 		m_nDevice(nDevice),
 		// Use the Right SSI Peripheral Setup
@@ -161,16 +161,16 @@ void ssi_peripheral::Initialize() {
 	// Enable the SSI interrupt
 	switch (m_nDevice) {
 	case ssi_peripheral::SSI0:
-		m_pTheSSI0 = this;
+		g_pTheSSI0 = this;
 		break;
 	case ssi_peripheral::SSI1:
-		m_pTheSSI1 = this;
+		g_pTheSSI1 = this;
 		break;
 	case ssi_peripheral::SSI2:
-		m_pTheSSI2 = this;
+		g_pTheSSI2 = this;
 		break;
 	case ssi_peripheral::SSI3:
-		m_pTheSSI3 = this;
+		g_pTheSSI3 = this;
 	default:
 		break;
 	}
@@ -186,16 +186,16 @@ void ssi_peripheral::Initialize() {
 void ssi_peripheral::Terminate() {
 	switch (m_nDevice) {
 	case ssi_peripheral::SSI0:
-		m_pTheSSI0 = 0;
+		g_pTheSSI0 = 0;
 		break;
 	case ssi_peripheral::SSI1:
-		m_pTheSSI1 = 0;
+		g_pTheSSI1 = 0;
 		break;
 	case ssi_peripheral::SSI2:
-		m_pTheSSI2 = 0;
+		g_pTheSSI2 = 0;
 		break;
 	case ssi_peripheral::SSI3:
-		m_pTheSSI3 = 0;
+		g_pTheSSI3 = 0;
 	default:
 		break;
 	}
@@ -208,6 +208,26 @@ void ssi_peripheral::OnInterrupt() {
 	uint32_t nIntStatus = SSIIntStatus(m_rSpecification.m_nSSIBase, false);
 	SSIIntClear(m_rSpecification.m_nSSIBase, nIntStatus);
 	LoadFIFO();
+}
+//--------------------------------
+void ssi_peripheral::Diag() {
+	switch (m_nDevice) {
+	case ssi_peripheral::SSI0:
+		UARTprintf("ssi0\n");
+		break;
+	case ssi_peripheral::SSI1:
+		UARTprintf("ssi1\n");
+		break;
+	case ssi_peripheral::SSI2:
+		UARTprintf("ssi2\n");
+		break;
+	case ssi_peripheral::SSI3:
+		UARTprintf("ssi3\n");
+		break;
+	default:
+		UARTprintf("ssi-void!\n");
+		break;
+	}
 }
 //--------------------------------
 void ssi_peripheral::LoadFIFO() {

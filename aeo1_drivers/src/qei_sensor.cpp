@@ -104,9 +104,20 @@ int32_t qei_sensor::Get() {
 }
 //--------------------------------
 void qei_sensor::Diag() {
-	UARTprintf("QEI: 0=%d(%d), 1=%d(%d)\n", GetValue(QEI0_BASE),
-			QEIPositionGet(QEI0_BASE), GetValue(QEI1_BASE),
-			QEIPositionGet(QEI1_BASE));
+	switch (m_nDevice) {
+	case QEI0:
+		UARTprintf("qei0: val=%d, pos=%d\n", GetValue(QEI0_BASE),
+				QEIPositionGet(QEI0_BASE));
+		break;
+	case QEI1:
+		UARTprintf("qei1: val=%d, pos=%d\n", GetValue(QEI1_BASE),
+				QEIPositionGet(QEI1_BASE));
+		break;
+	default:
+		UARTprintf("qei-void!\n");
+		break;
+	}
+
 }
 //--------------------------------
 } /* namespace aeo1 */

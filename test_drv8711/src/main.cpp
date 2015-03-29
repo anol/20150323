@@ -20,6 +20,7 @@
 #include "driverlib/uart.h"
 #include "driverlib/adc.h"
 #include "driverlib/qei.h"
+#include "utils/ustdlib.h"
 #include "utils/uartstdio.h"
 #include "utils/cmdline.h"
 //--------------------------------
@@ -40,6 +41,79 @@ aeo1::qei_sensor g_oRotaryDialer(aeo1::qei_sensor::QEI0,
 aeo1::qei_sensor g_oLinearScale(aeo1::qei_sensor::QEI1);
 aeo1::drv8711 g_oDrv8711;
 static char g_zInput[APP_INPUT_BUF_SIZE];
+//--------------------------------
+int CMD_help(int argc, char **argv) {
+	int32_t i32Index;
+	(void) argc;
+	(void) argv;
+	i32Index = 0;
+	UARTprintf("\nAvailable Commands\n------------------\n\n");
+	while (g_psCmdTable[i32Index].pcCmd) {
+		UARTprintf("%17s %s\n", g_psCmdTable[i32Index].pcCmd,
+				g_psCmdTable[i32Index].pcHelp);
+		i32Index++;
+	}
+	UARTprintf("\n");
+	return (0);
+}
+//--------------------------------
+int CMD_idle(int argc, char **argv) {
+	g_oDrv8711.Idle();
+	return (0);
+}
+//--------------------------------
+int CMD_halt(int argc, char **argv) {
+	g_oDrv8711.Halt();
+	return (0);
+}
+//--------------------------------
+int CMD_feed(int argc, char **argv) {
+	if (argc == 2) {
+		uint32_t nValue = ustrtoul(argv[1], 0, 10);
+		g_oDrv8711.Feed(nValue);
+	}
+	return (0);
+}
+//--------------------------------
+int CMD_move(int argc, char **argv) {
+	if (argc == 2) {
+		uint32_t nValue = ustrtoul(argv[1], 0, 10);
+		g_oDrv8711.Move(nValue);
+	}
+	return (0);
+}
+//--------------------------------
+int CMD_stop(int argc, char **argv) {
+	g_oDrv8711.Stop();
+	return (0);
+}
+//--------------------------------
+int CMD_diag(int argc, char **argv) {
+	g_oDialerDisplay.Diag();
+	g_oScaleDisplay.Diag();
+	g_oRotaryDialer.Diag();
+	g_oLinearScale.Diag();
+	g_oDrv8711.Diag();
+	return (0);
+}
+//--------------------------------
+tCmdLineEntry g_psCmdTable[] = {
+
+{ "help", CMD_help, " : Display list of commands" },
+
+{ "idle", CMD_idle, " : Idle (free) the motor" },
+
+{ "halt", CMD_halt, " : Halt (breake) the motor" },
+
+{ "feed", CMD_feed, " : Feed by speed (micrometers per second)" },
+
+{ "move", CMD_move, " : Move by lenght (micrometers)" },
+
+{ "stop", CMD_stop, " : Stop feed or move" },
+
+{ "diag", CMD_diag, " : Show diagnostic information" },
+
+{ 0, 0, 0 } };
 //--------------------------------
 void ConfigureUART(void) {
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);

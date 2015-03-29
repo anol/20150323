@@ -19,7 +19,8 @@ public:
 	virtual ~ssi_drv8711();
 
 public:
-	void Initialize();
+	virtual void Initialize();
+	virtual void Diag();
 
 private:
 

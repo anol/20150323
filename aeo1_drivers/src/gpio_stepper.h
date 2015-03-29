@@ -14,6 +14,9 @@ class gpio_stepper {
 public:
 	gpio_stepper();
 	virtual ~gpio_stepper();
+
+public:
+	void Diag();
 };
 
 } /* namespace aeo1 */
