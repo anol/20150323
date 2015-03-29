@@ -57,6 +57,20 @@ int CMD_help(int argc, char **argv) {
 	return (0);
 }
 //--------------------------------
+int CMD_zero(int argc, char **argv) {
+	g_oLinearScale.Zero();
+	g_oScaleDisplay.Set(0, 2);
+	return (0);
+}
+//--------------------------------
+int CMD_set(int argc, char **argv) {
+	if (argc == 2) {
+		uint32_t nValue = ustrtoul(argv[1], 0, 10);
+		g_oLinearScale.Set(nValue);
+	}
+	return (0);
+}
+//--------------------------------
 int CMD_idle(int argc, char **argv) {
 	g_oDrv8711.Idle();
 	return (0);
@@ -88,6 +102,13 @@ int CMD_stop(int argc, char **argv) {
 	return (0);
 }
 //--------------------------------
+int CMD_text(int argc, char **argv) {
+	if (argc == 2) {
+		g_oDialerDisplay.Set(argv[1]);
+	}
+	return (0);
+}
+//--------------------------------
 int CMD_diag(int argc, char **argv) {
 	g_oDialerDisplay.Diag();
 	g_oScaleDisplay.Diag();
@@ -101,6 +122,10 @@ tCmdLineEntry g_psCmdTable[] = {
 
 { "help", CMD_help, " : Display list of commands" },
 
+{ "null", CMD_zero, " : Zero the DRO" },
+
+{ "set", CMD_set, " : Set the DRO" },
+
 { "idle", CMD_idle, " : Idle (free) the motor" },
 
 { "halt", CMD_halt, " : Halt (breake) the motor" },
@@ -110,6 +135,8 @@ tCmdLineEntry g_psCmdTable[] = {
 { "move", CMD_move, " : Move by lenght (micrometers)" },
 
 { "stop", CMD_stop, " : Stop feed or move" },
+
+{ "text", CMD_text, " : Display a text" },
 
 { "diag", CMD_diag, " : Show diagnostic information" },
 

@@ -32,10 +32,13 @@ public:
 public:
 	void Initialize();
 	int32_t Get();
+	void Set( int32_t nValue );
+	void Zero();
 	void Diag();
 
 private:
 	device_id m_nDevice;
+	uint32_t m_ui32Base;
 	configuration m_nConfig;
 };
 

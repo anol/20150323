@@ -26,7 +26,8 @@ const uint32_t MaxPosition = 100000000;
 //--------------------------------
 qei_sensor::qei_sensor(device_id nDevice,
 		configuration nConfig /* =DefaultConfiguration */) :
-		m_nDevice(nDevice), m_nConfig(nConfig) {
+		m_nDevice(nDevice), m_ui32Base(
+				(QEI0 == nDevice) ? QEI0_BASE : QEI1_BASE), m_nConfig(nConfig) {
 }
 //--------------------------------
 qei_sensor::~qei_sensor() {
@@ -81,37 +82,37 @@ void qei_sensor::Initialize() {
 	}
 }
 //--------------------------------
-static int32_t GetValue(uint32_t ui32Base) {
-	uint32_t nPostion = QEIPositionGet(ui32Base);
+int32_t qei_sensor::Get() {
+	uint32_t nPosition = QEIPositionGet(m_ui32Base);
 	int32_t nValue;
-	if ((MaxPosition / 2) > nPostion) {
-		nValue = nPostion;
+	if ((MaxPosition / 2) > nPosition) {
+		nValue = nPosition;
 	} else {
-		nValue = -((int32_t) (MaxPosition - nPostion));
+		nValue = -((int32_t) (MaxPosition - nPosition));
 	}
 	return nValue;
 }
 //--------------------------------
-int32_t qei_sensor::Get() {
-	switch (m_nDevice) {
-	case QEI0:
-		return GetValue(QEI0_BASE);
-	case QEI1:
-		return GetValue(QEI1_BASE);
-	default:
-		return 0;
+void qei_sensor::Set(int32_t nValue) {
+	uint32_t nPosition;
+	if (0 > nValue) {
+		nPosition = nValue;
+	} else {
+		nPosition = MaxPosition + nValue;
 	}
+	QEIPositionSet(m_ui32Base, nPosition);
+}
+//--------------------------------
+void qei_sensor::Zero() {
 }
 //--------------------------------
 void qei_sensor::Diag() {
 	switch (m_nDevice) {
 	case QEI0:
-		UARTprintf("qei0: val=%d, pos=%d\n", GetValue(QEI0_BASE),
-				QEIPositionGet(QEI0_BASE));
+		UARTprintf("qei0: val=%d, pos=%d\n", Get(), QEIPositionGet(QEI0_BASE));
 		break;
 	case QEI1:
-		UARTprintf("qei1: val=%d, pos=%d\n", GetValue(QEI1_BASE),
-				QEIPositionGet(QEI1_BASE));
+		UARTprintf("qei1: val=%d, pos=%d\n", Get(), QEIPositionGet(QEI1_BASE));
 		break;
 	default:
 		UARTprintf("qei-void!\n");
