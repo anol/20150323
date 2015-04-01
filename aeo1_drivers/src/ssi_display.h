@@ -12,7 +12,7 @@
 //--------------------------------
 namespace aeo1 {
 //--------------------------------
-class ssi_display : public ssi_peripheral{
+class ssi_display: public ssi_peripheral {
 
 public:
 	ssi_display(ssi_peripheral::device_id nDevice);
@@ -20,6 +20,7 @@ public:
 
 public:
 	void Initialize();
+	void Diag();
 	void Set(int32_t nValue, int nDecimals = 0);
 	void Set(const char* zString);
 

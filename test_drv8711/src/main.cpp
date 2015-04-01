@@ -222,6 +222,7 @@ bool OnNumberDialer(int nEvent) {
 		g_nMenuMode = 0;
 		return true;
 	}
+
 }
 //--------------------------------
 void OnDialer(int nEvent) {

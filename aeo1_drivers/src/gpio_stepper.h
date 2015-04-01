@@ -16,6 +16,7 @@ public:
 	virtual ~gpio_stepper();
 
 public:
+	void Initialize();
 	void Diag();
 };
 

@@ -100,5 +100,10 @@ void ssi_display::Set(const char* zString) {
 	}
 }
 //--------------------------------
+void ssi_display::Diag() {
+	UARTprintf("ssi_display\n");
+	ssi_peripheral::Diag();
+}
+//--------------------------------
 } /* namespace aeo1 */
 //--------------------------------

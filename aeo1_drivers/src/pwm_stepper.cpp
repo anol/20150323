@@ -25,6 +25,9 @@ pwm_stepper::pwm_stepper() {
 pwm_stepper::~pwm_stepper() {
 }
 //--------------------------------
+void pwm_stepper::Initialize() {
+}
+//--------------------------------
 void pwm_stepper::Diag() {
 	UARTprintf("pwm_stepper\n");
 }

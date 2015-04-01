@@ -26,6 +26,9 @@ gpio_stepper::gpio_stepper() {
 gpio_stepper::~gpio_stepper() {
 }
 //--------------------------------
+void gpio_stepper::Initialize() {
+}
+//--------------------------------
 void gpio_stepper::Diag() {
 	UARTprintf("gpio_stepper\n");
 }

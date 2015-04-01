@@ -124,7 +124,10 @@ ssi_peripheral::ssi_peripheral(device_id nDevice) :
 						((ssi_peripheral::SSI1 == nDevice) ?
 								SSI1_Specification :
 								((ssi_peripheral::SSI2 == nDevice) ?
-										SSI2_Specification : SSI3_Specification))) {
+										SSI2_Specification : SSI3_Specification))),
+		// Clear the statistics counters
+		m_nTXEOT(0), m_nDMATX(0), m_nDMARX(0), m_nTXFF(0), m_nRXFF(0), m_nRXTO(
+				0), m_nRXOR(0) {
 	memset(m_nDataTx, 0, sizeof(m_nDataTx));
 	memset(m_nDataRx, 0, sizeof(m_nDataRx));
 }
@@ -208,26 +211,54 @@ void ssi_peripheral::OnInterrupt() {
 	uint32_t nIntStatus = SSIIntStatus(m_rSpecification.m_nSSIBase, false);
 	SSIIntClear(m_rSpecification.m_nSSIBase, nIntStatus);
 	LoadFIFO();
+	if ( SSI_TXEOT & nIntStatus) { // Transmit FIFO is empty
+		m_nTXEOT++;
+	}
+	if ( SSI_DMATX & nIntStatus) { // DMA Transmit complete
+		m_nDMATX++;
+	}
+	if ( SSI_DMARX & nIntStatus) { // DMA Receive complete
+		m_nTXFF++;
+	}
+	if ( SSI_TXFF & nIntStatus) { // TX FIFO half full or less
+		m_nTXFF++;
+	}
+	if ( SSI_RXFF & nIntStatus) { // RX FIFO half full or more
+		m_nRXFF++;
+	}
+	if ( SSI_RXTO & nIntStatus) {  // RX timeout
+		m_nRXTO++;
+	}
+	if ( SSI_RXOR & nIntStatus) {  // RX overrun
+		m_nRXOR++;
+	}
 }
 //--------------------------------
 void ssi_peripheral::Diag() {
 	switch (m_nDevice) {
 	case ssi_peripheral::SSI0:
-		UARTprintf("ssi0\n");
+		UARTprintf("\tssi0\n");
 		break;
 	case ssi_peripheral::SSI1:
-		UARTprintf("ssi1\n");
+		UARTprintf("\tssi1\n");
 		break;
 	case ssi_peripheral::SSI2:
-		UARTprintf("ssi2\n");
+		UARTprintf("\tssi2\n");
 		break;
 	case ssi_peripheral::SSI3:
-		UARTprintf("ssi3\n");
+		UARTprintf("\tssi3\n");
 		break;
 	default:
-		UARTprintf("ssi-void!\n");
+		UARTprintf("\tssi-void!\n");
 		break;
 	}
+	UARTprintf("\tTXEOT=%5d\n", m_nTXEOT);
+	UARTprintf("\tDMATX=%5d\n", m_nDMATX);
+	UARTprintf("\tDMARX=%5d\n", m_nDMARX);
+	UARTprintf("\tTXFF= %5d\n", m_nTXFF);
+	UARTprintf("\tRXFF= %5d\n", m_nRXFF);
+	UARTprintf("\tRXTO= %5d\n", m_nRXTO);
+	UARTprintf("\tRXOR= %5d\n", m_nRXOR);
 }
 //--------------------------------
 void ssi_peripheral::LoadFIFO() {

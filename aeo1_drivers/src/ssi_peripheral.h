@@ -45,6 +45,14 @@ protected:
 	uint32_t m_nDataTx[BufferSize];
 	uint32_t m_nDataRx[BufferSize];
 	uint32_t m_nIndex;
+	uint32_t m_nTXEOT; // Transmit FIFO is empty
+	uint32_t m_nDMATX; // DMA Transmit complete
+	uint32_t m_nDMARX; // DMA Receive complete
+	uint32_t m_nTXFF; // TX FIFO half full or less
+	uint32_t m_nRXFF; // RX FIFO half full or more
+	uint32_t m_nRXTO; // RX timeout
+	uint32_t m_nRXOR; // RX overrun
+
 };
 //--------------------------------
 } /* namespace aeo1 */

@@ -38,6 +38,7 @@ void ssi_drv8711::Initialize() {
 //--------------------------------
 void ssi_drv8711::Diag() {
 	UARTprintf("ssi_drv8711\n");
+	ssi_peripheral::Diag();
 }
 //--------------------------------
 } /* namespace aeo1 */

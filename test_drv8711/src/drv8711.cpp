@@ -29,6 +29,9 @@ drv8711::~drv8711() {
 }
 //--------------------------------
 void drv8711::Initialize() {
+	m_oSsiDrv8711.Initialize();
+	m_oGpioStepper.Initialize();
+	m_oPwmStepper.Initialize();
 }
 //--------------------------------
 void drv8711::Idle() {

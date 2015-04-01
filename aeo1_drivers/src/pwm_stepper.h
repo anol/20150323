@@ -15,6 +15,7 @@ public:
 	virtual ~pwm_stepper();
 
 public:
+	void Initialize();
 	void Diag();
 
 };
