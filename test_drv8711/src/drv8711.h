@@ -9,7 +9,6 @@
 #define DRV8711_H_
 //--------------------------------
 #include "ssi_drv8711.h"
-#include "gpio_stepper.h"
 #include "pwm_stepper.h"
 //--------------------------------
 namespace aeo1 {
@@ -29,7 +28,6 @@ public:
 
 private:
 	ssi_drv8711 m_oSsiDrv8711;
-	gpio_stepper m_oGpioStepper;
 	pwm_stepper m_oPwmStepper;
 };
 } /* namespace aeo1 */

@@ -15,14 +15,13 @@
 #include "utils/uartstdio.h"
 //--------------------------------
 #include "ssi_drv8711.h"
-#include "gpio_stepper.h"
 #include "pwm_stepper.h"
 #include "drv8711.h"
 //--------------------------------
 namespace aeo1 {
 //--------------------------------
 drv8711::drv8711() :
-		m_oSsiDrv8711(ssi_peripheral::SSI2), m_oGpioStepper(), m_oPwmStepper() {
+		m_oSsiDrv8711(ssi_peripheral::SSI2), m_oPwmStepper() {
 }
 //--------------------------------
 drv8711::~drv8711() {
@@ -30,7 +29,6 @@ drv8711::~drv8711() {
 //--------------------------------
 void drv8711::Initialize() {
 	m_oSsiDrv8711.Initialize();
-	m_oGpioStepper.Initialize();
 	m_oPwmStepper.Initialize();
 	m_oSsiDrv8711.Read();
 }
@@ -58,7 +56,6 @@ void drv8711::Stop() {
 void drv8711::Diag() {
 	m_oSsiDrv8711.Read();
 	UARTprintf("drv8711\n");
-	m_oGpioStepper.Diag();
 	m_oPwmStepper.Diag();
 	m_oSsiDrv8711.Diag();
 }
