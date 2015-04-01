@@ -25,7 +25,7 @@
 namespace aeo1 {
 //--------------------------------
 ssi_display::ssi_display(ssi_peripheral::device_id nDevice) :
-		ssi_peripheral(nDevice), m_bEmpty(false) {
+		ssi_peripheral(nDevice) {
 }
 //--------------------------------
 ssi_display::~ssi_display() {
@@ -33,7 +33,6 @@ ssi_display::~ssi_display() {
 //--------------------------------
 void ssi_display::Initialize() {
 	ssi_peripheral::Initialize();
-	m_bEmpty = true;
 }
 //--------------------------------
 uint32_t ssi_display::Digit2Segments(uint32_t nDigitNumber,
@@ -73,8 +72,8 @@ void ssi_display::Set(int32_t nValue, int nDecimals) {
 		nValue /= 10;
 		nDecimals--;
 	}
-	if (m_bEmpty) {
-		LoadFIFO();
+	if (IsEmpty()) {
+		LoadTxFIFO();
 	}
 }
 //--------------------------------
@@ -95,8 +94,8 @@ void ssi_display::Set(const char* zString) {
 		nCode = ~nCode;
 		m_nDataTx[nSymbolNumber] = (nCode << 8) | (1 << nSymbolNumber);
 	}
-	if (m_bEmpty) {
-		LoadFIFO();
+	if (IsEmpty()) {
+		LoadTxFIFO();
 	}
 }
 //--------------------------------

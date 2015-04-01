@@ -32,6 +32,7 @@ void drv8711::Initialize() {
 	m_oSsiDrv8711.Initialize();
 	m_oGpioStepper.Initialize();
 	m_oPwmStepper.Initialize();
+	m_oSsiDrv8711.Read();
 }
 //--------------------------------
 void drv8711::Idle() {
@@ -55,10 +56,11 @@ void drv8711::Stop() {
 }
 //--------------------------------
 void drv8711::Diag() {
+	m_oSsiDrv8711.Read();
 	UARTprintf("drv8711\n");
-	m_oSsiDrv8711.Diag();
 	m_oGpioStepper.Diag();
 	m_oPwmStepper.Diag();
+	m_oSsiDrv8711.Diag();
 }
 //--------------------------------
 } /* namespace aeo1 */

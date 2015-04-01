@@ -32,26 +32,40 @@ public:
 	virtual void OnInterrupt();
 	virtual void Diag();
 	virtual void Terminate();
-	virtual void LoadFIFO();
+	virtual void OnRx() {
+	}
+	virtual void OnTx() {
+	}
+
+protected:
+	void LoadTxFIFO();
+	void UnloadRxFIFO();
+	bool IsEmpty() const {
+		return m_bEmpty;
+	}
 
 protected:
 	enum {
 		BufferSize = 8
 	};
 
-protected:
-	device_id m_nDevice;
+private:
 	const ssi_specification& m_rSpecification;
-	uint32_t m_nDataTx[BufferSize];
-	uint32_t m_nDataRx[BufferSize];
-	uint32_t m_nIndex;
-	uint32_t m_nTXEOT; // Transmit FIFO is empty
+	device_id m_nDevice;
+	uint32_t m_nSRTFE; // SSI Transmit FIFO Empty (status)
+	uint32_t m_nTXEOT; // Transmit FIFO is empty (interrupt)
 	uint32_t m_nDMATX; // DMA Transmit complete
 	uint32_t m_nDMARX; // DMA Receive complete
 	uint32_t m_nTXFF; // TX FIFO half full or less
 	uint32_t m_nRXFF; // RX FIFO half full or more
 	uint32_t m_nRXTO; // RX timeout
 	uint32_t m_nRXOR; // RX overrun
+	bool m_bEmpty;
+
+protected:
+	uint32_t m_nRxCount;
+	uint32_t m_nDataRx[BufferSize];
+	uint32_t m_nDataTx[BufferSize];
 
 };
 //--------------------------------

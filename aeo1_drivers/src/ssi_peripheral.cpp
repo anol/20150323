@@ -8,7 +8,11 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
+#include "inc/hw_ints.h"
 #include "inc/hw_memmap.h"
+#include "inc/hw_ssi.h"
+#include "inc/hw_sysctl.h"
+#include "inc/hw_types.h"
 #include "driverlib/rom.h"
 #include "driverlib/rom_map.h"
 #include "driverlib/gpio.h"
@@ -17,8 +21,6 @@
 #include "driverlib/ssi.h"
 #include "driverlib/sysctl.h"
 #include "utils/uartstdio.h"
-//--------------------------------
-#include "inc/tm4c123gh6pm.h"
 //--------------------------------
 #include "ssi_peripheral.h"
 //--------------------------------
@@ -116,7 +118,6 @@ ssi_specification SSI3_Specification
 
 //--------------------------------
 ssi_peripheral::ssi_peripheral(device_id nDevice) :
-		m_nDevice(nDevice),
 		// Use the Right SSI Peripheral Setup
 		m_rSpecification(
 				(ssi_peripheral::SSI0 == nDevice) ?
@@ -125,9 +126,10 @@ ssi_peripheral::ssi_peripheral(device_id nDevice) :
 								SSI1_Specification :
 								((ssi_peripheral::SSI2 == nDevice) ?
 										SSI2_Specification : SSI3_Specification))),
-		// Clear the statistics counters
-		m_nTXEOT(0), m_nDMATX(0), m_nDMARX(0), m_nTXFF(0), m_nRXFF(0), m_nRXTO(
-				0), m_nRXOR(0) {
+		// Other members
+		m_nDevice(nDevice), m_nSRTFE(0), m_nTXEOT(0), m_nDMATX(0), m_nDMARX(0), m_nTXFF(
+				0), m_nRXFF(0), m_nRXTO(0), m_nRXOR(0), m_bEmpty(false), m_nRxCount(
+				0) {
 	memset(m_nDataTx, 0, sizeof(m_nDataTx));
 	memset(m_nDataRx, 0, sizeof(m_nDataRx));
 }
@@ -161,6 +163,7 @@ void ssi_peripheral::Initialize() {
 	// FIFO and does not "hang" if there isn't.
 	while (MAP_SSIDataGetNonBlocking(m_rSpecification.m_nSSIBase, &m_nDataRx[0])) {
 	}
+	m_bEmpty = true;
 	// Enable the SSI interrupt
 	switch (m_nDevice) {
 	case ssi_peripheral::SSI0:
@@ -209,9 +212,13 @@ void ssi_peripheral::Terminate() {
 //--------------------------------
 void ssi_peripheral::OnInterrupt() {
 	uint32_t nIntStatus = SSIIntStatus(m_rSpecification.m_nSSIBase, false);
+	uint32_t nSsiStatus = (HWREG(m_rSpecification.m_nSSIBase + SSI_O_SR));
 	SSIIntClear(m_rSpecification.m_nSSIBase, nIntStatus);
-	LoadFIFO();
-	if ( SSI_TXEOT & nIntStatus) { // Transmit FIFO is empty
+	if (SSI_SR_TFE & nSsiStatus) { // SSI Transmit FIFO Empty (status)
+		m_nSRTFE++;
+		OnTx();
+	}
+	if ( SSI_TXEOT & nIntStatus) { // Transmit FIFO is empty (interrupt)
 		m_nTXEOT++;
 	}
 	if ( SSI_DMATX & nIntStatus) { // DMA Transmit complete
@@ -225,6 +232,7 @@ void ssi_peripheral::OnInterrupt() {
 	}
 	if ( SSI_RXFF & nIntStatus) { // RX FIFO half full or more
 		m_nRXFF++;
+		UnloadRxFIFO();
 	}
 	if ( SSI_RXTO & nIntStatus) {  // RX timeout
 		m_nRXTO++;
@@ -252,6 +260,7 @@ void ssi_peripheral::Diag() {
 		UARTprintf("\tssi-void!\n");
 		break;
 	}
+	UARTprintf("\tSRTFE=%5d\n", m_nSRTFE);
 	UARTprintf("\tTXEOT=%5d\n", m_nTXEOT);
 	UARTprintf("\tDMATX=%5d\n", m_nDMATX);
 	UARTprintf("\tDMARX=%5d\n", m_nDMARX);
@@ -261,11 +270,26 @@ void ssi_peripheral::Diag() {
 	UARTprintf("\tRXOR= %5d\n", m_nRXOR);
 }
 //--------------------------------
-void ssi_peripheral::LoadFIFO() {
+void ssi_peripheral::LoadTxFIFO() {
 	int32_t nResult = 1;
 	for (int nIndex = 0; nResult && (BufferSize > nIndex); nIndex++) {
 		nResult = SSIDataPutNonBlocking(m_rSpecification.m_nSSIBase,
 				m_nDataTx[nIndex]);
+	}
+}
+//--------------------------------
+void ssi_peripheral::UnloadRxFIFO() {
+	int32_t nResult = 1;
+	m_nRxCount = 0;
+	for (int nIndex = 0;
+			nResult && (BufferSize > nIndex) && (BufferSize > m_nRxCount);
+			nIndex++) {
+		nResult = SSIDataGetNonBlocking(m_rSpecification.m_nSSIBase,
+				&m_nDataRx[m_nRxCount]);
+		m_nRxCount += nResult;
+	}
+	if (m_nRxCount) {
+		OnRx();
 	}
 }
 //--------------------------------
