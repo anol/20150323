@@ -21,7 +21,7 @@
 namespace aeo1 {
 //--------------------------------
 drv8711::drv8711() :
-		m_oSsiDrv8711(ssi_peripheral::SSI2), m_oPwmStepper() {
+		m_oSsiDrv8711(), m_oPwmStepper() {
 }
 //--------------------------------
 drv8711::~drv8711() {
@@ -30,7 +30,6 @@ drv8711::~drv8711() {
 void drv8711::Initialize() {
 	m_oSsiDrv8711.Initialize();
 	m_oPwmStepper.Initialize();
-	m_oSsiDrv8711.Read();
 }
 //--------------------------------
 void drv8711::Idle() {
@@ -54,10 +53,17 @@ void drv8711::Stop() {
 }
 //--------------------------------
 void drv8711::Diag() {
-	m_oSsiDrv8711.Read();
+	ReadAllRegisters();
 	UARTprintf("drv8711\n");
 	m_oPwmStepper.Diag();
 	m_oSsiDrv8711.Diag();
+}
+//--------------------------------
+void drv8711::ReadAllRegisters() {
+	for (int nRegister = 0; ssi_drv8711::NumberOfRegisters > nRegister;
+			nRegister++) {
+		m_oSsiDrv8711.Read(nRegister);
+	}
 }
 //--------------------------------
 } /* namespace aeo1 */

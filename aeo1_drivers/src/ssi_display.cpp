@@ -25,7 +25,7 @@
 namespace aeo1 {
 //--------------------------------
 ssi_display::ssi_display(ssi_peripheral::device_id nDevice) :
-		ssi_peripheral(nDevice) {
+		ssi_peripheral(nDevice, 20000) {
 }
 //--------------------------------
 ssi_display::~ssi_display() {

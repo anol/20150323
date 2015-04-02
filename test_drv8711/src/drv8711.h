@@ -27,6 +27,9 @@ public:
 	void Diag();
 
 private:
+	void ReadAllRegisters();
+
+private:
 	ssi_drv8711 m_oSsiDrv8711;
 	pwm_stepper m_oPwmStepper;
 };

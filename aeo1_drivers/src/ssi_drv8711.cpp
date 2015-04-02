@@ -50,8 +50,9 @@ extern "C" void OnGPIOEInterrupt(void) {
 //--------------------------------
 namespace aeo1 {
 //--------------------------------
-ssi_drv8711::ssi_drv8711(ssi_peripheral::device_id nDevice) :
-		ssi_peripheral(nDevice) {
+ssi_drv8711::ssi_drv8711() :
+		ssi_peripheral(ssi_peripheral::SSI2, 1000000, false) {
+	memset(m_nRegister, 0, sizeof(m_nRegister));
 }
 //--------------------------------
 ssi_drv8711::~ssi_drv8711() {
@@ -94,30 +95,42 @@ void ssi_drv8711::Initialize() {
 	GPIOIntEnable(GPIO_PORTE_BASE, GPIO_PIN_0);
 	IntEnable(INT_GPIOE);
 
-	GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_5, GPIO_PIN_5);
-	GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_5, 0);
+	GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_5, GPIO_PIN_5); // nSleep = 1
 
-//	GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_2, GPIO_PIN_2);
+	GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_5, GPIO_PIN_5); // Reset = 1
+	GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_5, 0); // Reset = 0
+
+//	GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, GPIO_PIN_2); // Chip Select = 1
 
 }
+////--------------------------------
+//void ssi_drv8711::Read() {
+//	for (uint32_t nIndex = 0; BufferSize > nIndex; nIndex++) {
+//		m_nDataTx[nIndex] = 0x8000 | (nIndex << 12);
+////		m_nDataTx[nIndex] = 0x5A5A;
+//	}
+//	GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, GPIO_PIN_2); // Chip Select = 1
+//	LoadTxFIFO();
+//}
 //--------------------------------
-void ssi_drv8711::Read() {
-	for (int nIndex = 0; BufferSize > nIndex; nIndex++) {
-		m_nDataTx[nIndex] = 0x8000 | (nIndex << 12);
+uint32_t ssi_drv8711::Read(uint32_t nRegister) {
+	uint32_t nValue = (uint32_t) -1;
+	if (NumberOfRegisters > nRegister) {
+		uint32_t nRead = 0x8000 | (nRegister << 12);
+		GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, GPIO_PIN_2); // Chip Select = 1
+		Put(nRead);
+		nValue = Get();
+		GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, 0); // Chip Select = 0
+		m_nRegister[nRegister] = nValue;
 	}
-	GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_2, GPIO_PIN_2);
-	LoadTxFIFO();
-}
-//--------------------------------
-void ssi_drv8711::OnRx() {
-	GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_2, 0);
+	return nValue;
 }
 //--------------------------------
 void ssi_drv8711::Diag() {
 	ssi_peripheral::Diag();
 	UARTprintf("ssi_drv8711: r_cnt=%d\n", m_nRxCount);
-	for (int nIndex = 0; BufferSize > nIndex; nIndex++) {
-		UARTprintf("\t%d=0x%04X\n", nIndex, m_nDataRx[nIndex]);
+	for (int nRegister = 0; NumberOfRegisters > nRegister; nRegister++) {
+		UARTprintf("\t%d=0x%04X\n", nRegister, m_nRegister[nRegister]);
 	}
 }
 //--------------------------------

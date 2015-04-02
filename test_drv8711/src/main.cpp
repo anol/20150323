@@ -189,6 +189,8 @@ tCmdLineEntry g_psRotaryMenu[] = {
 
 { "stop", CMD_stop, " : Stop feed or move" },
 
+{ "diag", CMD_diag, " : Show diagnostic information" },
+
 { 0, 0, 0 } };
 //--------------------------------
 void OnMenuDialer(int nEvent) {
@@ -222,7 +224,6 @@ bool OnNumberDialer(int nEvent) {
 		g_nMenuMode = 0;
 		return true;
 	}
-
 }
 //--------------------------------
 void OnDialer(int nEvent) {

@@ -93,7 +93,7 @@ ssi_specification SSI2_Specification
 		SYSCTL_PERIPH_SSI2, // = SSIPeripheral
 		SSI2_BASE, // = SSIBase
 		GPIO_PB4_SSI2CLK, // = SSIPinClk
-		GPIO_PB5_SSI2FSS, // = SSIPinFss
+		0, //GPIO_PB5_SSI2FSS, // = SSIPinFss
 		GPIO_PB6_SSI2RX, // = SSIPinRx
 		GPIO_PB7_SSI2TX, // = SSIPinTx
 		0x4000A004, //SSI2_CR1_R, // = SSI_CR1_R
@@ -117,7 +117,8 @@ ssi_specification SSI3_Specification
 		};
 
 //--------------------------------
-ssi_peripheral::ssi_peripheral(device_id nDevice) :
+ssi_peripheral::ssi_peripheral(device_id nDevice, uint32_t nBitRate,
+		bool bNonBlocking /*=true*/) :
 		// Use the Right SSI Peripheral Setup
 		m_rSpecification(
 				(ssi_peripheral::SSI0 == nDevice) ?
@@ -127,9 +128,9 @@ ssi_peripheral::ssi_peripheral(device_id nDevice) :
 								((ssi_peripheral::SSI2 == nDevice) ?
 										SSI2_Specification : SSI3_Specification))),
 		// Other members
-		m_nDevice(nDevice), m_nSRTFE(0), m_nTXEOT(0), m_nDMATX(0), m_nDMARX(0), m_nTXFF(
-				0), m_nRXFF(0), m_nRXTO(0), m_nRXOR(0), m_bEmpty(false), m_nRxCount(
-				0) {
+		m_nDevice(nDevice), m_nBitRate(nBitRate), m_nSRTFE(0), m_nTXEOT(0), m_nDMATX(
+				0), m_nDMARX(0), m_nTXFF(0), m_nRXFF(0), m_nRXTO(0), m_nRXOR(0), m_bEmpty(
+				false), m_bNonBlocking(bNonBlocking), m_nRxCount(0) {
 	memset(m_nDataTx, 0, sizeof(m_nDataTx));
 	memset(m_nDataRx, 0, sizeof(m_nDataRx));
 }
@@ -142,7 +143,9 @@ void ssi_peripheral::Initialize() {
 	MAP_SysCtlPeripheralEnable(m_rSpecification.m_nSSIPeripheral);
 	MAP_SysCtlPeripheralEnable(m_rSpecification.m_nGPIOPeripheral);
 	MAP_GPIOPinConfigure(m_rSpecification.m_nSSIPinClk);
-	MAP_GPIOPinConfigure(m_rSpecification.m_nSSIPinFss);
+	if (m_rSpecification.m_nSSIPinFss) {
+		MAP_GPIOPinConfigure(m_rSpecification.m_nSSIPinFss);
+	}
 	MAP_GPIOPinConfigure(m_rSpecification.m_nSSIPinRx);
 	MAP_GPIOPinConfigure(m_rSpecification.m_nSSIPinTx);
 	MAP_GPIOPinTypeSSI(m_rSpecification.m_nGPIOBase,
@@ -150,8 +153,7 @@ void ssi_peripheral::Initialize() {
 	// Configure and enable the SSI port for TI master mode.  Use SSI3, system
 	// clock supply, master mode, SSI frequency, and 16-bit data.
 	SSIConfigSetExpClk(m_rSpecification.m_nSSIBase, SysCtlClockGet(),
-	SSI_FRF_MOTO_MODE_2,
-	SSI_MODE_MASTER, 10000, 16);
+	SSI_FRF_MOTO_MODE_0, SSI_MODE_MASTER, m_nBitRate, 16);
 	// Enable the SSI module.
 	MAP_SSIEnable(m_rSpecification.m_nSSIBase);
 	// Read any residual data from the SSI port.  This makes sure the receive
@@ -185,8 +187,10 @@ void ssi_peripheral::Initialize() {
 	SSIIntClear(m_rSpecification.m_nSSIBase,
 	SSI_TXFF | SSI_RXFF | SSI_RXTO | SSI_RXOR);
 	(*((volatile uint32_t *) m_rSpecification.m_nSSI_CR1_R)) |= SSI_CR1_EOT; /* switch tx interrupt to eot int */
-	SSIIntEnable(m_rSpecification.m_nSSIBase, SSI_TXFF); /* SSI_TXFF | SSI_RXFF | SSI_RXTO | SSI_RXOR  */
-	MAP_IntEnable(m_rSpecification.m_nInterrupt);
+	if (m_bNonBlocking) {
+		SSIIntEnable(m_rSpecification.m_nSSIBase, SSI_TXFF); /* SSI_TXFF | SSI_RXFF | SSI_RXTO | SSI_RXOR  */
+		MAP_IntEnable(m_rSpecification.m_nInterrupt);
+	}
 }
 //--------------------------------
 void ssi_peripheral::Terminate() {
@@ -270,6 +274,16 @@ void ssi_peripheral::Diag() {
 	UARTprintf("\tRXOR= %5d\n", m_nRXOR);
 }
 //--------------------------------
+void ssi_peripheral::Put(uint32_t nValue) {
+	SSIDataPut(m_rSpecification.m_nSSIBase, nValue);
+}
+//--------------------------------
+uint32_t ssi_peripheral::Get() {
+	uint32_t nValue = 0;
+	SSIDataGet(m_rSpecification.m_nSSIBase, &nValue);
+	return nValue;
+}
+//--------------------------------
 void ssi_peripheral::LoadTxFIFO() {
 	int32_t nResult = 1;
 	for (int nIndex = 0; nResult && (BufferSize > nIndex); nIndex++) {
@@ -281,11 +295,9 @@ void ssi_peripheral::LoadTxFIFO() {
 void ssi_peripheral::UnloadRxFIFO() {
 	int32_t nResult = 1;
 	m_nRxCount = 0;
-	for (int nIndex = 0;
-			nResult && (BufferSize > nIndex) && (BufferSize > m_nRxCount);
-			nIndex++) {
+	for (int nIndex = 0; nResult && (BufferSize > nIndex); nIndex++) {
 		nResult = SSIDataGetNonBlocking(m_rSpecification.m_nSSIBase,
-				&m_nDataRx[m_nRxCount]);
+				&m_nDataRx[nIndex]);
 		m_nRxCount += nResult;
 	}
 	if (m_nRxCount) {

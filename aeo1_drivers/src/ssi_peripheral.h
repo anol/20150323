@@ -24,7 +24,8 @@ public:
 	};
 
 public:
-	ssi_peripheral(device_id nDevice);
+	ssi_peripheral(device_id nDevice, uint32_t nBitRate, bool bNonBlocking =
+			true);
 	virtual ~ssi_peripheral();
 
 public:
@@ -38,6 +39,8 @@ public:
 	}
 
 protected:
+	void Put(uint32_t nValue);
+	uint32_t Get();
 	void LoadTxFIFO();
 	void UnloadRxFIFO();
 	bool IsEmpty() const {
@@ -52,6 +55,7 @@ protected:
 private:
 	const ssi_specification& m_rSpecification;
 	device_id m_nDevice;
+	uint32_t m_nBitRate;
 	uint32_t m_nSRTFE; // SSI Transmit FIFO Empty (status)
 	uint32_t m_nTXEOT; // Transmit FIFO is empty (interrupt)
 	uint32_t m_nDMATX; // DMA Transmit complete
@@ -61,6 +65,7 @@ private:
 	uint32_t m_nRXTO; // RX timeout
 	uint32_t m_nRXOR; // RX overrun
 	bool m_bEmpty;
+	bool m_bNonBlocking;
 
 protected:
 	uint32_t m_nRxCount;

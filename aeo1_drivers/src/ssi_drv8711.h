@@ -12,21 +12,24 @@
 //--------------------------------
 namespace aeo1 {
 //--------------------------------
-class ssi_drv8711 : public ssi_peripheral{
+class ssi_drv8711: public ssi_peripheral {
+public:
+	enum {
+		NumberOfRegisters = 8
+	};
 
 public:
-	ssi_drv8711(ssi_peripheral::device_id nDevice);
+	ssi_drv8711();
 	virtual ~ssi_drv8711();
 
 public:
-	 void Initialize();
-	 void Diag();
-	 void OnRx();
-	 void Read();
+	void Initialize();
+	void Diag();
+	uint32_t Read(uint32_t nRegister);
 
 private:
+	uint32_t m_nRegister[NumberOfRegisters];
 
-private:
 };
 //--------------------------------
 } /* namespace aeo1 */
