@@ -34,10 +34,12 @@ void drv8711::Initialize() {
 //--------------------------------
 void drv8711::Idle() {
 	UARTprintf("Idle\n");
+	m_oSsiDrv8711.Write(0, 0xC10);
 }
 //--------------------------------
 void drv8711::Halt() {
 	UARTprintf("Halt\n");
+	m_oSsiDrv8711.Write(0, 0xC11);
 }
 //--------------------------------
 void drv8711::Feed(int32_t nMicrosPerSecond) {

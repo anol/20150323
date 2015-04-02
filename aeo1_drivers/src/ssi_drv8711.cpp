@@ -100,18 +100,7 @@ void ssi_drv8711::Initialize() {
 	GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_5, GPIO_PIN_5); // Reset = 1
 	GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_5, 0); // Reset = 0
 
-//	GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, GPIO_PIN_2); // Chip Select = 1
-
 }
-////--------------------------------
-//void ssi_drv8711::Read() {
-//	for (uint32_t nIndex = 0; BufferSize > nIndex; nIndex++) {
-//		m_nDataTx[nIndex] = 0x8000 | (nIndex << 12);
-////		m_nDataTx[nIndex] = 0x5A5A;
-//	}
-//	GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, GPIO_PIN_2); // Chip Select = 1
-//	LoadTxFIFO();
-//}
 //--------------------------------
 uint32_t ssi_drv8711::Read(uint32_t nRegister) {
 	uint32_t nValue = (uint32_t) -1;
@@ -124,6 +113,18 @@ uint32_t ssi_drv8711::Read(uint32_t nRegister) {
 		m_nRegister[nRegister] = nValue;
 	}
 	return nValue;
+}
+//--------------------------------
+uint32_t ssi_drv8711::Write(uint32_t nRegister, uint32_t nValue) {
+	uint32_t nEcho = 0;
+	if (NumberOfRegisters > nRegister) {
+		uint32_t nRead = (nRegister << 12) | (0xFFF & nValue);
+		GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, GPIO_PIN_2); // Chip Select = 1
+		Put(nRead);
+		nEcho = Get();
+		GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, 0); // Chip Select = 0
+	}
+	return nEcho;
 }
 //--------------------------------
 void ssi_drv8711::Diag() {

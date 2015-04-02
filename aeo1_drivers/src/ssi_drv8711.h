@@ -26,6 +26,7 @@ public:
 	void Initialize();
 	void Diag();
 	uint32_t Read(uint32_t nRegister);
+	uint32_t Write(uint32_t nRegister, uint32_t nValue);
 
 private:
 	uint32_t m_nRegister[NumberOfRegisters];
