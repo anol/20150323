@@ -83,6 +83,8 @@ int CMD_move(int argc, char **argv) {
 	if (argc == 2) {
 		uint32_t nValue = ustrtoul(argv[1], 0, 10);
 		g_oDrv8711.Move(nValue);
+	} else {
+		UARTprintf("Use: move <um>\n");
 	}
 	return (0);
 }

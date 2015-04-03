@@ -65,6 +65,7 @@ extern void OnSSI2Interrupt(void);
 extern void OnSSI3Interrupt(void);
 extern void OnGPIOBInterrupt(void);
 extern void OnGPIOEInterrupt(void);
+extern void OnPWM1Gen1Interrupt(void);
 
 //*****************************************************************************
 //
@@ -94,10 +95,10 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // The PendSV handler
     SysTickIntHandler,                      // The SysTick handler
     IntDefaultHandler,                      // GPIO Port A
-    OnGPIOBInterrupt,                      // GPIO Port B
+    OnGPIOBInterrupt,                       // GPIO Port B
     IntDefaultHandler,                      // GPIO Port C
     IntDefaultHandler,                      // GPIO Port D
-    OnGPIOEInterrupt,                      // GPIO Port E
+    OnGPIOEInterrupt,                       // GPIO Port E
     UARTStdioIntHandler,                    // UART0 Rx and Tx
     IntDefaultHandler,                      // UART1 Rx and Tx
     OnSSI0Interrupt,                      	// SSI0 Rx and Tx
@@ -228,7 +229,7 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // GPIO Port R
     IntDefaultHandler,                      // GPIO Port S
     IntDefaultHandler,                      // PWM 1 Generator 0
-    IntDefaultHandler,                      // PWM 1 Generator 1
+    OnPWM1Gen1Interrupt,                    // PWM 1 Generator 1
     IntDefaultHandler,                      // PWM 1 Generator 2
     IntDefaultHandler,                      // PWM 1 Generator 3
     IntDefaultHandler                       // PWM 1 Fault

@@ -74,7 +74,7 @@ void drv8711::Halt() {
 //--------------------------------
 void drv8711::Step(uint32_t nSteps, bool bForward) {
 	uint32_t nValue = m_oSsiDrv8711.Read(0);
-	if(bForward){
+	if (bForward) {
 		nValue |= 0x007;
 	} else {
 		nValue &= ~(0x007);
@@ -118,7 +118,9 @@ void drv8711::Feed(int32_t nMicrosPerSecond) {
 }
 //--------------------------------
 void drv8711::Move(int32_t nMicros) {
-	UARTprintf("Move: length=%d(um)\n", nMicros);
+	uint32_t nSteps = nMicros / 20;
+	UARTprintf("Move %d um\n", nMicros);
+	m_oPwmStepper.Move(nSteps);
 }
 //--------------------------------
 void drv8711::Stop() {

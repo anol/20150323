@@ -8,8 +8,14 @@
 #ifndef SRC_PWM_STEPPER_H_
 #define SRC_PWM_STEPPER_H_
 //--------------------------------
+#include "driverlib/pwm.h"
+//--------------------------------
 namespace aeo1 {
 class pwm_stepper {
+private:
+	enum {
+		Base = PWM1_BASE, Generator = PWM_GEN_1
+	};
 public:
 	pwm_stepper();
 	virtual ~pwm_stepper();
@@ -17,6 +23,7 @@ public:
 public:
 	void Initialize();
 	void Diag();
+	void Move(uint32_t nSteps);
 
 };
 } /* namespace aeo1 */
