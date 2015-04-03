@@ -132,8 +132,13 @@ void drv8711::Move(int32_t nMicros) {
 	m_oPwmStepper.Move(nSteps);
 }
 //--------------------------------
-void drv8711::Stop() {
-	UARTprintf("Stop\n");
+void drv8711::Stop(bool bHard) {
+	if (bHard) {
+		UARTprintf("Hard Stop\n");
+	} else {
+		UARTprintf("Soft Stop\n");
+	}
+	m_oPwmStepper.Stop(bHard);
 }
 //--------------------------------
 void drv8711::Diag() {

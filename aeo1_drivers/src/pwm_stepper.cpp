@@ -46,9 +46,7 @@ void pwm_stepper::Initialize() {
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
 	GPIOPinConfigure(GPIO_PA6_M1PWM2);
 	GPIOPinTypePWM(GPIO_PORTA_BASE, GPIO_PIN_6);
-	PWMGenConfigure(Base, Generator,
-//	PWM_GEN_MODE_DOWN | PWM_GEN_MODE_SYNC | PWM_GEN_MODE_GEN_SYNC_LOCAL);
-	PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
+	PWMGenConfigure(Base, Generator, PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
 	// Set the PWM period to 250Hz.  To calculate the appropriate parameter
 	// use the following equation: N = (1 / f) * SysClk.  Where N is the
 	// function parameter, f is the desired frequency, and SysClk is the
@@ -65,6 +63,7 @@ void pwm_stepper::Initialize() {
 	// Enable the PWM1 interrupts on the processor (NVIC).
 	IntEnable(INT_PWM1_1);
 	// Enable the PWM1 output signal (PA6).
+//	PWMOutputInvert(Base, PWM_OUT_2_BIT, true);
 	PWMOutputState(Base, PWM_OUT_2_BIT, true);
 }
 //--------------------------------
@@ -81,7 +80,9 @@ void pwm_stepper::OnInterrupt() {
 			m_nSpeed = m_nTargetSpeed;
 			m_nPhase = Phase_Steady;
 		}
-//		PWMGenPeriodSet(Base, Generator, m_nSpeed);
+		PWMGenPeriodSet(Base, Generator, m_nSpeed);
+		PWMPulseWidthSet(Base, PWM_OUT_2, 64);
+		PWMGenEnable(Base, Generator);
 		break;
 	case Phase_Steady:
 		if (m_nSteps <= ((StartSpeed - m_nSpeed) / m_nDeceleration)) {
@@ -94,7 +95,9 @@ void pwm_stepper::OnInterrupt() {
 			m_nSpeed = StartSpeed;
 			m_nPhase = Phase_Stop;
 		}
-//		PWMGenPeriodSet(Base, Generator, m_nSpeed);
+		PWMGenPeriodSet(Base, Generator, m_nSpeed);
+		PWMPulseWidthSet(Base, PWM_OUT_2, 64);
+		PWMGenEnable(Base, Generator);
 		break;
 	case Phase_Stop:
 		PWMGenDisable(Base, Generator);
@@ -113,7 +116,16 @@ void pwm_stepper::Move(uint32_t nSteps) {
 	m_nPhase = Phase_Accel;
 	UARTprintf("Move %d steps\n", m_nSteps);
 	PWMGenPeriodSet(Base, Generator, m_nSpeed);
+	PWMPulseWidthSet(Base, PWM_OUT_2, 64);
 	PWMGenEnable(Base, Generator);
+}
+//--------------------------------
+void pwm_stepper::Stop(bool bHard) {
+	if (bHard) {
+		PWMGenDisable(Base, Generator);
+	} else {
+		m_nSteps = ((StartSpeed - m_nSpeed) / m_nDeceleration);
+	}
 }
 //--------------------------------
 void pwm_stepper::Diag() {

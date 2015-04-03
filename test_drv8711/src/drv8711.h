@@ -25,7 +25,7 @@ public:
 	void Move(int32_t nMicros);
 	void SetTorque(uint32_t nTorque);
 	void SetDefault();
-	void Stop();
+	void Stop(bool bHard);
 	void Diag();
 	void Step(uint32_t nSteps, bool bForward);
 	void Sleep(bool bSleep);

@@ -17,8 +17,8 @@ private:
 		Base = PWM1_BASE,
 		Generator = PWM_GEN_1,
 		StartSpeed = 16000,
-		MaxSpeed = 8000,
-		Acceleration = 10
+		MaxSpeed = 4000,
+		Acceleration = 20
 	};
 	enum Phase {
 		Phase_Idle,
@@ -34,6 +34,7 @@ public:
 	void Initialize();
 	void Diag();
 	void Move(uint32_t nSteps);
+	void Stop(bool bHard);
 	void OnInterrupt();
 private:
 	int32_t m_nSteps;

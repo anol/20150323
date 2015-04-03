@@ -90,7 +90,11 @@ int CMD_move(int argc, char **argv) {
 }
 //--------------------------------
 int CMD_stop(int argc, char **argv) {
-	g_oDrv8711.Stop();
+	if (argc == 2) {
+		g_oDrv8711.Stop(false);
+	} else {
+		g_oDrv8711.Stop(true);
+	}
 	return (0);
 }
 //--------------------------------
