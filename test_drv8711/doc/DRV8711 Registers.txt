@@ -1,0 +1,185 @@
+CTRL Register
+Address = 0x0
+Default = 0x
+Reference = 0xF1C
+BIT NAME SIZE R/W DEFAULT DESCRIPTION
+0 ENBL 1 R/W 0 
+	0: Disable motor 
+	1:* Enable motor
+1 RDIR 1 R/W 0 
+	0:* Direction set by DIR pin 
+	1: Direction set by inverse of DIR pin
+2 RSTEP 1 W 0 
+	0:* No action 
+	1: Indexer will advance one step; automatically cleared after write
+6-3 MODE 4 R/W 0010 
+	0000: Full-step, 71% current
+	0001: Half step
+	0010: 1/4 step
+	0011:* 1/8 step
+	0100: 1/16 step 
+	0101: 1/32 step
+	0110: 1/64 step
+	0111: 1/128 step
+	1000: 1/256 step
+	1001 – 1111: Reserved
+7 EXSTALL 1 R/W 0 
+	0:* Internal stall detect 
+	1: External stall detect
+9-8 ISGAIN 2 R/W 00 
+	ISENSE amplifier gain set
+	00: Gain of 5
+	01: Gain of 10
+	10: Gain of 20
+	11:* Gain of 40
+11-10 DTIME 2 R/W 11 
+	Dead time set
+	00: 400 ns dead time
+	01: 450 ns dead time
+	10: 650 ns dead time
+	11:* 850 ns dead time
+
+TORQUE Register
+Address = 0x1
+Default = 0x0FF
+Reference = 0x0BA
+BIT NAME SIZE R/W DEFAULT DESCRIPTION
+7-0 TORQUE 8 R/W 0xFF 	
+	Sets full-scale output current for both H-bridges
+	0xBA:* 186
+10-8 SMPLTH 3 R/W 001 011: 300 μs
+	Back EMF sample threshold
+	000:* 50 μs
+	001: 100 μs
+	010: 200 μs
+	100: 400 μs
+	101: 600 μs
+	110: 800 μs
+	111: 1000 μs
+11 Reserved
+
+OFF Register
+Address = 0x2
+Default = 0x030
+Reference = 0x030
+BIT NAME SIZE R/W DEFAULT DESCRIPTION
+7-0 TOFF 8 R/W 0x30 
+	Sets fixed off time, in increments of 500 ns
+	0x00: 500 ns
+	0x30:* 24 μs (48) 
+	0xFF: 128 μs
+8 PWMMODE 1 R/W 0 
+	0:* Use internal indexer 
+	1: Bypass indexer, use xINx inputs to control outputs
+11-9 Reserved
+
+BLANK Register
+Address = 0x3
+Default = 0x080
+Reference = 0x108
+BIT NAME SIZE R/W DEFAULT DESCRIPTION
+7-0 TBLANK 8 R/W 0x80
+	Sets current trip blanking time, in increments of 20 ns
+	0x00h: 1.00 μs
+	…
+	0x32h: 2.00 μs
+	0x33h: 2.02 μs
+	…
+	0xFEh: 5.10 μs
+	0xFFh: 5.12 μs
+	Also sets minimum on-time of PWM
+8 ABT 1 R/W 0 
+	0: Disable adaptive blanking time 
+	1: Enable adaptive blanking time
+11-9 Reserved
+
+DECAY Register
+Address = 0x4
+Default = 0x110
+Reference = 0x510
+BIT NAME SIZE R/W DEFAULT DESCRIPTION
+7-0 TDECAY 8 R/W 0x10
+	Sets mixed decay transition time, in increments of 500 ns
+10-8 DECMOD 3 R/W 001 
+	000: Force slow decay at all times
+	001: Slow decay for increasing current, mixed decay for decreasing current
+	010: Force fast decay at all times
+	011: Use mixed decay at all times
+	100: Slow decay for increasing current, auto mixed decay for decreasing current
+	101:* Use auto mixed decay at all times
+	110 – 111: Reserved
+11 Reserved
+
+STALL Register
+Address = 0x5h
+BIT NAME SIZE R/W DEFAULT DESCRIPTION
+7-0 SDTHR 8 R/W 0x40h Sets stall detect threshold The correct setting needs to be determined experimentally
+00: STALLn asserted on first step with back EMF below SDTHR
+9-8 SDCNT 2 R/W 00 01: STALLn asserted after 2 steps 10: STALLn asserted after 4 steps
+11: STALLn asserted after 8 steps
+00: Back EMF is divided by 32
+11-10 VDIV 2 R/W 00 01: Back EMF is divided by 16 10: Back EMF is divided by 8
+11: Back EMF is divided by 4
+
+DRIVE Register
+Address = 0x6h
+BIT NAME SIZE R/W DEFAULT DESCRIPTION
+OCP threshold
+00: 250 mV
+1-0 OCPTH 2 R/W 00 01: 500 mV
+10: 750 mV
+11: 1000 mV
+OCP deglitch time
+00: 1 μs
+3-2 OCPDEG 2 R/W 01 01: 2 μs
+10: 4 μs
+11: 8 μs
+Low-side gate drive time
+00: 250 ns
+5-4 TDRIVEN 2 R/W 01 01: 500 ns
+10: 1 μs
+11: 2 μs
+High-side gate drive time
+00: 250 ns
+7-6 TDRIVEP 2 R/W 01 01: 500 ns
+10: 1 μs
+11: 2 μs
+Low-side gate drive peak current
+00: 100 mA peak (sink)
+9-8 IDRIVEN 2 R/W 00 01: 200 mA peak (sink)
+10: 300 mA peak (sink)
+11: 400 mA peak (sink)
+High-side gate drive peak current
+00: 50 mA peak (source)
+11-10 IDRIVEP 2 R/W 00 01: 100 mA peak (source)
+10: 150 mA peak (source)
+11: 200 mA peak (source)
+
+STATUS Register
+Address = 0x7h
+BIT NAME SIZE R/W DEFAULT DESCRIPTION
+0: Normal operation
+0 OTS 1 R 0 1: Device has entered overtemperature shutdown
+OTS bit will clear once temperature has fallen to safe levels
+0: Normal operation
+1 AOCP 1 R/W 0 1: Channel A overcurrent shutdown
+Write a ‘0’ to this bit to clear the fault and resume operation
+0: Normal operation
+2 BOCP 1 R/W 0 1: Channel B overcurrent shutdown
+Write a ‘0’ to this bit to clear the fault and resume operation
+0: Normal operation
+3 APDF 1 R/W 0 1: Channel A predriver fault
+Write a ‘0’ to this bit to clear the fault and resume operation
+0: Normal operation
+4 BPDF 1 R/W 0 1: Channel B predriver fault
+Write a ‘0’ to this bit to clear the fault and resume operation
+0: Normal operation
+5 UVLO 1 R 0 1: Undervoltage lockout
+UVLO bit will clear after VM has increased over VUVLO
+6 STD 1 R 0 0: Normal operation 1: Stall detected
+0: Normal operation
+7 STDLAT 1 R/W 0 1: Latched stall detect
+Write a ‘0’ to this bit to clear the fault and resume operation
+11-8 Reserved 4 - - Reserved
+
+
