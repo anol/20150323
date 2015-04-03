@@ -104,6 +104,28 @@ int CMD_diag(int argc, char **argv) {
 	return (0);
 }
 //--------------------------------
+int CMD_sleep(int argc, char **argv) {
+	static bool bSleep = false;
+	bSleep = !bSleep;
+	g_oDrv8711.Sleep(bSleep);
+	return (0);
+}
+//--------------------------------
+int CMD_reset(int argc, char **argv) {
+	g_oDrv8711.Reset();
+	return (0);
+}
+//--------------------------------
+int CMD_noerr(int argc, char **argv) {
+	g_oDrv8711.ClearFaults();
+	return (0);
+}
+//--------------------------------
+int CMD_step(int argc, char **argv) {
+	g_oDrv8711.Step();
+	return (0);
+}
+//--------------------------------
 int CMD_help(int argc, char **argv) {
 	int32_t i32Index;
 	(void) argc;
@@ -138,6 +160,14 @@ tCmdLineEntry g_psCmdTable[] = {
 { "text", CMD_text, " : Display a text" },
 
 { "diag", CMD_diag, " : Show diagnostic information" },
+
+{ "sleep", CMD_sleep, " : Toggle DRV8711 Sleep" },
+
+{ "noerr", CMD_noerr, " : Clear DRV8711 faults" },
+
+{ "reset", CMD_reset, " : Reset DRV8711" },
+
+{ "step", CMD_step, " : Single step (RSTEP)" },
 
 { "help", CMD_help, " : Display list of commands" },
 
@@ -190,6 +220,10 @@ tCmdLineEntry g_psRotaryMenu[] = {
 { "stop", CMD_stop, " : Stop feed or move" },
 
 { "diag", CMD_diag, " : Show diagnostic information" },
+
+{ "noerr", CMD_noerr, " : Clear DRV8711 faults" },
+
+{ "reset", CMD_reset, " : Reset DRV8711" },
 
 { 0, 0, 0 } };
 //--------------------------------

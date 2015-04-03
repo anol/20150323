@@ -33,13 +33,50 @@ void drv8711::Initialize() {
 }
 //--------------------------------
 void drv8711::Idle() {
+	uint32_t nValue = m_oSsiDrv8711.Read(0);
+	nValue &= ~(0x101);
+	m_oSsiDrv8711.Write(0, nValue);
 	UARTprintf("Idle\n");
-	m_oSsiDrv8711.Write(0, 0xC10);
 }
 //--------------------------------
 void drv8711::Halt() {
-	UARTprintf("Halt\n");
-	m_oSsiDrv8711.Write(0, 0xC11);
+	uint32_t nValue = m_oSsiDrv8711.Read(0);
+	nValue |= 0x101;
+	m_oSsiDrv8711.Write(0, nValue);
+	UARTprintf("Active\n");
+}
+//--------------------------------
+void drv8711::Step() {
+	uint32_t nValue = m_oSsiDrv8711.Read(0);
+	nValue |= 0x004;
+	m_oSsiDrv8711.Write(0, nValue);
+	UARTprintf("Step\n");
+}
+//--------------------------------
+void drv8711::Sleep(bool bSleep) {
+	m_oSsiDrv8711.Sleep(bSleep);
+	if (bSleep) {
+		UARTprintf("Sleep\n");
+	} else {
+		UARTprintf("No sleep\n");
+	}
+}
+//--------------------------------
+void drv8711::ClearFaults() {
+	m_oSsiDrv8711.Write(7, 0);
+	UARTprintf("Clear faults\n");
+}
+//--------------------------------
+void drv8711::Reset() {
+	m_oSsiDrv8711.Reset();
+	UARTprintf("Reset\n");
+}
+//--------------------------------
+void drv8711::SetTorque(uint32_t nTorque) {
+	uint32_t nValue = m_oSsiDrv8711.Read(0);
+	nValue |= 0x100;
+	m_oSsiDrv8711.Write(0, nValue);
+	UARTprintf("Step\n");
 }
 //--------------------------------
 void drv8711::Feed(int32_t nMicrosPerSecond) {

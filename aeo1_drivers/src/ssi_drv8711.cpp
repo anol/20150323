@@ -39,13 +39,26 @@
 //--------------------------------
 #include "inc/tm4c123gh6pm.h"
 //--------------------------------
+#include "ssi_display.h"
 #include "ssi_drv8711.h"
 #include "alpha7segment.h"
 //--------------------------------
+extern aeo1::ssi_display g_oScaleDisplay;
+//--------------------------------
+static aeo1::ssi_drv8711* g_pTheDRV8711 = 0;
+//--------------------------------
 extern "C" void OnGPIOBInterrupt(void) {
+	GPIOIntDisable(GPIO_PORTB_BASE, GPIO_PIN_2);
+	if (g_pTheDRV8711) {
+		g_pTheDRV8711->OnGpioInterrupt(aeo1::ssi_drv8711::StallEvent);
+	}
 }
 //--------------------------------
 extern "C" void OnGPIOEInterrupt(void) {
+	GPIOIntDisable(GPIO_PORTE_BASE, GPIO_PIN_0);
+	if (g_pTheDRV8711) {
+		g_pTheDRV8711->OnGpioInterrupt(aeo1::ssi_drv8711::FaultEvent);
+	}
 }
 //--------------------------------
 namespace aeo1 {
@@ -59,6 +72,7 @@ ssi_drv8711::~ssi_drv8711() {
 }
 //--------------------------------
 void ssi_drv8711::Initialize() {
+	g_pTheDRV8711 = this;
 	ssi_peripheral::Initialize();
 	// PA2 Output: Chip Select = 0
 	// PA3 Output: Bin1 = 0
@@ -86,20 +100,50 @@ void ssi_drv8711::Initialize() {
 	GPIOPadConfigSet(GPIO_PORTB_BASE, GPIO_PIN_2, GPIO_STRENGTH_2MA,
 	GPIO_PIN_TYPE_STD_WPU);
 	GPIOIntEnable(GPIO_PORTB_BASE, GPIO_PIN_2);
-	IntEnable(INT_GPIOB);
 	// PE0 Input: nFault
 	GPIOPinTypeGPIOInput(GPIO_PORTE_BASE, GPIO_PIN_0);
 	GPIOPadConfigSet(GPIO_PORTE_BASE, GPIO_PIN_0, GPIO_STRENGTH_2MA,
 	GPIO_PIN_TYPE_STD_WPU);
 	GPIOIntTypeSet(GPIO_PORTE_BASE, GPIO_PIN_0, GPIO_FALLING_EDGE);
 	GPIOIntEnable(GPIO_PORTE_BASE, GPIO_PIN_0);
+	//
+	Sleep(false);
+	Reset();
+	//
+	IntEnable(INT_GPIOB);
 	IntEnable(INT_GPIOE);
-
-	GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_5, GPIO_PIN_5); // nSleep = 1
-
-	GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_5, GPIO_PIN_5); // Reset = 1
-	GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_5, 0); // Reset = 0
-
+}
+//--------------------------------
+void ssi_drv8711::Sleep(bool bSleep) {
+	GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_5, bSleep ? 0 : GPIO_PIN_5);
+}
+//--------------------------------
+void ssi_drv8711::Reset() {
+	GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_5, GPIO_PIN_5);
+	GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_5, 0);
+	OnGpioInterrupt(NoStall);
+	OnGpioInterrupt(NoFault);
+}
+//--------------------------------
+void ssi_drv8711::OnGpioInterrupt(Event nEvent) {
+	switch (nEvent) {
+	case NoStall:
+		g_oScaleDisplay.Set("-----");
+		GPIOIntEnable(GPIO_PORTB_BASE, GPIO_PIN_2);
+		break;
+	case StallEvent:
+		g_oScaleDisplay.Set("STALL");
+		break;
+	case NoFault:
+		g_oScaleDisplay.Set("-----");
+		GPIOIntEnable(GPIO_PORTE_BASE, GPIO_PIN_0);
+		break;
+	case FaultEvent:
+		g_oScaleDisplay.Set("FAULT");
+		break;
+	default:
+		break;
+	}
 }
 //--------------------------------
 uint32_t ssi_drv8711::Read(uint32_t nRegister) {
@@ -127,12 +171,38 @@ uint32_t ssi_drv8711::Write(uint32_t nRegister, uint32_t nValue) {
 	return nEcho;
 }
 //--------------------------------
+void ssi_drv8711::PrintStatus(uint32_t nStatus) {
+	struct StatusEntry {
+		uint32_t nMask;
+		const char* zText;
+	};
+	const StatusEntry StatusTable[] = { { 0x001, "OverTemp" },
+			{ 0x002, "A-amps" }, { 0x004, "B-amps" }, { 0x008, "A-fault" }, {
+					0x010, "B-fault" }, { 0x020, "Low V" }, { 0x040, "Stall" },
+			{ 0x080, "Latched" }, { 0, "" } };
+	const StatusEntry* pEntry = &StatusTable[0];
+	UARTprintf("Status:");
+	while (pEntry) {
+		uint32_t nMask = pEntry->nMask;
+		if (!nMask) {
+			pEntry = 0;
+		} else {
+			if (nMask & nStatus) {
+				UARTprintf(" %s", pEntry->zText);
+			}
+			pEntry++;
+		}
+	}
+	UARTprintf("\n");
+}
+//--------------------------------
 void ssi_drv8711::Diag() {
 	ssi_peripheral::Diag();
 	UARTprintf("ssi_drv8711: r_cnt=%d\n", m_nRxCount);
 	for (int nRegister = 0; NumberOfRegisters > nRegister; nRegister++) {
-		UARTprintf("\t%d=0x%04X\n", nRegister, m_nRegister[nRegister]);
+		UARTprintf("\t%d=0x%03X\n", nRegister, 0xFFF & m_nRegister[nRegister]);
 	}
+	PrintStatus(0xFFF & m_nRegister[7]);
 }
 //--------------------------------
 } /* namespace aeo1 */

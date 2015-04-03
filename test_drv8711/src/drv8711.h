@@ -23,8 +23,13 @@ public:
 	void Halt();
 	void Feed(int32_t nMicrosPerSecond);
 	void Move(int32_t nMicros);
+	void SetTorque(uint32_t nTorque);
 	void Stop();
 	void Diag();
+	void Step();
+	void Sleep(bool bSleep);
+	void ClearFaults();
+	void Reset();
 
 private:
 	void ReadAllRegisters();

@@ -17,20 +17,22 @@ public:
 	enum {
 		NumberOfRegisters = 8
 	};
-
+	enum Event {
+		NoStall, StallEvent, NoFault, FaultEvent
+	};
 public:
 	ssi_drv8711();
 	virtual ~ssi_drv8711();
-
-public:
 	void Initialize();
 	void Diag();
+	void PrintStatus(uint32_t nStatus);
+	void Sleep(bool bSleep);
+	void Reset();
+	void OnGpioInterrupt(Event nEvent);
 	uint32_t Read(uint32_t nRegister);
 	uint32_t Write(uint32_t nRegister, uint32_t nValue);
-
 private:
 	uint32_t m_nRegister[NumberOfRegisters];
-
 };
 //--------------------------------
 } /* namespace aeo1 */
