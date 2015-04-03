@@ -287,6 +287,8 @@ bool OnFeed(int nEvent) {
 		}
 		return false;
 	} else {
+		nOldPosition = 0;
+		g_oRotaryDialer.Set(0);
 		g_nMenuMode = MenuMode_Menu;
 		return true;
 	}
