@@ -118,9 +118,9 @@ void drv8711::Feed(int32_t nMicrosPerSecond) {
 }
 //--------------------------------
 void drv8711::Move(int32_t nMicros) {
-	int32_t nSteps = nMicros / 20;
+	int32_t nSteps = (16 * nMicros) / 10;
 	uint32_t nControlRegister = m_oSsiDrv8711.Read(0);
-	UARTprintf("Move %d um\n", nMicros);
+	UARTprintf("Move %d.%d mm\n", nMicros / 1000, nMicros % 1000);
 	if (0 > nSteps) {
 		nSteps = -nSteps;
 		nControlRegister &= ~(0x007);

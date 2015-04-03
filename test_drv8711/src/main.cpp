@@ -296,6 +296,33 @@ bool OnFeed(int nEvent) {
 	}
 }
 //--------------------------------
+bool OnMove(int nEvent) {
+	static int32_t nOldPosition = 0;
+	static bool bCoarseTune = true;
+	bool bFinished = false;
+	int32_t nNewPosition = g_oRotaryDialer.Get();
+	if (bCoarseTune) {
+		nNewPosition *= 100;
+	}
+	if (nEvent) {
+		g_oDialerDisplay.Set(nNewPosition, 2);
+	} else {
+		if (bCoarseTune) {
+			bCoarseTune = false;
+			g_oRotaryDialer.Set(nNewPosition);
+		} else {
+			int32_t nFeed = nNewPosition - nOldPosition;
+			g_oDrv8711.Move(nFeed * 10);
+			bCoarseTune = true;
+			nOldPosition = 0;
+			g_oRotaryDialer.Set(0);
+			g_nMenuMode = MenuMode_Menu;
+			bFinished = true;
+		}
+	}
+	return bFinished;
+}
+//--------------------------------
 void OnDialer(int nEvent) {
 	switch (g_nMenuMode) {
 	case MenuMode_Menu:
@@ -311,7 +338,7 @@ void OnDialer(int nEvent) {
 		OnFeed(nEvent);
 		break;
 	case MenuMode_Move:
-		OnNumberDialer(nEvent);
+		OnMove(nEvent);
 		break;
 	default:
 		OnMenuDialer(nEvent);

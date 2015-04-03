@@ -32,7 +32,8 @@ extern "C" void OnPWM1Gen1Interrupt(void) {
 namespace aeo1 {
 //--------------------------------
 pwm_stepper::pwm_stepper() :
-		m_nSteps(0) {
+		m_nSteps(0), m_nSpeed(StartSpeed), m_nTargetSpeed(0), m_nAcceleration(
+				0), m_nDeceleration(0), m_nPhase(Phase_Idle) {
 }
 //--------------------------------
 pwm_stepper::~pwm_stepper() {
@@ -53,7 +54,7 @@ void pwm_stepper::Initialize() {
 	// system clock frequency.
 	// In this case you get: (1 / 250Hz) * 16MHz = 64000 cycles.  Note that
 	// the maximum period you can set is 2^16.
-	PWMGenPeriodSet(Base, Generator, 64000);
+	PWMGenPeriodSet(Base, Generator, StartSpeed);
 	PWMPulseWidthSet(Base, PWM_OUT_2, 64);
 	// Allow PWM1 generated interrupts.  This configuration is done to
 	// differentiate fault interrupts from other PWM1 related interrupts.
@@ -67,18 +68,50 @@ void pwm_stepper::Initialize() {
 }
 //--------------------------------
 void pwm_stepper::OnInterrupt() {
-	if (0 < m_nSteps) {
-		m_nSteps--;
-		if (0 == m_nSteps) {
-			PWMGenDisable(Base, Generator);
+	m_nSteps--;
+	if(0 >= m_nSteps){
+		m_nSteps = 0;
+		m_nPhase = Phase_Stop;
+	}
+	switch (m_nPhase) {
+	case Phase_Accel:
+		m_nSpeed += m_nAcceleration;
+		if (m_nTargetSpeed >= m_nSpeed) {
+			m_nSpeed = m_nTargetSpeed;
+			m_nPhase = Phase_Steady;
 		}
+//		PWMGenPeriodSet(Base, Generator, m_nSpeed);
+		break;
+	case Phase_Steady:
+		if (m_nSteps <= ((StartSpeed - m_nSpeed) / m_nDeceleration)) {
+			m_nPhase = Phase_Decel;
+		}
+		break;
+	case Phase_Decel:
+		m_nSpeed += m_nDeceleration;
+		if (StartSpeed <= m_nSpeed) {
+			m_nSpeed = StartSpeed;
+			m_nPhase = Phase_Stop;
+		}
+//		PWMGenPeriodSet(Base, Generator, m_nSpeed);
+		break;
+	case Phase_Stop:
+		PWMGenDisable(Base, Generator);
+		break;
+	default:
+		break;
 	}
 }
 //--------------------------------
 void pwm_stepper::Move(uint32_t nSteps) {
 	m_nSteps = nSteps;
-	UARTprintf("Move %d steps\n", nSteps);
-	// Enables the PWM generator block.
+	m_nSpeed = StartSpeed;
+	m_nTargetSpeed = MaxSpeed;
+	m_nAcceleration = Acceleration;
+	m_nDeceleration = Acceleration;
+	m_nPhase = Phase_Accel;
+	UARTprintf("Move %d steps\n", m_nSteps);
+	PWMGenPeriodSet(Base, Generator, m_nSpeed);
 	PWMGenEnable(Base, Generator);
 }
 //--------------------------------
