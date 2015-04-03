@@ -47,6 +47,7 @@ void pwm_stepper::Initialize() {
 	GPIOPinConfigure(GPIO_PA6_M1PWM2);
 	GPIOPinTypePWM(GPIO_PORTA_BASE, GPIO_PIN_6);
 	PWMGenConfigure(Base, Generator,
+//	PWM_GEN_MODE_DOWN | PWM_GEN_MODE_SYNC | PWM_GEN_MODE_GEN_SYNC_LOCAL);
 	PWM_GEN_MODE_DOWN | PWM_GEN_MODE_NO_SYNC);
 	// Set the PWM period to 250Hz.  To calculate the appropriate parameter
 	// use the following equation: N = (1 / f) * SysClk.  Where N is the
@@ -69,13 +70,13 @@ void pwm_stepper::Initialize() {
 //--------------------------------
 void pwm_stepper::OnInterrupt() {
 	m_nSteps--;
-	if(0 >= m_nSteps){
+	if (0 >= m_nSteps) {
 		m_nSteps = 0;
 		m_nPhase = Phase_Stop;
 	}
 	switch (m_nPhase) {
 	case Phase_Accel:
-		m_nSpeed += m_nAcceleration;
+		m_nSpeed -= m_nAcceleration;
 		if (m_nTargetSpeed >= m_nSpeed) {
 			m_nSpeed = m_nTargetSpeed;
 			m_nPhase = Phase_Steady;
