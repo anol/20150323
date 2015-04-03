@@ -17,6 +17,17 @@
 #include "ssi_drv8711.h"
 #include "pwm_stepper.h"
 #include "drv8711.h"
+/*
+DRV8711 Register Settings
+0: def=0xxxx, ref=0xF1C
+1: def=0x0FF, ref=0x0BA
+2: def=0x030, ref=0x030
+3: def=0x080, ref=0x108
+4: def=0x110, ref=0x510
+5: def=0x040, ref=0xF40
+6: def=0x032, ref=0x033
+7: def=0x000, ref=0x000
+*/
 //--------------------------------
 namespace aeo1 {
 //--------------------------------
@@ -40,10 +51,21 @@ void drv8711::Idle() {
 }
 //--------------------------------
 void drv8711::Halt() {
-	uint32_t nValue = m_oSsiDrv8711.Read(0);
-	nValue |= 0x101;
-	m_oSsiDrv8711.Write(0, nValue);
-	UARTprintf("Active\n");
+//	uint32_t nValue = m_oSsiDrv8711.Read(0);
+//	nValue |= 0x101;
+	//	m_oSsiDrv8711.Write(0, nValue);
+	//	UARTprintf("Active\n");
+
+	UARTprintf("Set to reference\n");
+	m_oSsiDrv8711.Write(0, 0xF19);
+	m_oSsiDrv8711.Write(1, 0x0BA);
+	m_oSsiDrv8711.Write(2, 0x030);
+	m_oSsiDrv8711.Write(3, 0x108);
+	m_oSsiDrv8711.Write(4, 0x310);
+	m_oSsiDrv8711.Write(5, 0xF40);
+	m_oSsiDrv8711.Write(6, 0x055);
+	m_oSsiDrv8711.Write(7, 0x000);
+
 }
 //--------------------------------
 void drv8711::Step() {
