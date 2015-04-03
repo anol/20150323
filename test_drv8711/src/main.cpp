@@ -281,9 +281,9 @@ bool OnFeed(int nEvent) {
 		g_oDialerDisplay.Set(nNewPosition, 2);
 		if (0 > nFeed) {
 			nFeed = -nFeed;
-			g_oDrv8711.Step(nFeed * 32, false);
+			g_oDrv8711.Step(nFeed * 16, false);
 		} else {
-			g_oDrv8711.Step(nFeed * 32, true);
+			g_oDrv8711.Step(nFeed * 16, true);
 		}
 		return false;
 	} else {
