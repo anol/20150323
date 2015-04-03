@@ -19,12 +19,12 @@ private:
 public:
 	pwm_stepper();
 	virtual ~pwm_stepper();
-
-public:
 	void Initialize();
 	void Diag();
 	void Move(uint32_t nSteps);
-
+	void OnInterrupt();
+private:
+	uint32_t m_nSteps;
 };
 } /* namespace aeo1 */
 //--------------------------------

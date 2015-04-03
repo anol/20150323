@@ -118,8 +118,17 @@ void drv8711::Feed(int32_t nMicrosPerSecond) {
 }
 //--------------------------------
 void drv8711::Move(int32_t nMicros) {
-	uint32_t nSteps = nMicros / 20;
+	int32_t nSteps = nMicros / 20;
+	uint32_t nControlRegister = m_oSsiDrv8711.Read(0);
 	UARTprintf("Move %d um\n", nMicros);
+	if (0 > nSteps) {
+		nSteps = -nSteps;
+		nControlRegister &= ~(0x007);
+		nControlRegister |= 0x005;
+	} else {
+		nControlRegister |= 0x007;
+	}
+	m_oSsiDrv8711.Write(0, nControlRegister);
 	m_oPwmStepper.Move(nSteps);
 }
 //--------------------------------

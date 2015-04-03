@@ -20,28 +20,26 @@
 //--------------------------------
 #include "pwm_stepper.h"
 //--------------------------------
+static aeo1::pwm_stepper* g_pTheStepper = 0;
+//--------------------------------
 extern "C" void OnPWM1Gen1Interrupt(void) {
-	// Clear the PWM1 LOAD interrupt flag.  This flag gets set when the PWM
-	// counter gets reloaded.
 	PWMGenIntClear(PWM1_BASE, PWM_GEN_1, PWM_INT_CNT_LOAD);
-//	if ((PWMPulseWidthGet(PWM1_BASE, PWM_OUT_2) + 64)
-//			<= ((PWMGenPeriodGet(PWM1_BASE, PWM_GEN_1) * 3) / 4)) {
-//		PWMPulseWidthSet(PWM1_BASE, PWM_OUT_2,
-//				PWMPulseWidthGet(PWM1_BASE, PWM_OUT_2) + 64);
-//	} else {
-//		PWMPulseWidthSet(PWM1_BASE, PWM_OUT_2, 64);
-//	}
+	if (g_pTheStepper) {
+		g_pTheStepper->OnInterrupt();
+	}
 }
 
 namespace aeo1 {
 //--------------------------------
-pwm_stepper::pwm_stepper() {
+pwm_stepper::pwm_stepper() :
+		m_nSteps(0) {
 }
 //--------------------------------
 pwm_stepper::~pwm_stepper() {
 }
 //--------------------------------
 void pwm_stepper::Initialize() {
+	g_pTheStepper = this;
 	SysCtlPWMClockSet(SYSCTL_PWMDIV_1);
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM1);
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
@@ -68,18 +66,20 @@ void pwm_stepper::Initialize() {
 	PWMOutputState(Base, PWM_OUT_2_BIT, true);
 }
 //--------------------------------
-void pwm_stepper::Move(uint32_t nSteps) {
-	static bool bStart = true;
-	if(bStart){
-		UARTprintf("Move %d steps\n", nSteps);
-		// Enables the PWM generator block.
-		PWMGenEnable(Base, Generator);
-	} else {
-		UARTprintf("Stop move\n" );
-		// Enables the PWM generator block.
-		PWMGenDisable(Base, Generator);
+void pwm_stepper::OnInterrupt() {
+	if (0 < m_nSteps) {
+		m_nSteps--;
+		if (0 == m_nSteps) {
+			PWMGenDisable(Base, Generator);
+		}
 	}
-	bStart = !bStart;
+}
+//--------------------------------
+void pwm_stepper::Move(uint32_t nSteps) {
+	m_nSteps = nSteps;
+	UARTprintf("Move %d steps\n", nSteps);
+	// Enables the PWM generator block.
+	PWMGenEnable(Base, Generator);
 }
 //--------------------------------
 void pwm_stepper::Diag() {
