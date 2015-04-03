@@ -41,7 +41,11 @@ aeo1::qei_sensor g_oRotaryDialer(aeo1::qei_sensor::QEI0,
 aeo1::qei_sensor g_oLinearScale(aeo1::qei_sensor::QEI1);
 aeo1::drv8711 g_oDrv8711;
 static char g_zInput[APP_INPUT_BUF_SIZE];
-static uint32_t g_nMenuMode = 0;
+//--------------------------------
+enum MenuMode {
+	MenuMode_Menu, MenuMode_Set, MenuMode_Feed, MenuMode_Move
+};
+static MenuMode g_nMenuMode = MenuMode_Menu;
 //--------------------------------
 int CMD_zero(int argc, char **argv) {
 	g_oLinearScale.Zero();
@@ -122,7 +126,15 @@ int CMD_noerr(int argc, char **argv) {
 }
 //--------------------------------
 int CMD_step(int argc, char **argv) {
-	g_oDrv8711.Step();
+	if (argc == 2) {
+		int nValue = ustrtoul(argv[1], 0, 10);
+		if (0 > nValue) {
+			nValue = -nValue;
+			g_oDrv8711.Step(nValue, false);
+		} else {
+			g_oDrv8711.Step(nValue, true);
+		}
+	}
 	return (0);
 }
 //--------------------------------
@@ -176,7 +188,7 @@ tCmdLineEntry g_psCmdTable[] = {
 int MNU_set(int argc, char **argv) {
 	(void) argc;
 	(void) argv;
-	g_nMenuMode = 1;
+	g_nMenuMode = MenuMode_Set;
 	g_oRotaryDialer.Set(g_oLinearScale.Get() * 2);
 	return (0);
 }
@@ -184,7 +196,7 @@ int MNU_set(int argc, char **argv) {
 int MNU_feed(int argc, char **argv) {
 	(void) argc;
 	(void) argv;
-	g_nMenuMode = 2;
+	g_nMenuMode = MenuMode_Feed;
 	g_oRotaryDialer.Zero();
 	return (0);
 }
@@ -192,7 +204,7 @@ int MNU_feed(int argc, char **argv) {
 int MNU_move(int argc, char **argv) {
 	(void) argc;
 	(void) argv;
-	g_nMenuMode = 3;
+	g_nMenuMode = MenuMode_Move;
 	g_oRotaryDialer.Zero();
 	return (0);
 }
@@ -255,26 +267,46 @@ bool OnNumberDialer(int nEvent) {
 		g_oDialerDisplay.Set(g_oRotaryDialer.Get() / 2, 2);
 		return false;
 	} else {
-		g_nMenuMode = 0;
+		g_nMenuMode = MenuMode_Menu;
+		return true;
+	}
+}
+//--------------------------------
+bool OnFeed(int nEvent) {
+	static int32_t nOldPosition = 0;
+	int32_t nNewPosition = g_oRotaryDialer.Get() / 2;
+	int32_t nFeed = nNewPosition - nOldPosition;
+	nOldPosition = nNewPosition;
+	if (nEvent) {
+		g_oDialerDisplay.Set(nNewPosition, 2);
+		if (0 > nFeed) {
+			nFeed = -nFeed;
+			g_oDrv8711.Step(nFeed * 32, false);
+		} else {
+			g_oDrv8711.Step(nFeed * 32, true);
+		}
+		return false;
+	} else {
+		g_nMenuMode = MenuMode_Menu;
 		return true;
 	}
 }
 //--------------------------------
 void OnDialer(int nEvent) {
 	switch (g_nMenuMode) {
-	case 0:
+	case MenuMode_Menu:
 		OnMenuDialer(nEvent);
 		break;
-	case 1:
+	case MenuMode_Set:
 		if (OnNumberDialer(nEvent)) {
 			g_oLinearScale.Set(g_oRotaryDialer.Get() / 2);
 			OnMenuDialer(2);
 		}
 		break;
-	case 2:
-		OnNumberDialer(nEvent);
+	case MenuMode_Feed:
+		OnFeed(nEvent);
 		break;
-	case 3:
+	case MenuMode_Move:
 		OnNumberDialer(nEvent);
 		break;
 	default:

@@ -24,9 +24,10 @@ public:
 	void Feed(int32_t nMicrosPerSecond);
 	void Move(int32_t nMicros);
 	void SetTorque(uint32_t nTorque);
+	void SetDefault();
 	void Stop();
 	void Diag();
-	void Step();
+	void Step(uint32_t nSteps, bool bForward);
 	void Sleep(bool bSleep);
 	void ClearFaults();
 	void Reset();
