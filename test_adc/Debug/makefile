@@ -4,18 +4,18 @@
 
 SHELL = cmd.exe
 
-CG_TOOL_ROOT := c:/ti/ccsv6/tools/compiler/arm_5.1.8
+CG_TOOL_ROOT := C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.4
 
 ORDERED_OBJS += \
-$(GEN_CMDS__FLAG) \
 "./ain7.obj" \
 "./main.obj" \
 "./tm4c1233h6pm_startup_ccs.obj" \
 "./drivers/buttons.obj" \
 "./drivers/rgb.obj" \
 "../tm4c1233h6pm.cmd" \
+$(GEN_CMDS__FLAG) \
 -l"libc.a" \
--l"c:/ti/ccsv6/../TivaWare_C_Series-2.1.0.12573/driverlib/ccs/Debug/driverlib.lib" \
+-l"C:/ti/ccsv6/../TivaWare_C_Series-2.1.0.12573/driverlib/ccs/Debug/driverlib.lib" \
 
 -include ../makefile.init
 
@@ -55,11 +55,11 @@ endif
 ifneq ($(strip $(C67_DEPS)),)
 -include $(C67_DEPS)
 endif
-ifneq ($(strip $(C??_DEPS)),)
--include $(C??_DEPS)
-endif
 ifneq ($(strip $(CLA_DEPS)),)
 -include $(CLA_DEPS)
+endif
+ifneq ($(strip $(C??_DEPS)),)
+-include $(C??_DEPS)
 endif
 ifneq ($(strip $(CPP_DEPS)),)
 -include $(CPP_DEPS)
@@ -88,6 +88,9 @@ endif
 ifneq ($(strip $(C43_DEPS)),)
 -include $(C43_DEPS)
 endif
+ifneq ($(strip $(INO_DEPS)),)
+-include $(INO_DEPS)
+endif
 ifneq ($(strip $(S67_DEPS)),)
 -include $(S67_DEPS)
 endif
@@ -99,6 +102,9 @@ ifneq ($(strip $(S43_DEPS)),)
 endif
 ifneq ($(strip $(OPT_DEPS)),)
 -include $(OPT_DEPS)
+endif
+ifneq ($(strip $(PDE_DEPS)),)
+-include $(PDE_DEPS)
 endif
 ifneq ($(strip $(S64_DEPS)),)
 -include $(S64_DEPS)
@@ -121,10 +127,10 @@ EXE_OUTPUTS__QUOTED += \
 "test_adc.out" \
 
 BIN_OUTPUTS += \
-test_adc.hex \
+test_adc.bin \
 
 BIN_OUTPUTS__QUOTED += \
-"test_adc.hex" \
+"test_adc.bin" \
 
 
 # All Target
@@ -134,14 +140,14 @@ all: test_adc.out
 test_adc.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: ARM Linker'
-	"c:/ti/ccsv6/tools/compiler/arm_5.1.8/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 --abi=eabi -me -g --gcc --define="ccs" --define=ccs="ccs" --define=PART_TM4C1233H6PM --display_error_number --diag_warning=225 --diag_wrap=off -z -m"test_adc.map" --heap_size=0 --stack_size=1024 -i"c:/ti/ccsv6/tools/compiler/arm_5.1.8/lib" -i"c:/ti/ccsv6/tools/compiler/arm_5.1.8/include" --reread_libs --warn_sections --display_error_number --diag_wrap=off --xml_link_info="test_adc_linkInfo.xml" --rom_model -o "test_adc.out" $(ORDERED_OBJS)
+	"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.4/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 --abi=eabi -me -g --gcc --define="ccs" --define=ccs="ccs" --define=PART_TM4C1233H6PM --display_error_number --diag_warning=225 --diag_wrap=off -z -m"test_adc.map" --heap_size=0 --stack_size=1024 -i"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.4/lib" -i"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.4/include" --reread_libs --warn_sections --display_error_number --diag_wrap=off --xml_link_info="test_adc_linkInfo.xml" --rom_model -o "test_adc.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	@$(MAKE) --no-print-directory post-build
 
-test_adc.hex: $(EXE_OUTPUTS)
+test_adc.bin: $(EXE_OUTPUTS)
 	@echo 'Invoking: ARM Hex Utility'
-	"c:/ti/ccsv6/tools/compiler/arm_5.1.8/bin/armhex"  -o "test_adc.hex" $(EXE_OUTPUTS__QUOTED)
+	"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.4/bin/armhex"  -o "test_adc.bin" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $@'
 	@echo ' '
 
@@ -155,7 +161,7 @@ clean:
 	-@echo ' '
 
 post-build:
-	-"c:/ti/ccsv6/utils/tiobj2bin/tiobj2bin" "test_adc.out" "test_adc.bin" "c:/ti/ccsv6/tools/compiler/arm_5.1.8/bin/armofd" "c:/ti/ccsv6/tools/compiler/arm_5.1.8/bin/armhex" "c:/ti/ccsv6/utils/tiobj2bin/mkhex4bin"
+	-"C:/ti/ccsv6/utils/tiobj2bin/tiobj2bin" "test_adc.out" "test_adc.bin" "C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.4/bin/armofd" "C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.4/bin/armhex" "C:/ti/ccsv6/utils/tiobj2bin/mkhex4bin"
 	-@echo ' '
 
 .PHONY: all clean dependents
