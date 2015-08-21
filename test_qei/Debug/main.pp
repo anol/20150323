@@ -26,6 +26,7 @@ main.obj: C:/ti/TivaWare_C_Series-2.1.0.12573/driverlib/uart.h
 main.obj: C:/ti/TivaWare_C_Series-2.1.0.12573/driverlib/qei.h
 main.obj: ../utils/uartstdio.h
 main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/stdarg.h
+main.obj: ../aeo1_drivers/qei_sensor.h
 
 ../main.cpp: 
 C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/stdint.h: 
@@ -53,3 +54,4 @@ C:/ti/TivaWare_C_Series-2.1.0.12573/driverlib/uart.h:
 C:/ti/TivaWare_C_Series-2.1.0.12573/driverlib/qei.h: 
 ../utils/uartstdio.h: 
 C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.5/include/stdarg.h: 
+../aeo1_drivers/qei_sensor.h: 
