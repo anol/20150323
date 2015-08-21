@@ -18,6 +18,10 @@
 #include "driverlib/qei.h"
 #include "utils/uartstdio.h"
 //--------------------------------
+#include "aeo1_drivers/qei_sensor.h"
+aeo1::qei_sensor g_oQei0(aeo1::qei_sensor::QEI0);
+aeo1::qei_sensor g_oQei1(aeo1::qei_sensor::QEI1);
+//--------------------------------
 #define BIT_RATE	115200
 void ConfigureUART(void) {
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
@@ -49,6 +53,8 @@ void Initialize() {
 	ROM_SysCtlClockSet(
 	SYSCTL_SYSDIV_5 | SYSCTL_USE_PLL | SYSCTL_XTAL_16MHZ | SYSCTL_OSC_MAIN);
 	ConfigureUART();
+	g_oQei0.Initialize();
+	g_oQei1.Initialize();
 	SysTickPeriodSet(SysCtlClockGet() / APP_SYSTICKS_PER_SEC);
 	SysTickEnable();
 	SysTickIntEnable();
@@ -61,7 +67,7 @@ void MainLoop() {
 		if (nTickCounter != g_nTickCounter) {
 			nTickCounter = g_nTickCounter;
 			if (!(nTickCounter % APP_SYSTICKS_PER_SEC)) {
-				UARTprintf(".");
+				UARTprintf("0=%d, 1=%d\n", g_oQei0.Get(), g_oQei1.Get());
 			}
 		}
 	}
