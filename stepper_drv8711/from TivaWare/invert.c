@@ -2,7 +2,7 @@
 //
 // invert.c - Example demonstrating the PWM invert function.
 //
-// Copyright (c) 2010-2014 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2010-2015 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
 //   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// This is part of revision 2.1.0.12573 of the Tiva Firmware Development Package.
+// This is part of revision 2.1.1.71 of the Tiva Firmware Development Package.
 //
 //*****************************************************************************
 
@@ -131,13 +131,27 @@ InitConsole(void)
 int
 main(void)
 {
+#if defined(TARGET_IS_TM4C129_RA0) ||                                         \
+	defined(TARGET_IS_TM4C129_RA1) ||                                         \
+    defined(TARGET_IS_TM4C129_RA2)
+	uint32_t ui32SysClock;
+#endif
+
     //
     // Set the clocking to run directly from the external crystal/oscillator.
     // TODO: The SYSCTL_XTAL_ value must be changed to match the value of the
     // crystal on your board.
     //
+#if defined(TARGET_IS_TM4C129_RA0) ||                                         \
+	defined(TARGET_IS_TM4C129_RA1) ||                                         \
+    defined(TARGET_IS_TM4C129_RA2)
+    ui32SysClock = SysCtlClockFreqSet((SYSCTL_XTAL_25MHZ |
+                                       SYSCTL_OSC_MAIN |
+                                       SYSCTL_USE_OSC), 25000000);
+#else
     SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN |
                    SYSCTL_XTAL_16MHZ);
+#endif
 
     //
     // Set the PWM clock to the system clock.
@@ -243,7 +257,13 @@ main(void)
         // delay.  The function delay (in cycles) = 3 * parameter.  Delay
         // 5 seconds arbitrarily.
         //
+#if defined(TARGET_IS_TM4C129_RA0) ||                                         \
+	defined(TARGET_IS_TM4C129_RA1) ||                                         \
+    defined(TARGET_IS_TM4C129_RA2)
+        SysCtlDelay((ui32SysClock * 5) / 3);
+#else
         SysCtlDelay((SysCtlClockGet() * 5) / 3);
+#endif
 
         //
         // Invert PWM0 signal.
@@ -260,7 +280,13 @@ main(void)
         // delay.  The function delay (in cycles) = 3 * parameter.  Delay
         // 5 seconds arbitrarily.
         //
+#if defined(TARGET_IS_TM4C129_RA0) ||                                         \
+	defined(TARGET_IS_TM4C129_RA1) ||                                         \
+    defined(TARGET_IS_TM4C129_RA2)
+        SysCtlDelay((ui32SysClock * 5) / 3);
+#else
         SysCtlDelay((SysCtlClockGet() * 5) / 3);
+#endif
 
         //
         // Switch PWM0 signal back to regular operation.

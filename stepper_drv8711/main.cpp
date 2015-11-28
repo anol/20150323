@@ -20,6 +20,7 @@
 // This is part of revision 2.1.0.12573 of the EK-TM4C123GXL Firmware Package.
 //*****************************************************************************
 #include <stdint.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
 #include <time.h>

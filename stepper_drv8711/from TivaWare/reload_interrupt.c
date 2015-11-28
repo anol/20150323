@@ -2,7 +2,7 @@
 //
 // reload_interrupt.c - Example demonstrating the PWM interrupt.
 //
-// Copyright (c) 2010-2014 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2010-2015 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
 //   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// This is part of revision 2.1.0.12573 of the Tiva Firmware Development Package.
+// This is part of revision 2.1.1.71 of the Tiva Firmware Development Package.
 //
 //*****************************************************************************
 
@@ -77,6 +77,17 @@
 //! - INT_PWM0_0 - PWM0IntHandler
 //
 //*****************************************************************************
+
+//*****************************************************************************
+//
+// The variable g_ui32SysClock contains the system clock frequency
+//
+//*****************************************************************************
+#if defined(TARGET_IS_TM4C129_RA0) ||                                         \
+	defined(TARGET_IS_TM4C129_RA1) ||                                         \
+    defined(TARGET_IS_TM4C129_RA2)
+	uint32_t g_ui32SysClock;
+#endif
 
 //*****************************************************************************
 //
@@ -135,19 +146,55 @@ void
 PrintRunningDots(void)
 {
     UARTprintf(". ");
+#if defined(TARGET_IS_TM4C129_RA0) ||                                         \
+	defined(TARGET_IS_TM4C129_RA1) ||                                         \
+    defined(TARGET_IS_TM4C129_RA2)
+    SysCtlDelay(g_ui32SysClock / 3);
+#else
     SysCtlDelay(SysCtlClockGet() / 3);
+#endif
     UARTprintf(". ");
+#if defined(TARGET_IS_TM4C129_RA0) ||                                         \
+	defined(TARGET_IS_TM4C129_RA1) ||                                         \
+    defined(TARGET_IS_TM4C129_RA2)
+    SysCtlDelay(g_ui32SysClock / 3);
+#else
     SysCtlDelay(SysCtlClockGet() / 3);
+#endif
     UARTprintf(". ");
+#if defined(TARGET_IS_TM4C129_RA0) ||                                         \
+	defined(TARGET_IS_TM4C129_RA1) ||                                         \
+    defined(TARGET_IS_TM4C129_RA2)
+    SysCtlDelay(g_ui32SysClock / 3);
+#else
     SysCtlDelay(SysCtlClockGet() / 3);
+#endif
     UARTprintf(". ");
+#if defined(TARGET_IS_TM4C129_RA0) ||                                         \
+	defined(TARGET_IS_TM4C129_RA1) ||                                         \
+    defined(TARGET_IS_TM4C129_RA2)
+    SysCtlDelay(g_ui32SysClock / 3);
+#else
     SysCtlDelay(SysCtlClockGet() / 3);
+#endif
     UARTprintf(". ");
+#if defined(TARGET_IS_TM4C129_RA0) ||                                         \
+	defined(TARGET_IS_TM4C129_RA1) ||                                         \
+    defined(TARGET_IS_TM4C129_RA2)
+    SysCtlDelay(g_ui32SysClock / 3);
+#else
     SysCtlDelay(SysCtlClockGet() / 3);
+#endif
     UARTprintf("\b\b\b\b\b\b\b\b\b\b");
     UARTprintf("          ");
     UARTprintf("\b\b\b\b\b\b\b\b\b\b");
+#if defined(TARGET_IS_TM4C129_RA0) ||                                         \
+	defined(TARGET_IS_TM4C129_RA1) ||                                         \
+    defined(TARGET_IS_TM4C129_RA2)
+    SysCtlDelay(g_ui32SysClock / 3);
+#else
     SysCtlDelay(SysCtlClockGet() / 3);
+#endif
 }
 
 //*****************************************************************************
@@ -197,8 +244,16 @@ main(void)
     // TODO: The SYSCTL_XTAL_ value must be changed to match the value of the
     // crystal on your board.
     //
+#if defined(TARGET_IS_TM4C129_RA0) ||                                         \
+	defined(TARGET_IS_TM4C129_RA1) ||                                         \
+    defined(TARGET_IS_TM4C129_RA2)
+    g_ui32SysClock = SysCtlClockFreqSet((SYSCTL_XTAL_25MHZ |
+                                       SYSCTL_OSC_MAIN |
+                                       SYSCTL_USE_OSC), 25000000);
+#else
     SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN |
                    SYSCTL_XTAL_16MHZ);
+#endif
 
     //
     // Set the PWM clock to the system clock.

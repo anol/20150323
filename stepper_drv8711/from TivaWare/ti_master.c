@@ -2,7 +2,7 @@
 //
 // ti_master.c - Example demonstrating how to configure SSI0 in TI master mode.
 //
-// Copyright (c) 2010-2014 Texas Instruments Incorporated.  All rights reserved.
+// Copyright (c) 2010-2015 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
 // 
 //   Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// This is part of revision 2.1.0.12573 of the Tiva Firmware Development Package.
+// This is part of revision 2.1.1.71 of the Tiva Firmware Development Package.
 //
 //*****************************************************************************
 
@@ -141,6 +141,12 @@ InitConsole(void)
 int
 main(void)
 {
+#if defined(TARGET_IS_TM4C129_RA0) ||                                         \
+	defined(TARGET_IS_TM4C129_RA1) ||                                         \
+    defined(TARGET_IS_TM4C129_RA2)
+	uint32_t ui32SysClock;
+#endif
+
     uint32_t pui32DataTx[NUM_SSI_DATA];
     uint32_t pui32DataRx[NUM_SSI_DATA];
     uint32_t ui32Index;
@@ -150,8 +156,16 @@ main(void)
     // TODO: The SYSCTL_XTAL_ value must be changed to match the value of the
     // crystal on your board.
     //
+#if defined(TARGET_IS_TM4C129_RA0) ||                                         \
+	defined(TARGET_IS_TM4C129_RA1) ||                                         \
+    defined(TARGET_IS_TM4C129_RA2)
+    ui32SysClock = SysCtlClockFreqSet((SYSCTL_XTAL_25MHZ |
+                                       SYSCTL_OSC_MAIN |
+                                       SYSCTL_USE_OSC), 25000000);
+#else
     SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN |
                    SYSCTL_XTAL_16MHZ);
+#endif
 
     //
     // Set up the serial console to use for displaying messages.  This is
@@ -208,8 +222,15 @@ main(void)
     // Configure and enable the SSI port for TI master mode.  Use SSI0, system
     // clock supply, master mode, 1MHz SSI frequency, and 8-bit data.
     //
+#if defined(TARGET_IS_TM4C129_RA0) ||                                         \
+	defined(TARGET_IS_TM4C129_RA1) ||                                         \
+    defined(TARGET_IS_TM4C129_RA2)
+    SSIConfigSetExpClk(SSI0_BASE, ui32SysClock, SSI_FRF_TI,
+                       SSI_MODE_MASTER, 1000000, 8);
+#else
     SSIConfigSetExpClk(SSI0_BASE, SysCtlClockGet(), SSI_FRF_TI,
                        SSI_MODE_MASTER, 1000000, 8);
+#endif
 
     //
     // Enable the SSI0 module.
