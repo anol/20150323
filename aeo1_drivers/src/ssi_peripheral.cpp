@@ -249,29 +249,33 @@ void ssi_peripheral::OnInterrupt() {
 void ssi_peripheral::Diag() {
 	switch (m_nDevice) {
 	case ssi_peripheral::SSI0:
-		UARTprintf("\tssi0\n");
+		UARTprintf("SSI0\n");
 		break;
 	case ssi_peripheral::SSI1:
-		UARTprintf("\tssi1\n");
+		UARTprintf("SSI1\n");
 		break;
 	case ssi_peripheral::SSI2:
-		UARTprintf("\tssi2\n");
+		UARTprintf("SSI2\n");
 		break;
 	case ssi_peripheral::SSI3:
-		UARTprintf("\tssi3\n");
+		UARTprintf("SSI3\n");
 		break;
 	default:
-		UARTprintf("\tssi-void!\n");
+		UARTprintf("ssi-void!\n");
 		break;
 	}
-	UARTprintf("\tSRTFE=%5d\n", m_nSRTFE);
-	UARTprintf("\tTXEOT=%5d\n", m_nTXEOT);
-	UARTprintf("\tDMATX=%5d\n", m_nDMATX);
-	UARTprintf("\tDMARX=%5d\n", m_nDMARX);
-	UARTprintf("\tTXFF= %5d\n", m_nTXFF);
-	UARTprintf("\tRXFF= %5d\n", m_nRXFF);
-	UARTprintf("\tRXTO= %5d\n", m_nRXTO);
-	UARTprintf("\tRXOR= %5d\n", m_nRXOR);
+	if (m_bNonBlocking) {
+		UARTprintf("\tSRTFE=%5d\n", m_nSRTFE);
+		UARTprintf("\tTXEOT=%5d\n", m_nTXEOT);
+		UARTprintf("\tDMATX=%5d\n", m_nDMATX);
+		UARTprintf("\tDMARX=%5d\n", m_nDMARX);
+		UARTprintf("\tTXFF= %5d\n", m_nTXFF);
+		UARTprintf("\tRXFF= %5d\n", m_nRXFF);
+		UARTprintf("\tRXTO= %5d\n", m_nRXTO);
+		UARTprintf("\tRXOR= %5d\n", m_nRXOR);
+	} else {
+		UARTprintf("\tBlocking IO\n");
+	}
 }
 //--------------------------------
 void ssi_peripheral::Put(uint32_t nValue) {
