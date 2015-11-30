@@ -64,7 +64,7 @@ extern "C" void OnGPIOEInterrupt(void) {
 namespace aeo1 {
 //--------------------------------
 enum {
-	ssi_drv8711_bitrate = 500000 // 1000000
+	ssi_drv8711_bitrate = 1000000
 };
 //--------------------------------
 ssi_drv8711::ssi_drv8711() :
@@ -201,12 +201,14 @@ void ssi_drv8711::PrintStatus(uint32_t nStatus) {
 }
 //--------------------------------
 void ssi_drv8711::Diag() {
-	UARTprintf("ssi_drv8711: r_cnt=%d\n", m_nRxCount);
+	UARTprintf("ssi_drv8711\n");
 	ssi_peripheral::Diag();
-	for (int nRegister = 0; NumberOfRegisters > nRegister; nRegister++) {
+	UARTprintf("\tregisters\n");
+		for (int nRegister = 0; NumberOfRegisters > nRegister; nRegister++) {
 		UARTprintf("\t%d=0x%03X\n", nRegister, 0xFFF & m_nRegister[nRegister]);
 	}
 	PrintStatus(0xFFF & m_nRegister[7]);
+	
 }
 //--------------------------------
 } /* namespace aeo1 */

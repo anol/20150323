@@ -411,6 +411,8 @@ static void PrintProgramInfo() {
 	UARTprintf("\n\n");
 	UARTprintf(STRINGIZE(ProjName) " " __DATE__ " " __TIME__);
 	UARTprintf("\n\n");
+//	UARTprintf("\n%d\n", SysCtlClockGet());
+//	UARTprintf("\n%d\n", ROM_SysCtlClockGet());
 }
 //--------------------------------
 void MainLoop() {

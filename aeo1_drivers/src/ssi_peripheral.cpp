@@ -153,7 +153,7 @@ void ssi_peripheral::Initialize() {
 	// Configure and enable the SSI port for TI master mode.  Use SSI3, system
 	// clock supply, master mode, SSI frequency, and 16-bit data.
 	SSIConfigSetExpClk(m_rSpecification.m_nSSIBase, SysCtlClockGet(),
-	SSI_FRF_MOTO_MODE_0, SSI_MODE_MASTER, m_nBitRate, 16);
+			SSI_FRF_MOTO_MODE_0, SSI_MODE_MASTER, m_nBitRate, 16);
 	// Enable the SSI module.
 	MAP_SSIEnable(m_rSpecification.m_nSSIBase);
 	// Read any residual data from the SSI port.  This makes sure the receive
@@ -249,19 +249,19 @@ void ssi_peripheral::OnInterrupt() {
 void ssi_peripheral::Diag() {
 	switch (m_nDevice) {
 	case ssi_peripheral::SSI0:
-		UARTprintf("SSI0\n");
+		UARTprintf("\tSSI0\n");
 		break;
 	case ssi_peripheral::SSI1:
-		UARTprintf("SSI1\n");
+		UARTprintf("\tSSI1\n");
 		break;
 	case ssi_peripheral::SSI2:
-		UARTprintf("SSI2\n");
+		UARTprintf("\tSSI2\n");
 		break;
 	case ssi_peripheral::SSI3:
-		UARTprintf("SSI3\n");
+		UARTprintf("\tSSI3\n");
 		break;
 	default:
-		UARTprintf("ssi-void!\n");
+		UARTprintf("\tssi-void!\n");
 		break;
 	}
 	if (m_bNonBlocking) {

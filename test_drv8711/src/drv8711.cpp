@@ -142,10 +142,16 @@ void drv8711::Stop(bool bHard) {
 }
 //--------------------------------
 void drv8711::Diag() {
-	ReadAllRegisters();
+	uint32_t nValue;
 	UARTprintf("drv8711\n");
-	m_oPwmStepper.Diag();
+	for (int nRegister = 0; ssi_drv8711::NumberOfRegisters > nRegister;
+			nRegister++) {
+		nValue = 0xFFF & m_oSsiDrv8711.Read(nRegister);
+		UARTprintf("\t%d= 0x%03X\n", nRegister, nValue);
+	}
+	m_oSsiDrv8711.PrintStatus(nValue);
 	m_oSsiDrv8711.Diag();
+	m_oPwmStepper.Diag();
 }
 //--------------------------------
 void drv8711::ReadAllRegisters() {
