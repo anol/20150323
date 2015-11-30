@@ -479,7 +479,7 @@ int main(void) {
 	oPotmeter.Initialize();
 // Enable and Initialize the UART.
 	ConfigureUART();
-	UARTprintf("\n20150317\n");
+	UARTprintf("\n20151128\n");
 	UARTprintf("Type 'help' for a list of commands\n");
 	UARTprintf("> ");
 // Determine why system reset occurred and respond accordingly.
