@@ -100,7 +100,7 @@ void ssi_display::Set(const char* zString) {
 }
 //--------------------------------
 void ssi_display::Diag() {
-	UARTprintf("ssi_display\n");
+	UARTprintf("\nssi_display: ");
 	ssi_peripheral::Diag();
 }
 //--------------------------------

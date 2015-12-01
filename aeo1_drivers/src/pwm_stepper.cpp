@@ -129,13 +129,8 @@ void pwm_stepper::Stop(bool bHard) {
 }
 //--------------------------------
 void pwm_stepper::Diag() {
-	UARTprintf("pwm_stepper\n");
-	UARTprintf("\tPhase= %5d\n", m_nPhase);
-	UARTprintf("\tSteps= %5d\n", m_nSteps);
-	UARTprintf("\tSpeed= %5d\n", m_nSpeed);
-	UARTprintf("\tTargetSpeed=  %5d\n", m_nTargetSpeed);
-	UARTprintf("\tAcceleration= %5d\n", m_nAcceleration);
-	UARTprintf("\tDeceleration= %5d\n", m_nDeceleration);
+	UARTprintf("\npwm_stepper: Phase=%d, Steps=%d, Speed=%d, TargetSpeed=%d,\n", m_nPhase, m_nSteps, m_nSpeed, m_nTargetSpeed);
+	UARTprintf("  Acceleration=%d, Deceleration=%d\n", m_nAcceleration, m_nDeceleration);
 }
 //--------------------------------
 } /* namespace aeo1 */

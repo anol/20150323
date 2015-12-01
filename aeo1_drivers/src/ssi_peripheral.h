@@ -7,6 +7,8 @@ struct ssi_specification {
 	uint32_t m_nGPIOPeripheral;
 	uint32_t m_nGPIOBase;
 	uint32_t m_nGPIOPins;
+	uint32_t m_nGPIOInputPin;
+	uint32_t m_nGPIOOutputPins;
 	uint32_t m_nSSIPeripheral;
 	uint32_t m_nSSIBase;
 	uint32_t m_nSSIPinClk;

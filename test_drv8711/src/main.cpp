@@ -411,14 +411,11 @@ static void PrintProgramInfo() {
 	UARTprintf("\n\n");
 	UARTprintf(STRINGIZE(ProjName) " " __DATE__ " " __TIME__);
 	UARTprintf("\n\n");
-//	UARTprintf("\n%d\n", SysCtlClockGet());
-//	UARTprintf("\n%d\n", ROM_SysCtlClockGet());
 }
 //--------------------------------
 void MainLoop() {
 	int32_t i32CommandStatus;
 	while (1) {
-		UARTprintf("\n>");
 		while (UARTPeek('\r') == -1) {
 			// SysCtlSleep();
 			SysCtlDelay(SysCtlClockGet() / (1000 / 3));
@@ -430,6 +427,7 @@ void MainLoop() {
 		} else if (i32CommandStatus == CMDLINE_TOO_MANY_ARGS) {
 			UARTprintf("Too many arguments for command processor!\n");
 		}
+		UARTprintf("\n>");
 	}
 }
 //--------------------------------

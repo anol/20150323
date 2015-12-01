@@ -182,17 +182,16 @@ void ssi_drv8711::PrintStatus(uint32_t nStatus) {
 	};
 	const StatusEntry StatusTable[] = { { 0x001, "OverTemp" },
 			{ 0x002, "A-amps" }, { 0x004, "B-amps" }, { 0x008, "A-fault" }, {
-					0x010, "B-fault" }, { 0x020, "Low V" }, { 0x040, "Stall" },
+					0x010, "B-fault" }, { 0x020, "Low-V" }, { 0x040, "Stall" },
 			{ 0x080, "Latched" }, { 0, "" } };
 	const StatusEntry* pEntry = &StatusTable[0];
-	UARTprintf("Status:");
 	while (pEntry) {
 		uint32_t nMask = pEntry->nMask;
 		if (!nMask) {
 			pEntry = 0;
 		} else {
 			if (nMask & nStatus) {
-				UARTprintf(" %s", pEntry->zText);
+				UARTprintf("%s ", pEntry->zText);
 			}
 			pEntry++;
 		}
@@ -201,14 +200,20 @@ void ssi_drv8711::PrintStatus(uint32_t nStatus) {
 }
 //--------------------------------
 void ssi_drv8711::Diag() {
-	UARTprintf("ssi_drv8711\n");
+	UARTprintf("\nssi_drv8711: ");
 	ssi_peripheral::Diag();
-	UARTprintf("\tregisters\n");
-		for (int nRegister = 0; NumberOfRegisters > nRegister; nRegister++) {
-		UARTprintf("\t%d=0x%03X\n", nRegister, 0xFFF & m_nRegister[nRegister]);
+	UARTprintf("  Control=%03X, ", m_nRegister[0]);
+	UARTprintf("Torque=%03X, ", m_nRegister[1]);
+	UARTprintf("Off=%03X, ", m_nRegister[2]);
+	UARTprintf("Blank=%03X,\n  ", m_nRegister[3]);
+	UARTprintf("Decay=%03X, ", m_nRegister[4]);
+	UARTprintf("Stall=%03X, ", m_nRegister[5]);
+	UARTprintf("Drive=%03X, ", m_nRegister[6]);
+	UARTprintf("Status=%03X\n", m_nRegister[7]);
+	if (m_nRegister[7]) {
+		UARTprintf("  -> ");
+		PrintStatus(m_nRegister[7]);
 	}
-	PrintStatus(0xFFF & m_nRegister[7]);
-	
 }
 //--------------------------------
 } /* namespace aeo1 */

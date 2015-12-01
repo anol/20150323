@@ -60,6 +60,8 @@ ssi_specification SSI0_Specification
 = { SYSCTL_PERIPH_GPIOA, // =	GPIOPeripheral
 		GPIO_PORTA_BASE, // = GPIOBase
 		GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5, // = GPIOPins
+		GPIO_PIN_4, // = m_nGPIOInputPin
+		GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_5, // = m_nGPIOOutputPins
 		SYSCTL_PERIPH_SSI0, // = SSIPeripheral
 		SSI0_BASE, // = SSIBase
 		GPIO_PA2_SSI0CLK, // = SSIPinClk
@@ -75,6 +77,8 @@ ssi_specification SSI1_Specification
 = { SYSCTL_PERIPH_GPIOF, // =	GPIOPeripheral
 		GPIO_PORTF_BASE, // = GPIOBase
 		GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, // = GPIOPins
+		GPIO_PIN_0, // = m_nGPIOInputPin
+		GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, // = m_nGPIOOutputPins
 		SYSCTL_PERIPH_SSI1, // = SSIPeripheral
 		SSI1_BASE, // = SSIBase
 		GPIO_PF2_SSI1CLK, // = SSIPinClk
@@ -90,6 +94,8 @@ ssi_specification SSI2_Specification
 = { SYSCTL_PERIPH_GPIOB, // =	GPIOPeripheral
 		GPIO_PORTB_BASE, // = GPIOBase
 		GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7, // = GPIOPins
+		GPIO_PIN_6, // = m_nGPIOInputPin
+		GPIO_PIN_4 | GPIO_PIN_7, // = m_nGPIOOutputPins
 		SYSCTL_PERIPH_SSI2, // = SSIPeripheral
 		SSI2_BASE, // = SSIBase
 		GPIO_PB4_SSI2CLK, // = SSIPinClk
@@ -106,6 +112,8 @@ ssi_specification SSI3_Specification
 = { SYSCTL_PERIPH_GPIOD, // = GPIOPeripheral
 		GPIO_PORTD_BASE, // = GPIOBase
 		GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, // = GPIOPins
+		GPIO_PIN_2, // = m_nGPIOInputPin
+		GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_3, // = m_nGPIOOutputPins
 		SYSCTL_PERIPH_SSI3, // = SSIPeripheral
 		SSI3_BASE, // = SSIBase
 		GPIO_PD0_SSI3CLK, // = SSIPinClk
@@ -142,27 +150,30 @@ ssi_peripheral::~ssi_peripheral() {
 void ssi_peripheral::Initialize() {
 	MAP_SysCtlPeripheralEnable(m_rSpecification.m_nSSIPeripheral);
 	MAP_SysCtlPeripheralEnable(m_rSpecification.m_nGPIOPeripheral);
+	// Assign the SSI signals to the appropriate pins
+	MAP_GPIOPinConfigure(m_rSpecification.m_nSSIPinRx);
 	MAP_GPIOPinConfigure(m_rSpecification.m_nSSIPinClk);
+	MAP_GPIOPinConfigure(m_rSpecification.m_nSSIPinTx);
 	if (m_rSpecification.m_nSSIPinFss) {
 		MAP_GPIOPinConfigure(m_rSpecification.m_nSSIPinFss);
 	}
-	MAP_GPIOPinConfigure(m_rSpecification.m_nSSIPinRx);
-	MAP_GPIOPinConfigure(m_rSpecification.m_nSSIPinTx);
+	// Set the GPIO AFSEL bits for the appropriate pins
 	MAP_GPIOPinTypeSSI(m_rSpecification.m_nGPIOBase,
 			m_rSpecification.m_nGPIOPins);
-	// Configure and enable the SSI port for TI master mode.  Use SSI3, system
-	// clock supply, master mode, SSI frequency, and 16-bit data.
-	SSIConfigSetExpClk(m_rSpecification.m_nSSIBase, SysCtlClockGet(),
-			SSI_FRF_MOTO_MODE_0, SSI_MODE_MASTER, m_nBitRate, 16);
+	// Set pull-up on the SSI Rx pin
+	MAP_GPIOPadConfigSet(m_rSpecification.m_nGPIOBase,
+			m_rSpecification.m_nGPIOInputPin, GPIO_STRENGTH_2MA,
+			GPIO_PIN_TYPE_STD_WPU);
+	// Set standrad on the SSI output pins
+	MAP_GPIOPadConfigSet(m_rSpecification.m_nGPIOBase,
+			m_rSpecification.m_nGPIOOutputPins, GPIO_STRENGTH_2MA,
+			GPIO_PIN_TYPE_STD);
+	// Configure the SSI peripheral
+	MAP_SSIConfigSetExpClk(m_rSpecification.m_nSSIBase, SysCtlClockGet(),
+	SSI_FRF_MOTO_MODE_0, SSI_MODE_MASTER, m_nBitRate, 16);
 	// Enable the SSI module.
 	MAP_SSIEnable(m_rSpecification.m_nSSIBase);
-	// Read any residual data from the SSI port.  This makes sure the receive
-	// FIFOs are empty, so we don't read any unwanted junk.  This is done here
-	// because the TI SSI mode is full-duplex, which allows you to send and
-	// receive at the same time.  The SSIDataGetNonBlocking function returns
-	// "true" when data was returned, and "false" when no data was returned.
-	// The "non-blocking" function checks if there is any data in the receive
-	// FIFO and does not "hang" if there isn't.
+	// Read any residual data from the SSI port.
 	while (MAP_SSIDataGetNonBlocking(m_rSpecification.m_nSSIBase, &m_nDataRx[0])) {
 	}
 	m_bEmpty = true;
@@ -249,32 +260,32 @@ void ssi_peripheral::OnInterrupt() {
 void ssi_peripheral::Diag() {
 	switch (m_nDevice) {
 	case ssi_peripheral::SSI0:
-		UARTprintf("\tSSI0\n");
+		UARTprintf("SSI0, ");
 		break;
 	case ssi_peripheral::SSI1:
-		UARTprintf("\tSSI1\n");
+		UARTprintf("SSI1, ");
 		break;
 	case ssi_peripheral::SSI2:
-		UARTprintf("\tSSI2\n");
+		UARTprintf("SSI2, ");
 		break;
 	case ssi_peripheral::SSI3:
-		UARTprintf("\tSSI3\n");
+		UARTprintf("SSI3, ");
 		break;
 	default:
-		UARTprintf("\tssi-void!\n");
+		UARTprintf("ssi-void! ");
 		break;
 	}
 	if (m_bNonBlocking) {
-		UARTprintf("\tSRTFE=%5d\n", m_nSRTFE);
-		UARTprintf("\tTXEOT=%5d\n", m_nTXEOT);
-		UARTprintf("\tDMATX=%5d\n", m_nDMATX);
-		UARTprintf("\tDMARX=%5d\n", m_nDMARX);
-		UARTprintf("\tTXFF= %5d\n", m_nTXFF);
-		UARTprintf("\tRXFF= %5d\n", m_nRXFF);
-		UARTprintf("\tRXTO= %5d\n", m_nRXTO);
-		UARTprintf("\tRXOR= %5d\n", m_nRXOR);
+		UARTprintf("SRTFE=%d, ", m_nSRTFE);
+		UARTprintf("TXEOT=%d, ", m_nTXEOT);
+		UARTprintf("DMATX=%d, ", m_nDMATX);
+		UARTprintf("DMARX=%d,\n  ", m_nDMARX);
+		UARTprintf("TXFF=%d, ", m_nTXFF);
+		UARTprintf("RXFF=%d, ", m_nRXFF);
+		UARTprintf("RXTO=%d, ", m_nRXTO);
+		UARTprintf("RXOR=%d\n", m_nRXOR);
 	} else {
-		UARTprintf("\tBlocking IO\n");
+		UARTprintf("BlockingIO\n");
 	}
 }
 //--------------------------------

@@ -121,13 +121,13 @@ void qei_sensor::Zero() {
 void qei_sensor::Diag() {
 	switch (m_nDevice) {
 	case QEI0:
-		UARTprintf("qei0: val=%d, pos=%d\n", Get(), QEIPositionGet(QEI0_BASE));
+		UARTprintf("\nqei_sensor: QEI0, val=%d, pos=%d\n", Get(), QEIPositionGet(QEI0_BASE));
 		break;
 	case QEI1:
-		UARTprintf("qei1: val=%d, pos=%d\n", Get(), QEIPositionGet(QEI1_BASE));
+		UARTprintf("\nqei_sensor: QEI1, val=%d, pos=%d\n", Get(), QEIPositionGet(QEI1_BASE));
 		break;
 	default:
-		UARTprintf("qei-void!\n");
+		UARTprintf("\nqei-void!\n");
 		break;
 	}
 
