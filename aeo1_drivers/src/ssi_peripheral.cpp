@@ -8,18 +8,20 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
+#include "inc/hw_types.h"
 #include "inc/hw_ints.h"
 #include "inc/hw_memmap.h"
-#include "inc/hw_ssi.h"
 #include "inc/hw_sysctl.h"
-#include "inc/hw_types.h"
-#include "driverlib/rom.h"
-#include "driverlib/rom_map.h"
+#include "inc/hw_ssi.h"
+#include "inc/hw_gpio.h"
 #include "driverlib/gpio.h"
 #include "driverlib/pin_map.h"
 #include "driverlib/interrupt.h"
 #include "driverlib/ssi.h"
 #include "driverlib/sysctl.h"
+#include "driverlib/rom.h"
+#include "driverlib/rom_map.h"
+//--------------------------------
 #include "utils/uartstdio.h"
 //--------------------------------
 #include "ssi_peripheral.h"
@@ -136,9 +138,9 @@ ssi_peripheral::ssi_peripheral(device_id nDevice, uint32_t nBitRate,
 								((ssi_peripheral::SSI2 == nDevice) ?
 										SSI2_Specification : SSI3_Specification))),
 		// Other members
-		m_nDevice(nDevice), m_nBitRate(nBitRate), m_nSRTFE(0), m_nTXEOT(0), m_nDMATX(
-				0), m_nDMARX(0), m_nTXFF(0), m_nRXFF(0), m_nRXTO(0), m_nRXOR(0), m_bEmpty(
-				false), m_bNonBlocking(bNonBlocking), m_nRxCount(0) {
+		m_nDevice(nDevice), m_nBitRate(nBitRate), m_nSRTFE(0), m_nTXFF(0), m_nRXFF(
+				0), m_nRXTO(0), m_nRXOR(0), m_bEmpty(false), m_bNonBlocking(
+				bNonBlocking), m_nRxCount(0) {
 	memset(m_nDataTx, 0, sizeof(m_nDataTx));
 	memset(m_nDataRx, 0, sizeof(m_nDataRx));
 }
@@ -161,15 +163,15 @@ void ssi_peripheral::Initialize() {
 	MAP_GPIOPinTypeSSI(m_rSpecification.m_nGPIOBase,
 			m_rSpecification.m_nGPIOPins);
 	// Set pull-up on the SSI Rx pin
-	MAP_GPIOPadConfigSet(m_rSpecification.m_nGPIOBase,
+	GPIOPadConfigSet(m_rSpecification.m_nGPIOBase,
 			m_rSpecification.m_nGPIOInputPin, GPIO_STRENGTH_2MA,
 			GPIO_PIN_TYPE_STD_WPU);
 	// Set standrad on the SSI output pins
-	MAP_GPIOPadConfigSet(m_rSpecification.m_nGPIOBase,
+	GPIOPadConfigSet(m_rSpecification.m_nGPIOBase,
 			m_rSpecification.m_nGPIOOutputPins, GPIO_STRENGTH_2MA,
 			GPIO_PIN_TYPE_STD);
 	// Configure the SSI peripheral
-	MAP_SSIConfigSetExpClk(m_rSpecification.m_nSSIBase, SysCtlClockGet(),
+	SSIConfigSetExpClk(m_rSpecification.m_nSSIBase, SysCtlClockGet(),
 	SSI_FRF_MOTO_MODE_0, SSI_MODE_MASTER, m_nBitRate, 16);
 	// Enable the SSI module.
 	MAP_SSIEnable(m_rSpecification.m_nSSIBase);
@@ -233,15 +235,6 @@ void ssi_peripheral::OnInterrupt() {
 		m_nSRTFE++;
 		OnTx();
 	}
-	if ( SSI_TXEOT & nIntStatus) { // Transmit FIFO is empty (interrupt)
-		m_nTXEOT++;
-	}
-	if ( SSI_DMATX & nIntStatus) { // DMA Transmit complete
-		m_nDMATX++;
-	}
-	if ( SSI_DMARX & nIntStatus) { // DMA Receive complete
-		m_nTXFF++;
-	}
 	if ( SSI_TXFF & nIntStatus) { // TX FIFO half full or less
 		m_nTXFF++;
 	}
@@ -276,17 +269,15 @@ void ssi_peripheral::Diag() {
 		break;
 	}
 	if (m_bNonBlocking) {
-		UARTprintf("SRTFE=%d, ", m_nSRTFE);
-		UARTprintf("TXEOT=%d, ", m_nTXEOT);
-		UARTprintf("DMATX=%d, ", m_nDMATX);
-		UARTprintf("DMARX=%d,\n  ", m_nDMARX);
-		UARTprintf("TXFF=%d, ", m_nTXFF);
-		UARTprintf("RXFF=%d, ", m_nRXFF);
-		UARTprintf("RXTO=%d, ", m_nRXTO);
-		UARTprintf("RXOR=%d\n", m_nRXOR);
+		UARTprintf("NonBlocking, ");
 	} else {
-		UARTprintf("BlockingIO\n");
+		UARTprintf("Blocking, ");
 	}
+	UARTprintf("\n  SRTFE=%d, ", m_nSRTFE);
+	UARTprintf("TXFF=%d, ", m_nTXFF);
+	UARTprintf("RXFF=%d, ", m_nRXFF);
+	UARTprintf("RXTO=%d, ", m_nRXTO);
+	UARTprintf("RXOR=%d\n", m_nRXOR);
 }
 //--------------------------------
 void ssi_peripheral::Put(uint32_t nValue) {

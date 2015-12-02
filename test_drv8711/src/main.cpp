@@ -169,7 +169,7 @@ tCmdLineEntry g_psCmdTable[] = {
 
 { "halt", CMD_halt, " : Halt (breake) the motor" },
 
-{ "feed", CMD_feed, " : Feed by speed (micrometers per second)" },
+{ "feed", CMD_feed, " : Feed by speed (micrometers per second) - not implemented yet" },
 
 { "move", CMD_move, " : Move by lenght (micrometers)" },
 

@@ -59,9 +59,6 @@ private:
 	device_id m_nDevice;
 	uint32_t m_nBitRate;
 	uint32_t m_nSRTFE; // SSI Transmit FIFO Empty (status)
-	uint32_t m_nTXEOT; // Transmit FIFO is empty (interrupt)
-	uint32_t m_nDMATX; // DMA Transmit complete
-	uint32_t m_nDMARX; // DMA Receive complete
 	uint32_t m_nTXFF; // TX FIFO half full or less
 	uint32_t m_nRXFF; // RX FIFO half full or more
 	uint32_t m_nRXTO; // RX timeout
