@@ -159,6 +159,7 @@ uint32_t ssi_drv8711::Read(uint32_t nRegister) {
 		Put(nRead);
 		nValue = Get();
 		GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, 0); // Chip Select = 0
+		nValue &= ~0x8000;
 		m_nRegister[nRegister] = nValue;
 	}
 	return nValue;

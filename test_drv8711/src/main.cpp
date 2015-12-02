@@ -387,9 +387,9 @@ extern "C" void SysTickIntHandler(void) {
 }
 //--------------------------------
 void Initialize() {
-	ROM_FPUEnable();
-	ROM_FPUStackingEnable();
-	ROM_SysCtlClockSet(SYSCTL_SYSDIV_5 | SYSCTL_USE_PLL | SYSCTL_XTAL_16MHZ |
+	FPUEnable();
+	FPUStackingEnable();
+	SysCtlClockSet(SYSCTL_SYSDIV_5 | SYSCTL_USE_PLL | SYSCTL_XTAL_16MHZ |
 	SYSCTL_OSC_MAIN);
 	ConfigureUART();
 	//
