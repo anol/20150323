@@ -4,7 +4,7 @@
 
 SHELL = cmd.exe
 
-CG_TOOL_ROOT := D:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6
+CG_TOOL_ROOT := C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6
 
 GEN_OPTS__FLAG := 
 GEN_CMDS__FLAG := 
@@ -130,7 +130,7 @@ all: tiva_utils.lib
 tiva_utils.lib: $(OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: ARM Archiver'
-	"D:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/bin/armar" r "tiva_utils.lib" $(ORDERED_OBJS)
+	"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/bin/armar" r "tiva_utils.lib" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
