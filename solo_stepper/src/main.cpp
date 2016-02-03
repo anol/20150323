@@ -40,7 +40,6 @@ static char g_zInput[APP_INPUT_BUF_SIZE];
 enum MenuMode {
 	MenuMode_Menu, MenuMode_Set, MenuMode_Feed, MenuMode_Move
 };
-static MenuMode g_nMenuMode = MenuMode_Menu;
 //--------------------------------
 int CMD_idle(int argc, char **argv) {
 	g_oDrv8711.Idle();
@@ -154,79 +153,6 @@ tCmdLineEntry g_psCmdTable[] = {
 { "help", CMD_help, " : Display list of commands" },
 
 { 0, 0, 0 } };
-//--------------------------------
-int MNU_set(int argc, char **argv) {
-	(void) argc;
-	(void) argv;
-	g_nMenuMode = MenuMode_Set;
-	g_oRotaryDialer.Set(g_oLinearScale.Get() * 2);
-	return (0);
-}
-//--------------------------------
-int MNU_feed(int argc, char **argv) {
-	(void) argc;
-	(void) argv;
-	g_nMenuMode = MenuMode_Feed;
-	g_oRotaryDialer.Zero();
-	return (0);
-}
-//--------------------------------
-int MNU_move(int argc, char **argv) {
-	(void) argc;
-	(void) argv;
-	g_nMenuMode = MenuMode_Move;
-	g_oRotaryDialer.Zero();
-	return (0);
-}
-//--------------------------------
-bool OnFeed(int nEvent) {
-	static int32_t nOldPosition = 0;
-	int32_t nNewPosition = g_oRotaryDialer.Get() / 2;
-	int32_t nFeed = nNewPosition - nOldPosition;
-	nOldPosition = nNewPosition;
-	if (nEvent) {
-		g_oDialerDisplay.Set(nNewPosition, 2);
-		if (0 > nFeed) {
-			nFeed = -nFeed;
-			g_oDrv8711.Step(nFeed * 16, false);
-		} else {
-			g_oDrv8711.Step(nFeed * 16, true);
-		}
-		return false;
-	} else {
-		nOldPosition = 0;
-		g_oRotaryDialer.Set(0);
-		g_nMenuMode = MenuMode_Menu;
-		return true;
-	}
-}
-//--------------------------------
-bool OnMove(int nEvent) {
-	static int32_t nOldPosition = 0;
-	static bool bCoarseTune = true;
-	bool bFinished = false;
-	int32_t nNewPosition = g_oRotaryDialer.Get();
-	if (bCoarseTune) {
-		nNewPosition *= 100;
-	}
-	if (nEvent) {
-		g_oDialerDisplay.Set(nNewPosition, 2);
-	} else {
-		if (bCoarseTune) {
-			bCoarseTune = false;
-			g_oRotaryDialer.Set(nNewPosition);
-		} else {
-			int32_t nFeed = nNewPosition - nOldPosition;
-			g_oDrv8711.Move(nFeed * 10);
-			bCoarseTune = true;
-			nOldPosition = 0;
-			g_oRotaryDialer.Set(0);
-			g_nMenuMode = MenuMode_Menu;
-			bFinished = true;
-		}
-	}
-	return bFinished;
-}
 //--------------------------------
 void ConfigureUART(void) {
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);

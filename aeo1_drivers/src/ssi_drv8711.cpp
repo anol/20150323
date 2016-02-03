@@ -44,7 +44,7 @@
 #include "ssi_drv8711.h"
 #include "alpha7segment.h"
 //--------------------------------
-extern aeo1::ssi_display g_oScaleDisplay;
+//extern aeo1::ssi_display g_oScaleDisplay;
 //--------------------------------
 static aeo1::ssi_drv8711* g_pTheDRV8711 = 0;
 //--------------------------------
@@ -133,18 +133,18 @@ void ssi_drv8711::Reset() {
 void ssi_drv8711::OnGpioInterrupt(Event nEvent) {
 	switch (nEvent) {
 	case NoStall:
-		g_oScaleDisplay.Set(".");
+//		g_oScaleDisplay.Set(".");
 		GPIOIntEnable(GPIO_PORTB_BASE, GPIO_PIN_2);
 		break;
 	case StallEvent:
-		g_oScaleDisplay.Set("STALL");
+//		g_oScaleDisplay.Set("STALL");
 		break;
 	case NoFault:
-		g_oScaleDisplay.Set(".");
+//		g_oScaleDisplay.Set(".");
 		GPIOIntEnable(GPIO_PORTE_BASE, GPIO_PIN_0);
 		break;
 	case FaultEvent:
-		g_oScaleDisplay.Set("FAULT");
+//		g_oScaleDisplay.Set("FAULT");
 		break;
 	default:
 		break;
