@@ -114,7 +114,6 @@ void pwm_stepper::Move(uint32_t nSteps) {
 	m_nAcceleration = Acceleration;
 	m_nDeceleration = Acceleration;
 	m_nPhase = Phase_Accel;
-	UARTprintf("Move %d steps\n", m_nSteps);
 	PWMGenPeriodSet(Base, Generator, m_nSpeed);
 	PWMPulseWidthSet(Base, PWM_OUT_2, 64);
 	PWMGenEnable(Base, Generator);

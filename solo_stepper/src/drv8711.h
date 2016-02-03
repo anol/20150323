@@ -21,13 +21,11 @@ public:
 	void Initialize();
 	void Idle();
 	void Halt();
-	void Feed(int32_t nMicrosPerSecond);
-	void Move(int32_t nMicros);
+	void Move(int32_t nSteps);
 	void SetTorque(uint32_t nTorque);
 	void SetDefault();
 	void Stop(bool bHard);
 	void Diag();
-	void Step(uint32_t nSteps, bool bForward);
 	void Sleep(bool bSleep);
 	void ClearFaults();
 	void Reset();

@@ -18,7 +18,7 @@ private:
 		Generator = PWM_GEN_1,
 		StartSpeed = 16000,
 		MaxSpeed = 4000,
-		Acceleration = 20
+		Acceleration = 10
 	};
 	enum Phase {
 		Phase_Idle,

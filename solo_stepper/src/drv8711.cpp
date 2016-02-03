@@ -46,15 +46,8 @@ void drv8711::Initialize() {
 	SetDefault();
 }
 //--------------------------------
-void drv8711::Idle() {
-	uint32_t nValue = m_oSsiDrv8711.Read(0);
-	nValue &= ~(0x101);
-	m_oSsiDrv8711.Write(0, nValue);
-	UARTprintf("Idle\n");
-}
-//--------------------------------
 void drv8711::SetDefault() {
-	m_oSsiDrv8711.Write(0, 0xF18);
+	m_oSsiDrv8711.Write(0, 0xF18);  // Microstepping 1/8
 	m_oSsiDrv8711.Write(1, 0x0BA);
 	m_oSsiDrv8711.Write(2, 0x030);
 	m_oSsiDrv8711.Write(3, 0x108);
@@ -65,26 +58,18 @@ void drv8711::SetDefault() {
 	UARTprintf("SetDefault\n");
 }
 //--------------------------------
+void drv8711::Idle() {
+	uint32_t nValue = m_oSsiDrv8711.Read(0);
+	nValue &= ~(0x101);
+	m_oSsiDrv8711.Write(0, nValue);
+	UARTprintf("Idle\n");
+}
+//--------------------------------
 void drv8711::Halt() {
 	uint32_t nValue = m_oSsiDrv8711.Read(0);
 	nValue |= 0x101;
 	m_oSsiDrv8711.Write(0, nValue);
 	UARTprintf("Halt\n");
-}
-//--------------------------------
-void drv8711::Step(uint32_t nSteps, bool bForward) {
-	uint32_t nValue = m_oSsiDrv8711.Read(0);
-	if (bForward) {
-		nValue |= 0x007;
-	} else {
-		nValue &= ~(0x007);
-		nValue |= 0x005;
-	}
-	for (int nStep = 0; nSteps > nStep; nStep++) {
-		m_oSsiDrv8711.Write(0, nValue);
-		SysCtlDelay(10000);
-	}
-	UARTprintf("%d steps\n");
 }
 //--------------------------------
 void drv8711::Sleep(bool bSleep) {
@@ -113,22 +98,19 @@ void drv8711::SetTorque(uint32_t nTorque) {
 	UARTprintf("Step\n");
 }
 //--------------------------------
-void drv8711::Feed(int32_t nMicrosPerSecond) {
-	UARTprintf("Feed: speed=%d(umps)\n", nMicrosPerSecond);
-}
-//--------------------------------
-void drv8711::Move(int32_t nMicros) {
-	int32_t nSteps = (16 * nMicros) / 10;
+void drv8711::Move(int32_t nSteps) {
 	uint32_t nControlRegister = m_oSsiDrv8711.Read(0);
-	UARTprintf("Move %d.%d mm\n", nMicros / 1000, nMicros % 1000);
 	if (0 > nSteps) {
 		nSteps = -nSteps;
 		nControlRegister &= ~(0x007);
 		nControlRegister |= 0x005;
+		UARTprintf("Reverse %d u-steps\n", nSteps);
 	} else {
 		nControlRegister |= 0x007;
+		UARTprintf("Forward %d u-steps\n", nSteps);
 	}
 	m_oSsiDrv8711.Write(0, nControlRegister);
+	// nSteps *= 8; // Microstepping 1/8
 	m_oPwmStepper.Move(nSteps);
 }
 //--------------------------------

@@ -51,14 +51,6 @@ int CMD_halt(int argc, char **argv) {
 	return (0);
 }
 //--------------------------------
-int CMD_feed(int argc, char **argv) {
-	if (argc == 2) {
-		uint32_t nValue = ustrtoul(argv[1], 0, 10);
-		g_oDrv8711.Feed(nValue);
-	}
-	return (0);
-}
-//--------------------------------
 int CMD_move(int argc, char **argv) {
 	if (argc == 2) {
 		uint32_t nValue = ustrtoul(argv[1], 0, 10);
@@ -100,19 +92,6 @@ int CMD_noerr(int argc, char **argv) {
 	return (0);
 }
 //--------------------------------
-int CMD_step(int argc, char **argv) {
-	if (argc == 2) {
-		int nValue = ustrtoul(argv[1], 0, 10);
-		if (0 > nValue) {
-			nValue = -nValue;
-			g_oDrv8711.Step(nValue, false);
-		} else {
-			g_oDrv8711.Step(nValue, true);
-		}
-	}
-	return (0);
-}
-//--------------------------------
 int CMD_help(int argc, char **argv) {
 	int32_t i32Index;
 	(void) argc;
@@ -134,9 +113,7 @@ tCmdLineEntry g_psCmdTable[] = {
 
 { "halt", CMD_halt, " : Halt (breake) the motor" },
 
-{ "feed", CMD_feed, " : Feed by speed (micrometers per second) - not implemented yet" },
-
-{ "move", CMD_move, " : Move by lenght (micrometers)" },
+{ "move", CMD_move, " : Move # steps" },
 
 { "stop", CMD_stop, " : Stop feed or move" },
 
@@ -147,8 +124,6 @@ tCmdLineEntry g_psCmdTable[] = {
 { "noerr", CMD_noerr, " : Clear DRV8711 faults" },
 
 { "reset", CMD_reset, " : Reset DRV8711" },
-
-{ "step", CMD_step, " : Single step (RSTEP)" },
 
 { "help", CMD_help, " : Display list of commands" },
 
