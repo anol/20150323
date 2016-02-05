@@ -32,6 +32,8 @@ public:
 
 private:
 	void ReadAllRegisters();
+	void PrintAllRegisters();
+	void PrintStatus(uint32_t nStatus);
 
 private:
 	ssi_drv8711 m_oSsiDrv8711;
