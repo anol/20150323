@@ -32,7 +32,8 @@ public:
 	}
 
 private:
-	void ConfigureUART();
+	void ConfigureUART(uint32_t nBps);
+	void SetBitrate(uint32_t nBps);
 	void OnTransmit();
 	void OnReceive();
 	int FillOutputBuffer(const char* zString);

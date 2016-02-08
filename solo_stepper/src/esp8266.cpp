@@ -46,6 +46,8 @@ const ESP8266_Command InitializationCommands[] = {
 		{ "AT+CIPMUX=1", "OK" },
 // Configure as TCP server (default port = 333)
 		{ "AT+CIPSERVER=1", "OK" },
+// Get IP addresses
+		{ "AT+CIFSR", 0 },
 // End of table
 		{ 0, 0 }
 
@@ -66,48 +68,79 @@ esp8266::~esp8266() {
 }
 //--------------------------------
 int esp8266::Initialize() {
+	char zReceived[50];
 	int nCommandIndex = 0;
 	pTheOneAndOnlyEsp8266 = this;
-	ConfigureUART();
+	// Setup the ESP8266 Reset Control Pin
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
+	GPIOPadConfigSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_STRENGTH_2MA,
+	GPIO_PIN_TYPE_STD);
+	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_DIR_MODE_OUT);
+	GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0);
+	//
+	ConfigureUART(74880);
+	SysCtlDelay(SysCtlClockGet());
+	GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_PIN_6);
+	while (ReadLine(zReceived, sizeof(zReceived)))
+		;
+	SysCtlDelay(SysCtlClockGet() / 5);
+	while (ReadLine(zReceived, sizeof(zReceived)))
+		;
+	SysCtlDelay(SysCtlClockGet() / 5);
+	while (ReadLine(zReceived, sizeof(zReceived)))
+		;
+	SetBitrate(115200);
+	while (ReadLine(zReceived, sizeof(zReceived)))
+		;
+	//
 	while (InitializationCommands[nCommandIndex].zCommand) {
 		if (Invoke(InitializationCommands[nCommandIndex].zCommand,
 				InitializationCommands[nCommandIndex].zResult)) {
+			SysCtlDelay(SysCtlClockGet());
 			nCommandIndex++;
 		} else {
 			break;
 		}
 	}
+	//
 	return nCommandIndex;
 }
 //--------------------------------
 bool esp8266::Invoke(const char* zCommand, const char* zResult) {
+	int nCount;
 	bool bSuccess = true;
 	char zReceived[50];
 	FillOutputBuffer(zCommand);
 	FillOutputBuffer("\r\n");
 	// Get response
-	while (!RxEndOfLine()) {
+	nCount = 1000;
+	while (nCount-- && !RxEndOfLine()) {
 		SysCtlDelay(SysCtlClockGet() / (1000 / 3));
 	}
 	ReadLine(zReceived, sizeof(zReceived));
 	// Get final CR-LF
-	while (!RxEndOfLine()) {
+	nCount = 1000;
+	while (nCount-- && !RxEndOfLine()) {
 		SysCtlDelay(SysCtlClockGet() / (1000 / 3));
 	}
-	ReadLine(zReceived, sizeof(zReceived));
+	while (ReadLine(zReceived, sizeof(zReceived)))
+		;
 	//
 	return bSuccess;
 }
 //--------------------------------
-void esp8266::ConfigureUART() {
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
+void esp8266::SetBitrate(uint32_t nBps) {
+	MAP_UARTConfigSetExpClk(UART_BASE, 16000000, nBps,
+			(UART_CONFIG_PAR_NONE | UART_CONFIG_STOP_ONE | UART_CONFIG_WLEN_8));
+}
+//--------------------------------
+void esp8266::ConfigureUART(uint32_t nBps) {
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART1);
 	GPIOPinConfigure(GPIO_PC4_U1RX);
 	GPIOPinConfigure(GPIO_PC5_U1TX);
 	GPIOPinTypeUART(GPIO_PORTC_BASE, GPIO_PIN_4 | GPIO_PIN_5);
 	UARTClockSourceSet(UART_BASE, UART_CLOCK_PIOSC);
-	MAP_UARTConfigSetExpClk(UART_BASE, 16000000, 115200,
-			(UART_CONFIG_PAR_NONE | UART_CONFIG_STOP_ONE | UART_CONFIG_WLEN_8));
+	SetBitrate(nBps);
 	MAP_UARTFIFOLevelSet(UART_BASE, UART_FIFO_TX1_8, UART_FIFO_RX1_8);
 	MAP_UARTIntDisable(UART_BASE, 0xFFFFFFFF);
 	MAP_UARTIntEnable(UART_BASE, UART_INT_RX | UART_INT_RT);
@@ -195,7 +228,7 @@ int esp8266::ReadLine(char* zString, int nSize) {
 		UARTprintf("%c", cSymb);
 
 		nCount++;
-		if(nSize > nCount){
+		if (nSize > nCount) {
 			*zString++ = cSymb;
 		}
 	}
