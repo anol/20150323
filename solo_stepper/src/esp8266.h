@@ -10,8 +10,9 @@
 //--------------------------------
 namespace aeo1 {
 class esp8266 {
+public:
 	enum {
-		InputBufferSize = 128
+		AtHeaderSize = 20, InputBufferSize = 128, OutputBufferSize = 128
 	};
 
 public:
@@ -21,12 +22,23 @@ public:
 public:
 	int Initialize();
 	void Diag();
+	void OnUart(uint32_t ui32Ints);
+	int Write(const char* zString);
 
 private:
+	void ConfigureUART();
+	void OnTransmit();
+	void OnReceive();
+	int FillOutputBuffer(const char* zString);
 	bool Invoke(const char* zCommand, const char* zResult);
 
 private:
-	char m_zInput[InputBufferSize];
+	int m_nTxHead;
+	int m_nTxTail;
+	int m_nRxHead;
+	int m_nRxTail;
+	char m_cInput[InputBufferSize];
+	char m_cOutput[OutputBufferSize];
 
 };
 } /* namespace aeo1 */

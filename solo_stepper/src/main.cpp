@@ -27,6 +27,7 @@
 #include "ssi_display.h"
 #include "qei_sensor.h"
 #include "drv8711.h"
+#include "esp8266.h"
 //--------------------------------
 #define APP_SYSTICKS_PER_SEC 50
 #define APP_INPUT_BUF_SIZE 128
@@ -35,6 +36,7 @@
 #define STRINGIZE(A) STRINGIZE_NX(A)
 //--------------------------------
 aeo1::drv8711 g_oDrv8711;
+aeo1::esp8266 g_oEsp8266;
 static char g_zInput[APP_INPUT_BUF_SIZE];
 //--------------------------------
 enum MenuMode {
@@ -129,7 +131,7 @@ tCmdLineEntry g_psCmdTable[] = {
 
 { 0, 0, 0 } };
 //--------------------------------
-void ConfigureUART(void) {
+void ConfigureDebugUART() {
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
 	GPIOPinConfigure(GPIO_PA0_U0RX);
@@ -147,7 +149,10 @@ void Initialize() {
 	FPUStackingEnable();
 	SysCtlClockSet(SYSCTL_SYSDIV_5 | SYSCTL_USE_PLL | SYSCTL_XTAL_16MHZ |
 	SYSCTL_OSC_MAIN);
-	ConfigureUART();
+	//
+	ConfigureDebugUART();
+	//
+	g_oEsp8266.Initialize();
 	//
 	g_oDrv8711.Initialize();
 	//
