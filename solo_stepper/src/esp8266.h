@@ -31,12 +31,21 @@ private:
 	void OnReceive();
 	int FillOutputBuffer(const char* zString);
 	bool Invoke(const char* zCommand, const char* zResult);
+	int ReadLine();
+
+private:
+	bool RxEndOfLine() {
+		bool bRxEndOfLine = m_bRxEndOfLine;
+		m_bRxEndOfLine = false;
+		return bRxEndOfLine;
+	}
 
 private:
 	int m_nTxHead;
-	int m_nTxTail;
+	int m_nTxFill;
 	int m_nRxHead;
-	int m_nRxTail;
+	int m_nRxFill;
+	bool m_bRxEndOfLine;
 	char m_cInput[InputBufferSize];
 	char m_cOutput[OutputBufferSize];
 

@@ -58,7 +58,8 @@ enum {
 };
 //--------------------------------
 esp8266::esp8266() :
-		m_nTxHead(0), m_nTxTail(0), m_nRxHead(0), m_nRxTail(0) {
+		m_nTxHead(0), m_nTxFill(0), m_nRxHead(0), m_nRxFill(0), m_bRxEndOfLine(
+				false) {
 }
 //--------------------------------
 esp8266::~esp8266() {
@@ -79,6 +80,25 @@ int esp8266::Initialize() {
 	return nCommandIndex;
 }
 //--------------------------------
+bool esp8266::Invoke(const char* zCommand, const char* zResult) {
+	bool bSuccess = true;
+	UARTprintf("<%s>\r\n", zCommand);
+	FillOutputBuffer(zCommand);
+	FillOutputBuffer("\r\n");
+	// Get response
+	while (!RxEndOfLine()) {
+		SysCtlDelay(SysCtlClockGet() / (1000 / 3));
+	}
+	ReadLine();
+	// Get final CR-LF
+	while (!RxEndOfLine()) {
+		SysCtlDelay(SysCtlClockGet() / (1000 / 3));
+	}
+	ReadLine();
+	//
+	return bSuccess;
+}
+//--------------------------------
 void esp8266::ConfigureUART() {
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART1);
@@ -96,23 +116,15 @@ void esp8266::ConfigureUART() {
 }
 //--------------------------------
 void esp8266::OnTransmit() {
-	// Do we have any data to transmit?
-	if (m_nTxHead != m_nTxTail) {
-		// Disable the UART interrupt.  If we don't do this there is a race
-		// condition which can cause the read index to be corrupted.
+	if (m_nTxHead != m_nTxFill) {
 		MAP_IntDisable(UART_INT);
-		// Yes - take some characters out of the transmit buffer and feed
-		// them to the UART transmit FIFO.
-		while (MAP_UARTSpaceAvail(UART_BASE) && (m_nTxHead != m_nTxTail)) {
+		while (MAP_UARTSpaceAvail(UART_BASE) && (m_nTxHead != m_nTxFill)) {
+			m_nTxHead = ((m_nTxHead + 1) % OutputBufferSize);
 			MAP_UARTCharPutNonBlocking(UART_BASE, m_cOutput[m_nTxHead]);
-			m_nTxHead++;
-			m_nTxHead %= OutputBufferSize;
 		}
-		// Reenable the UART interrupt.
 		MAP_IntEnable(UART_INT);
 	}
-	// If the output buffer is empty, turn off the transmit interrupt.
-	if (m_nTxHead == m_nTxTail) {
+	if (m_nTxHead == m_nTxFill) {
 		MAP_UARTIntDisable(UART_BASE, UART_INT_TX);
 	}
 }
@@ -120,14 +132,14 @@ void esp8266::OnTransmit() {
 void esp8266::OnReceive() {
 	while (MAP_UARTCharsAvail(UART_BASE)) {
 		// Read a character
-		int32_t i32Char = MAP_UARTCharGetNonBlocking(UART_BASE);
-		// If there is space in the receive buffer, put the character
-		// there, otherwise throw it away.
-		if (m_nRxHead == ((m_nRxTail + 1) % InputBufferSize)) {
+		char cSymb = (0xFF & MAP_UARTCharGetNonBlocking(UART_BASE));
+		if ('\n' == cSymb) {
+			m_bRxEndOfLine = true;
+		}
+		if (m_nRxHead != ((m_nRxFill + 1) % InputBufferSize)) {
 			// Store the new character in the receive buffer
-			m_cInput[m_nRxTail] = (i32Char & 0xFF);
-			m_nRxTail++;
-			m_nRxTail %= InputBufferSize;
+			m_nRxFill = ((m_nRxFill + 1) % InputBufferSize);
+			m_cInput[m_nRxFill] = cSymb;
 		}
 	}
 }
@@ -151,12 +163,34 @@ extern "C" void esp8266_UARTIntHandler(void) {
 //--------------------------------
 int esp8266::FillOutputBuffer(const char* zString) {
 	int nCount = 0;
-	while ((*zString) && (m_nTxHead == ((m_nTxTail + 1) % OutputBufferSize))) {
-		// Store the new character in the transmit buffer
-		m_cOutput[m_nTxTail] = *(zString++);
-		m_nTxTail++;
-		m_nTxTail %= InputBufferSize;
+	char cSymb = 0;
+	while ((*zString) && (m_nTxHead != ((m_nTxFill + 1) % OutputBufferSize))) {
+		cSymb = *(zString++);
+		m_nTxFill = ((m_nTxFill + 1) % OutputBufferSize);
+		m_cOutput[m_nTxFill] = cSymb;
 		nCount++;
+
+		// TODO:
+		UARTprintf("%c", cSymb);
+
+	}
+	OnTransmit();
+	MAP_UARTIntEnable(UART_BASE, UART_INT_TX);
+	return nCount;
+}
+//--------------------------------
+int esp8266::ReadLine() {
+	int nCount = 0;
+	char cSymb = 0;
+	while (('\n' != cSymb) && (m_nRxHead != m_nRxFill)) {
+		m_nRxHead++;
+		m_nRxHead %= InputBufferSize;
+		cSymb = m_cInput[m_nRxHead];
+		nCount++;
+
+		// TODO:
+		UARTprintf("%c", cSymb);
+
 	}
 	return nCount;
 }
@@ -164,32 +198,12 @@ int esp8266::FillOutputBuffer(const char* zString) {
 int esp8266::Write(const char* zString) {
 	int nCount = 0;
 	char zSize[8];
+	std::ltoa(strlen(zString), zSize);
 	nCount += FillOutputBuffer("AT+CIPSEND=1,");
-	nCount += FillOutputBuffer(itoa(strlen(zString), zSize));
+	nCount += FillOutputBuffer(zSize);
 	nCount += FillOutputBuffer("\r\n");
 	nCount += FillOutputBuffer(zString);
 	return nCount;
-}
-//--------------------------------
-bool esp8266::Invoke(const char* zCommand, const char* zResult) {
-	bool bSuccess = true;
-	UARTprintf("%s\r\n", zCommand);
-	// Get response
-	while (UARTPeek('\r') == -1) {
-		SysCtlDelay(SysCtlClockGet() / (1000 / 3));
-	}
-	UARTgets(m_cInput, sizeof(m_cInput));
-	if (zResult) {
-		UARTprintf(" <%s >\r\n", m_cInput);
-		bSuccess = strcmp(m_zInput, zResult) ? false : true;
-	}
-	// Get final CR-LF
-	while (UARTPeek('\r') == -1) {
-		SysCtlDelay(SysCtlClockGet() / (1000 / 3));
-	}
-	UARTgets(m_cInput, sizeof(m_cInput));
-	//
-	return bSuccess;
 }
 //--------------------------------
 void esp8266::Diag() {

@@ -58,6 +58,7 @@ extern uint32_t __STACK_TOP;
 //*****************************************************************************
 extern void SysTickIntHandler(void);
 extern void UARTStdioIntHandler(void);
+extern void esp8266_UARTIntHandler(void);
 extern void OnADCInterrupt(void);
 extern void OnSSI0Interrupt(void);
 extern void OnSSI1Interrupt(void);
