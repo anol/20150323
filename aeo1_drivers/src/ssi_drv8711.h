@@ -25,12 +25,12 @@ public:
 	virtual ~ssi_drv8711();
 	void Initialize();
 	void Diag();
-	void PrintStatus(uint32_t nStatus);
 	void Sleep(bool bSleep);
 	void Reset();
 	void OnGpioInterrupt(Event nEvent);
 	uint32_t Read(uint32_t nRegister);
 	uint32_t Write(uint32_t nRegister, uint32_t nValue);
+	uint32_t GetRegister(uint32_t nRegister);
 private:
 	uint32_t m_nRegister[NumberOfRegisters];
 };

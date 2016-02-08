@@ -18,6 +18,7 @@
 #include "ssi_drv8711.h"
 #include "pwm_stepper.h"
 #include "drv8711.h"
+#include "drv8711_registers.h"
 /*
  DRV8711 Register Settings
  0: def=0xxxx, ref=0xF1C
@@ -89,6 +90,7 @@ void drv8711::ClearFaults() {
 void drv8711::Reset() {
 	m_oSsiDrv8711.Reset();
 	UARTprintf("Reset\n");
+	SetDefault();
 }
 //--------------------------------
 void drv8711::SetTorque(uint32_t nTorque) {
@@ -123,10 +125,28 @@ void drv8711::Stop(bool bHard) {
 	m_oPwmStepper.Stop(bHard);
 }
 //--------------------------------
-void drv8711::Diag() {
-	ReadAllRegisters();
-	m_oSsiDrv8711.Diag();
-	m_oPwmStepper.Diag();
+void drv8711::PrintStatus(uint32_t nStatus) {
+	struct StatusEntry {
+		uint32_t nMask;
+		const char* zText;
+	};
+	const StatusEntry StatusTable[] = { { 0x001, "OverTemp" },
+			{ 0x002, "A-amps" }, { 0x004, "B-amps" }, { 0x008, "A-fault" }, {
+					0x010, "B-fault" }, { 0x020, "Low-V" }, { 0x040, "Stall" },
+			{ 0x080, "Latched" }, { 0, "" } };
+	const StatusEntry* pEntry = &StatusTable[0];
+	while (pEntry) {
+		uint32_t nMask = pEntry->nMask;
+		if (!nMask) {
+			pEntry = 0;
+		} else {
+			if (nMask & nStatus) {
+				UARTprintf("%s ", pEntry->zText);
+			}
+			pEntry++;
+		}
+	}
+	UARTprintf("\n");
 }
 //--------------------------------
 void drv8711::ReadAllRegisters() {
@@ -134,6 +154,32 @@ void drv8711::ReadAllRegisters() {
 			nRegister++) {
 		m_oSsiDrv8711.Read(nRegister);
 	}
+}
+//--------------------------------
+static bool MyPrintFunction(const char* zName, int nValue,
+		const char* zDescription, void* pUserData) {
+	UARTprintf("  %8s= %4d %40s\n", zName, nValue, zDescription);
+	return true;
+}
+//--------------------------------
+void drv8711::PrintAllRegisters() {
+	int nValue = 0xFFFF;
+	for (int nRegister = 0; 8 > nRegister; nRegister++) {
+		nValue = m_oSsiDrv8711.GetRegister(nRegister);
+		UARTprintf("  Register %d=%03X, ", nRegister, nValue);
+		drv8711_registers_Print(nRegister, nValue, MyPrintFunction, 0);
+	}
+	if (nValue) {
+		UARTprintf("  -> ");
+		PrintStatus(nValue);
+	}
+}
+//--------------------------------
+void drv8711::Diag() {
+	m_oSsiDrv8711.Diag();
+	m_oPwmStepper.Diag();
+	ReadAllRegisters();
+	PrintAllRegisters();
 }
 //--------------------------------
 } /* namespace aeo1 */
