@@ -131,7 +131,7 @@ tCmdLineEntry g_psCmdTable[] = {
 
 { 0, 0, 0 } };
 //--------------------------------
-void ConfigureDebugUART() {
+static void ConfigureDebugUART() {
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
 	GPIOPinConfigure(GPIO_PA0_U0RX);
@@ -144,22 +144,18 @@ void ConfigureDebugUART() {
 extern "C" void SysTickIntHandler(void) {
 }
 //--------------------------------
-void Initialize() {
+static void Initialize() {
 	FPUEnable();
 	FPUStackingEnable();
 	SysCtlClockSet(SYSCTL_SYSDIV_5 | SYSCTL_USE_PLL | SYSCTL_XTAL_16MHZ |
 	SYSCTL_OSC_MAIN);
-	//
-	ConfigureDebugUART();
-	//
-	g_oEsp8266.Initialize();
-	//
-	g_oDrv8711.Initialize();
-	//
 	SysTickPeriodSet(SysCtlClockGet() / APP_SYSTICKS_PER_SEC);
 	SysTickEnable();
 	SysTickIntEnable();
 	IntMasterEnable();
+	ConfigureDebugUART();
+	g_oEsp8266.Initialize();
+	g_oDrv8711.Initialize();
 }
 //--------------------------------
 static void PrintProgramInfo() {
@@ -168,21 +164,27 @@ static void PrintProgramInfo() {
 	UARTprintf("\n\n");
 }
 //--------------------------------
+static void OnCommand() {
+	int32_t i32CommandStatus = CmdLineProcess(g_zInput);
+	if (i32CommandStatus == CMDLINE_BAD_CMD) {
+		UARTprintf("Bad command!\n");
+	} else if (i32CommandStatus == CMDLINE_TOO_MANY_ARGS) {
+		UARTprintf("Too many arguments for command processor!\n");
+	}
+	UARTprintf("\n>");
+}
+//--------------------------------
 void MainLoop() {
-	int32_t i32CommandStatus;
 	while (1) {
-		while (UARTPeek('\r') == -1) {
-			// SysCtlSleep();
+		if (-1 != UARTPeek('\r')) {
+			UARTgets(g_zInput, sizeof(g_zInput));
+			OnCommand();
+		} else if (g_oEsp8266.RxEndOfLine()) {
+			g_oEsp8266.ReadLine(g_zInput, sizeof(g_zInput));
+			OnCommand();
+		} else {
 			SysCtlDelay(SysCtlClockGet() / (1000 / 3));
 		}
-		UARTgets(g_zInput, sizeof(g_zInput));
-		i32CommandStatus = CmdLineProcess(g_zInput);
-		if (i32CommandStatus == CMDLINE_BAD_CMD) {
-			UARTprintf("Bad command!\n");
-		} else if (i32CommandStatus == CMDLINE_TOO_MANY_ARGS) {
-			UARTprintf("Too many arguments for command processor!\n");
-		}
-		UARTprintf("\n>");
 	}
 }
 //--------------------------------

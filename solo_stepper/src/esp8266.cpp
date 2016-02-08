@@ -82,19 +82,19 @@ int esp8266::Initialize() {
 //--------------------------------
 bool esp8266::Invoke(const char* zCommand, const char* zResult) {
 	bool bSuccess = true;
-	UARTprintf("<%s>\r\n", zCommand);
+	char zReceived[50];
 	FillOutputBuffer(zCommand);
 	FillOutputBuffer("\r\n");
 	// Get response
 	while (!RxEndOfLine()) {
 		SysCtlDelay(SysCtlClockGet() / (1000 / 3));
 	}
-	ReadLine();
+	ReadLine(zReceived, sizeof(zReceived));
 	// Get final CR-LF
 	while (!RxEndOfLine()) {
 		SysCtlDelay(SysCtlClockGet() / (1000 / 3));
 	}
-	ReadLine();
+	ReadLine(zReceived, sizeof(zReceived));
 	//
 	return bSuccess;
 }
@@ -179,19 +179,27 @@ int esp8266::FillOutputBuffer(const char* zString) {
 	return nCount;
 }
 //--------------------------------
-int esp8266::ReadLine() {
+int esp8266::ReadLine(char* zString, int nSize) {
 	int nCount = 0;
 	char cSymb = 0;
+	nSize--;
 	while (('\n' != cSymb) && (m_nRxHead != m_nRxFill)) {
 		m_nRxHead++;
 		m_nRxHead %= InputBufferSize;
 		cSymb = m_cInput[m_nRxHead];
-		nCount++;
+
+		// TODO: Remove CR-LF's on ReadLine
+		// TODO: Fix the RxEndOfLine flag
 
 		// TODO:
 		UARTprintf("%c", cSymb);
 
+		nCount++;
+		if(nSize > nCount){
+			*zString++ = cSymb;
+		}
 	}
+	*zString = '\0';
 	return nCount;
 }
 //--------------------------------

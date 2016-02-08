@@ -565,7 +565,7 @@ int UARTgets(char *pcBuf, uint32_t ui32Len) {
 			//
 			// See if a newline or escape character was received.
 			//
-			if ((cChar == '\n') || (cChar == 0x1b)) {
+			if ((cChar == '\r') || (cChar == '\n') || (cChar == 0x1b)) {
 				//
 				// Stop processing the input and end the line.
 				//
@@ -1565,9 +1565,7 @@ extern "C" void UARTStdioIntHandler(void) {
 					// receives both CR and LF.
 					//
 					cChar = '\r';
-					if (!g_bDisableEcho) {
-						UARTwrite("\n", 1);
-					}
+					UARTwrite("\n", 1);
 				}
 			}
 

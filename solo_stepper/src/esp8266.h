@@ -24,6 +24,12 @@ public:
 	void Diag();
 	void OnUart(uint32_t ui32Ints);
 	int Write(const char* zString);
+	int ReadLine(char* zString, int nSize);
+	bool RxEndOfLine() {
+		bool bRxEndOfLine = m_bRxEndOfLine;
+		m_bRxEndOfLine = false;
+		return bRxEndOfLine;
+	}
 
 private:
 	void ConfigureUART();
@@ -31,14 +37,6 @@ private:
 	void OnReceive();
 	int FillOutputBuffer(const char* zString);
 	bool Invoke(const char* zCommand, const char* zResult);
-	int ReadLine();
-
-private:
-	bool RxEndOfLine() {
-		bool bRxEndOfLine = m_bRxEndOfLine;
-		m_bRxEndOfLine = false;
-		return bRxEndOfLine;
-	}
 
 private:
 	int m_nTxHead;
