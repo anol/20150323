@@ -82,19 +82,18 @@ bool esp8266::Initialize() {
 }
 //--------------------------------
 void esp8266::Reset() {
-	char zReceived[50];
 	SetBitrate(74880);
 	GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0);
 	SysCtlDelay(SysCtlClockGet() / 5);
 	GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_PIN_6);
 	SysCtlDelay(SysCtlClockGet() / 5);
-	while (ReadLine(zReceived, sizeof(zReceived))) {
+	while (ReadLine(m_zReply, sizeof(m_zReply))) {
 	}
 	SysCtlDelay(SysCtlClockGet() / 5);
-	while (ReadLine(zReceived, sizeof(zReceived))) {
+	while (ReadLine(m_zReply, sizeof(m_zReply))) {
 	}
 	SysCtlDelay(SysCtlClockGet() / 5);
-	while (ReadLine(zReceived, sizeof(zReceived))) {
+	while (ReadLine(m_zReply, sizeof(m_zReply))) {
 	}
 	SetBitrate(115200);
 }
@@ -103,8 +102,7 @@ bool esp8266::Setup() {
 	int nIndex = 0;
 	bool bSuccess = true;
 	while (bSuccess && InitCommands[nIndex].zCommand) {
-		if (Invoke(InitCommands[nIndex].zCommand,
-				InitCommands[nIndex].zSuccess,
+		if (Invoke(InitCommands[nIndex].zCommand, InitCommands[nIndex].zSuccess,
 				InitCommands[nIndex].zFailure,
 				InitCommands[nIndex].nWaitCount)) {
 			nIndex++;
@@ -119,18 +117,17 @@ bool esp8266::Invoke(const char* zCommand, const char* zSuccess,
 		const char* zFailure, int nWaitCount) {
 	bool bSuccess = false;
 	bool bFailure = false;
-	char zReceived[50];
 	FillOutputBuffer(zCommand);
 	FillOutputBuffer("\r\n");
 	// Wait for response
 	while (!bSuccess && !bFailure && nWaitCount--) {
 		if (RxEndOfLine()) {
-			int nCount = ReadLine(zReceived, sizeof(zReceived));
+			int nCount = ReadLine(m_zReply, sizeof(m_zReply));
 			if (nCount) {
-				UARTprintf("%s\r\n", zReceived);
-				if (zSuccess && !strcmp(zSuccess, zReceived)) {
+				UARTprintf("%s\r\n", m_zReply);
+				if (zSuccess && !strcmp(zSuccess, m_zReply)) {
 					bSuccess = true;
-				} else if (zFailure && !strcmp(zFailure, zReceived)) {
+				} else if (zFailure && !strcmp(zFailure, m_zReply)) {
 					bFailure = true;
 				}
 			}
@@ -248,16 +245,35 @@ int esp8266::ReadLine(char* zString, int nSize) {
 	return nCount;
 }
 //--------------------------------
-int esp8266::Write(const char* zString) {
-	int nCount = 0;
+bool esp8266::Write(const char* zString) {
+	bool bSuccess = false;
+	bool bFailure = false;
+	int nWaitCount = 2000;
 	char zSize[8];
 	std::ltoa(strlen(zString), zSize);
-	nCount += FillOutputBuffer("AT+CIPSEND=0,");
-	nCount += FillOutputBuffer(zSize);
-	nCount += FillOutputBuffer("\r\n");
-	nCount += FillOutputBuffer(zString);
-	nCount += FillOutputBuffer("\r\n");
-	return nCount;
+	FillOutputBuffer("AT+CIPSEND=0,");
+	FillOutputBuffer(zSize);
+	FillOutputBuffer("\r\n");
+	FillOutputBuffer(zString);
+	FillOutputBuffer("\r\n");
+	// Wait for response
+	while (!bSuccess && !bFailure && nWaitCount--) {
+		if (RxEndOfLine()) {
+			int nCount = ReadLine(m_zReply, sizeof(m_zReply));
+			if (nCount) {
+				UARTprintf("%s\r\n", m_zReply);
+				if (!strcmp("OK", m_zReply)) {
+					bSuccess = true;
+				} else if (!strcmp("ERROR", m_zReply)) {
+					bFailure = true;
+				}
+			}
+		} else {
+			SysCtlDelay(SysCtlClockGet() / (1000 / 3));
+		}
+	}
+	//
+	return bSuccess;
 }
 //--------------------------------
 void esp8266::Diag() {
