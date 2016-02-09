@@ -30,7 +30,7 @@ const drv8711_field DRV8711_Fields[] =
 
 // 1: Torque Register
 
-				{ 1, 1, 8, "TORQUE", "Full-scale output current" },
+				{ 1, 0, 8, "TORQUE", "Full-scale output current" },
 
 				{ 1, 8, 3, "SMPLTH",
 						"Back EMF sample threshold: 50us, 100us, 200us, …" },
