@@ -126,7 +126,7 @@ bool drv8711_registers_Print(int nRegister, int nValue,
 					int nFieldValue = GetFieldValue(nValue, nPosition,
 							DRV8711_Fields[nIndex].nSize);
 					bContinue = pPrintFunction(DRV8711_Fields[nIndex].zName,
-							nValue, DRV8711_Fields[nIndex].zDescription,
+							nFieldValue, DRV8711_Fields[nIndex].zDescription,
 							pUserData);
 					nPosition += DRV8711_Fields[nIndex].nSize;
 				}
