@@ -90,7 +90,7 @@ int esp8266::Setup() {
 	while (InitializationCommands[nCommandIndex].zCommand) {
 		if (Invoke(InitializationCommands[nCommandIndex].zCommand,
 				InitializationCommands[nCommandIndex].zResult)) {
-			SysCtlDelay(SysCtlClockGet());
+			SysCtlDelay(SysCtlClockGet() / 3);
 			nCommandIndex++;
 		} else {
 			break;
@@ -126,6 +126,12 @@ bool esp8266::Invoke(const char* zCommand, const char* zResult) {
 	}
 	ReadLine(zReceived, sizeof(zReceived));
 	// Get final CR-LF
+	nCount = 1000;
+	while (nCount-- && !RxEndOfLine()) {
+		SysCtlDelay(SysCtlClockGet() / (1000 / 3));
+	}
+	while (ReadLine(zReceived, sizeof(zReceived))) {
+	}
 	nCount = 1000;
 	while (nCount-- && !RxEndOfLine()) {
 		SysCtlDelay(SysCtlClockGet() / (1000 / 3));
