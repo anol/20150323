@@ -93,6 +93,7 @@ int CMD_mreset(int argc, char **argv) {
 //--------------------------------
 int CMD_wreset(int argc, char **argv) {
 	g_oEsp8266.Reset();
+	g_oEsp8266.Setup();
 	return (0);
 }
 //--------------------------------

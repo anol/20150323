@@ -85,8 +85,21 @@ void esp8266::Reset() {
 	SetBitrate(115200);
 }
 //--------------------------------
-int esp8266::Initialize() {
+int esp8266::Setup() {
 	int nCommandIndex = 0;
+	while (InitializationCommands[nCommandIndex].zCommand) {
+		if (Invoke(InitializationCommands[nCommandIndex].zCommand,
+				InitializationCommands[nCommandIndex].zResult)) {
+			SysCtlDelay(SysCtlClockGet());
+			nCommandIndex++;
+		} else {
+			break;
+		}
+	}
+	return nCommandIndex;
+}
+//--------------------------------
+int esp8266::Initialize() {
 	pTheOneAndOnlyEsp8266 = this;
 	// Setup the ESP8266 Reset Control Pin
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
@@ -97,19 +110,7 @@ int esp8266::Initialize() {
 	//
 	ConfigureUART(115200);
 	Reset();
-	GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_PIN_6);
-	//
-	while (InitializationCommands[nCommandIndex].zCommand) {
-		if (Invoke(InitializationCommands[nCommandIndex].zCommand,
-				InitializationCommands[nCommandIndex].zResult)) {
-			SysCtlDelay(SysCtlClockGet());
-			nCommandIndex++;
-		} else {
-			break;
-		}
-	}
-	//
-	return nCommandIndex;
+	return Setup();
 }
 //--------------------------------
 bool esp8266::Invoke(const char* zCommand, const char* zResult) {
