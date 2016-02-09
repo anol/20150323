@@ -159,7 +159,7 @@ void drv8711::ReadAllRegisters() {
 static bool MyPrintFunction(const char* zName, int nValue,
 		const char* zDescription, void* pUserData) {
 	UARTprintf("    %8s= %4d %40s\n", zName, nValue, zDescription);
-	SysCtlDelay(SysCtlClockGet() / 1000);
+	SysCtlDelay(SysCtlClockGet() / 500);
 	return true;
 }
 //--------------------------------
