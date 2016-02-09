@@ -60,8 +60,8 @@ enum {
 };
 //--------------------------------
 esp8266::esp8266() :
-		m_nTxHead(0), m_nTxFill(0), m_nRxHead(0), m_nRxFill(0), m_bRxEndOfLine(
-				false) {
+		m_nTxHead(0), m_nTxFill(0), m_nRxHead(0), m_nRxFill(0), m_nRxEndOfLine(
+				0) {
 }
 //--------------------------------
 esp8266::~esp8266() {
@@ -79,19 +79,17 @@ int esp8266::Initialize() {
 	GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0);
 	//
 	ConfigureUART(74880);
-	SysCtlDelay(SysCtlClockGet());
 	GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_PIN_6);
-	while (ReadLine(zReceived, sizeof(zReceived)))
-		;
 	SysCtlDelay(SysCtlClockGet() / 5);
-	while (ReadLine(zReceived, sizeof(zReceived)))
-		;
+	while (ReadLine(zReceived, sizeof(zReceived))) {
+	}
 	SysCtlDelay(SysCtlClockGet() / 5);
-	while (ReadLine(zReceived, sizeof(zReceived)))
-		;
+	while (ReadLine(zReceived, sizeof(zReceived))) {
+	}
+	SysCtlDelay(SysCtlClockGet() / 5);
+	while (ReadLine(zReceived, sizeof(zReceived))) {
+	}
 	SetBitrate(115200);
-	while (ReadLine(zReceived, sizeof(zReceived)))
-		;
 	//
 	while (InitializationCommands[nCommandIndex].zCommand) {
 		if (Invoke(InitializationCommands[nCommandIndex].zCommand,
@@ -123,8 +121,8 @@ bool esp8266::Invoke(const char* zCommand, const char* zResult) {
 	while (nCount-- && !RxEndOfLine()) {
 		SysCtlDelay(SysCtlClockGet() / (1000 / 3));
 	}
-	while (ReadLine(zReceived, sizeof(zReceived)))
-		;
+	while (ReadLine(zReceived, sizeof(zReceived))) {
+	}
 	//
 	return bSuccess;
 }
@@ -167,7 +165,7 @@ void esp8266::OnReceive() {
 		// Read a character
 		char cSymb = (0xFF & MAP_UARTCharGetNonBlocking(UART_BASE));
 		if ('\n' == cSymb) {
-			m_bRxEndOfLine = true;
+			m_nRxEndOfLine++;
 		}
 		if (m_nRxHead != ((m_nRxFill + 1) % InputBufferSize)) {
 			// Store the new character in the receive buffer
@@ -175,6 +173,14 @@ void esp8266::OnReceive() {
 			m_cInput[m_nRxFill] = cSymb;
 		}
 	}
+}
+//--------------------------------
+bool esp8266::RxEndOfLine() {
+	int nRxEndOfLine = m_nRxEndOfLine;
+	if (0 < m_nRxEndOfLine) {
+		m_nRxEndOfLine--;
+	}
+	return nRxEndOfLine ? true : false;
 }
 //--------------------------------
 void esp8266::OnUart(uint32_t ui32Ints) {
@@ -222,7 +228,6 @@ int esp8266::ReadLine(char* zString, int nSize) {
 		cSymb = m_cInput[m_nRxHead];
 
 		// TODO: Remove CR-LF's on ReadLine
-		// TODO: Fix the RxEndOfLine flag
 
 		// TODO:
 		UARTprintf("%c", cSymb);

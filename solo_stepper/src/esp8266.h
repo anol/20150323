@@ -12,7 +12,7 @@ namespace aeo1 {
 class esp8266 {
 public:
 	enum {
-		AtHeaderSize = 20, InputBufferSize = 128, OutputBufferSize = 128
+		AtHeaderSize = 20, InputBufferSize = 256, OutputBufferSize = 128
 	};
 
 public:
@@ -25,11 +25,7 @@ public:
 	void OnUart(uint32_t ui32Ints);
 	int Write(const char* zString);
 	int ReadLine(char* zString, int nSize);
-	bool RxEndOfLine() {
-		bool bRxEndOfLine = m_bRxEndOfLine;
-		m_bRxEndOfLine = false;
-		return bRxEndOfLine;
-	}
+	bool RxEndOfLine();
 
 private:
 	void ConfigureUART(uint32_t nBps);
@@ -44,7 +40,7 @@ private:
 	int m_nTxFill;
 	int m_nRxHead;
 	int m_nRxFill;
-	bool m_bRxEndOfLine;
+	int m_nRxEndOfLine;
 	char m_cInput[InputBufferSize];
 	char m_cOutput[OutputBufferSize];
 
