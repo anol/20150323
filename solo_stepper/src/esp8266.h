@@ -35,7 +35,8 @@ private:
 	void OnTransmit();
 	void OnReceive();
 	int FillOutputBuffer(const char* zString);
-	bool Invoke(const char* zCommand, const char* zResult);
+	bool Invoke(const char* zCommand, const char* zSuccess,
+			const char* zFailure, int nWaitCount);
 
 private:
 	int m_nTxHead;

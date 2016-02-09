@@ -27,29 +27,29 @@ namespace aeo1 {
 //--------------------------------
 struct ESP8266_Command {
 	const char* zCommand;
-	const char* zResult;
+	const char* zSuccess;
+	const char* zFailure;
+	int nWaitCount;
 };
 //--------------------------------
 const ESP8266_Command InitializationCommands[] = {
 
 // Test for ready
-		{ "AT", "OK" },
+		{ "AT", "OK", "ERROR", 300 },
 // Quit access point
-		{ "AT+CWQAP", "OK" },
-// List access points
-//		{ "AT+CWLAP", 0 },
+		{ "AT+CWQAP", "OK", "ERROR", 1000 },
+// Set mode
+		{ "AT+CWMODE_CUR=1", "OK", "ERROR", 1000 },
 // Join access point
-		{ "AT+CWJAP=\"Offline\",\"Unsoldered7\"", "OK" },
-// Get interface IP address
-//		{ "AT+CIFSR", 0 },
+		{ "AT+CWJAP=\"Offline\",\"Unsoldered7\"", "OK", "ERROR", 3000 },
 // Enable multiple connections
-		{ "AT+CIPMUX=1", "OK" },
+		{ "AT+CIPMUX=1", "OK", "ERROR", 1000 },
 // Configure as TCP server (default port = 333)
-		{ "AT+CIPSERVER=1", "OK" },
+		{ "AT+CIPSERVER=1", "OK", "ERROR", 1000 },
 // Get IP addresses
-		{ "AT+CIFSR", 0 },
+		{ "AT+CIFSR", "OK", "ERROR", 300 },
 // End of table
-		{ 0, 0 }
+		{ 0, 0, 0, 0 }
 
 };
 //--------------------------------
@@ -65,6 +65,20 @@ esp8266::esp8266() :
 }
 //--------------------------------
 esp8266::~esp8266() {
+}
+//--------------------------------
+int esp8266::Initialize() {
+	pTheOneAndOnlyEsp8266 = this;
+	// Setup the ESP8266 Reset Control Pin
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
+	GPIOPadConfigSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_STRENGTH_2MA,
+	GPIO_PIN_TYPE_STD);
+	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_DIR_MODE_OUT);
+	GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0);
+	//
+	ConfigureUART(115200);
+	Reset();
+	return Setup();
 }
 //--------------------------------
 void esp8266::Reset() {
@@ -89,8 +103,10 @@ int esp8266::Setup() {
 	int nCommandIndex = 0;
 	while (InitializationCommands[nCommandIndex].zCommand) {
 		if (Invoke(InitializationCommands[nCommandIndex].zCommand,
-				InitializationCommands[nCommandIndex].zResult)) {
-			SysCtlDelay(SysCtlClockGet() / 3);
+				InitializationCommands[nCommandIndex].zSuccess,
+				InitializationCommands[nCommandIndex].zFailure,
+				InitializationCommands[nCommandIndex].nWaitCount)) {
+			SysCtlDelay(SysCtlClockGet());
 			nCommandIndex++;
 		} else {
 			break;
@@ -99,44 +115,28 @@ int esp8266::Setup() {
 	return nCommandIndex;
 }
 //--------------------------------
-int esp8266::Initialize() {
-	pTheOneAndOnlyEsp8266 = this;
-	// Setup the ESP8266 Reset Control Pin
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
-	GPIOPadConfigSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_STRENGTH_2MA,
-	GPIO_PIN_TYPE_STD);
-	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_DIR_MODE_OUT);
-	GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0);
-	//
-	ConfigureUART(115200);
-	Reset();
-	return Setup();
-}
-//--------------------------------
-bool esp8266::Invoke(const char* zCommand, const char* zResult) {
-	int nCount;
-	bool bSuccess = true;
+bool esp8266::Invoke(const char* zCommand, const char* zSuccess,
+		const char* zFailure, int nWaitCount) {
+	bool bSuccess = false;
+	bool bFailure = false;
 	char zReceived[50];
 	FillOutputBuffer(zCommand);
 	FillOutputBuffer("\r\n");
-	// Get response
-	nCount = 1000;
-	while (nCount-- && !RxEndOfLine()) {
-		SysCtlDelay(SysCtlClockGet() / (1000 / 3));
-	}
-	ReadLine(zReceived, sizeof(zReceived));
-	// Get final CR-LF
-	nCount = 1000;
-	while (nCount-- && !RxEndOfLine()) {
-		SysCtlDelay(SysCtlClockGet() / (1000 / 3));
-	}
-	while (ReadLine(zReceived, sizeof(zReceived))) {
-	}
-	nCount = 1000;
-	while (nCount-- && !RxEndOfLine()) {
-		SysCtlDelay(SysCtlClockGet() / (1000 / 3));
-	}
-	while (ReadLine(zReceived, sizeof(zReceived))) {
+	// Wait for response
+	while (!bSuccess && !bFailure && nWaitCount--) {
+		if (RxEndOfLine()) {
+			int nCount = ReadLine(zReceived, sizeof(zReceived));
+			if (nCount) {
+				UARTprintf("%s\r\n", zReceived);
+				if (zSuccess && !strcmp(zSuccess, zReceived)) {
+					bSuccess = true;
+				} else if (zFailure && !strcmp(zFailure, zReceived)) {
+					bFailure = true;
+				}
+			}
+		} else {
+			SysCtlDelay(SysCtlClockGet() / (1000 / 3));
+		}
 	}
 	//
 	return bSuccess;
@@ -223,10 +223,6 @@ int esp8266::FillOutputBuffer(const char* zString) {
 		m_nTxFill = ((m_nTxFill + 1) % OutputBufferSize);
 		m_cOutput[m_nTxFill] = cSymb;
 		nCount++;
-
-		// TODO:
-		UARTprintf("%c", cSymb);
-
 	}
 	OnTransmit();
 	MAP_UARTIntEnable(UART_BASE, UART_INT_TX);
@@ -241,15 +237,11 @@ int esp8266::ReadLine(char* zString, int nSize) {
 		m_nRxHead++;
 		m_nRxHead %= InputBufferSize;
 		cSymb = m_cInput[m_nRxHead];
-
-		// TODO: Remove CR-LF's on ReadLine
-
-		// TODO:
-		UARTprintf("%c", cSymb);
-
-		nCount++;
-		if (nSize > nCount) {
-			*zString++ = cSymb;
+		if (('\r' != cSymb) && ('\n' != cSymb)) {
+			nCount++;
+			if (nSize > nCount) {
+				*zString++ = cSymb;
+			}
 		}
 	}
 	*zString = '\0';
@@ -269,8 +261,8 @@ int esp8266::Write(const char* zString) {
 //--------------------------------
 void esp8266::Diag() {
 	UARTprintf("esp8266::Diag\r\n");
-	Invoke("AT+CIFSR", 0);
-	Invoke("AT+CWLAP", 0);
+	Invoke("AT+CIFSR", "OK", "ERROR", 500);
+	Invoke("AT+CWLAP", "OK", "ERROR", 500);
 }
 //--------------------------------
 } /* namespace aeo1 */
