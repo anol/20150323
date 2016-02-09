@@ -205,6 +205,7 @@ static char* GetCommand(char* zCmdLine) {
 			if (zCommand) {
 				zCommand++;
 			}
+			UARTprintf("%s\r\n", zCommand);
 		} else {
 			UARTprintf(zCmdLine);
 		}
