@@ -202,18 +202,20 @@ static char* RemoteCommand(char* zCmdLine) {
 		zCommand = strstr(zCmdLine, "+IPD,");
 		if (zCommand) {
 			zCommand = strchr(zCommand, ':');
-			if (zCommand) {
+			if (zCommand && *zCommand) {
 				int32_t nStatus;
 				zCommand++;
-				g_oEsp8266.Write(zCommand);
 				UARTprintf("%s\r\n", zCommand);
-				nStatus = CmdLineProcess(zCommand);
-				if (nStatus == CMDLINE_BAD_CMD) {
-					g_oEsp8266.Write("ERROR: Bad command");
-				} else if (nStatus == CMDLINE_TOO_MANY_ARGS) {
-					g_oEsp8266.Write("ERROR: Bad arguments");
-				} else {
-					g_oEsp8266.Write("OK");
+				if (*zCommand) {
+					g_oEsp8266.Write(zCommand);
+					nStatus = CmdLineProcess(zCommand);
+					if (nStatus == CMDLINE_BAD_CMD) {
+						g_oEsp8266.Write("ERROR: Bad command");
+					} else if (nStatus == CMDLINE_TOO_MANY_ARGS) {
+						g_oEsp8266.Write("ERROR: Bad arguments");
+					} else {
+						g_oEsp8266.Write("OK");
+					}
 				}
 			} else {
 				g_oEsp8266.Write("ERROR");
@@ -237,6 +239,7 @@ static void OnCommand(char* zCmdLine) {
 }
 //--------------------------------
 void MainLoop() {
+	UARTprintf("\n>");
 	while (1) {
 		if (-1 != UARTPeek('\r')) {
 			UARTgets(g_zInput, sizeof(g_zInput));

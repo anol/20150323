@@ -216,9 +216,10 @@ int esp8266::FillOutputBuffer(const char* zString) {
 	int nCount = 0;
 	char cSymb = 0;
 	while ((*zString) && (m_nTxHead != ((m_nTxFill + 1) % OutputBufferSize))) {
-		cSymb = *(zString++);
+		cSymb = *zString;
 		m_nTxFill = ((m_nTxFill + 1) % OutputBufferSize);
 		m_cOutput[m_nTxFill] = cSymb;
+		zString++;
 		nCount++;
 	}
 	OnTransmit();
@@ -254,15 +255,17 @@ bool esp8266::Write(const char* zString) {
 	FillOutputBuffer("AT+CIPSEND=0,");
 	FillOutputBuffer(zSize);
 	FillOutputBuffer("\r\n");
+	// TODO: Wait for ready, i.e. '>'
+	SysCtlDelay(SysCtlClockGet() / (1000 / 3));
+	//
 	FillOutputBuffer(zString);
-	FillOutputBuffer("\r\n");
 	// Wait for response
 	while (!bSuccess && !bFailure && nWaitCount--) {
 		if (RxEndOfLine()) {
 			int nCount = ReadLine(m_zReply, sizeof(m_zReply));
 			if (nCount) {
 				UARTprintf("%s\r\n", m_zReply);
-				if (!strcmp("OK", m_zReply)) {
+				if (!strcmp("SEND OK", m_zReply)) {
 					bSuccess = true;
 				} else if (!strcmp("ERROR", m_zReply)) {
 					bFailure = true;
