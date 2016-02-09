@@ -252,10 +252,11 @@ int esp8266::Write(const char* zString) {
 	int nCount = 0;
 	char zSize[8];
 	std::ltoa(strlen(zString), zSize);
-	nCount += FillOutputBuffer("AT+CIPSEND=1,");
+	nCount += FillOutputBuffer("AT+CIPSEND=0,");
 	nCount += FillOutputBuffer(zSize);
 	nCount += FillOutputBuffer("\r\n");
 	nCount += FillOutputBuffer(zString);
+	nCount += FillOutputBuffer("\r\n");
 	return nCount;
 }
 //--------------------------------

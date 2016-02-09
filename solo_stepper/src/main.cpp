@@ -196,16 +196,29 @@ static void Initialize() {
 	g_oDrv8711.Initialize();
 }
 //--------------------------------
-static char* GetCommand(char* zCmdLine) {
+static char* RemoteCommand(char* zCmdLine) {
 	char* zCommand = 0;
 	if (zCmdLine && *zCmdLine) {
 		zCommand = strstr(zCmdLine, "+IPD,");
 		if (zCommand) {
 			zCommand = strchr(zCommand, ':');
 			if (zCommand) {
+				int32_t nStatus;
 				zCommand++;
+				g_oEsp8266.Write(zCommand);
+				UARTprintf("%s\r\n", zCommand);
+				nStatus = CmdLineProcess(zCommand);
+				if (nStatus == CMDLINE_BAD_CMD) {
+					g_oEsp8266.Write("ERROR: Bad command");
+				} else if (nStatus == CMDLINE_TOO_MANY_ARGS) {
+					g_oEsp8266.Write("ERROR: Bad arguments");
+				} else {
+					g_oEsp8266.Write("OK");
+				}
+			} else {
+				g_oEsp8266.Write("ERROR");
+				UARTprintf(zCmdLine);
 			}
-			UARTprintf("%s\r\n", zCommand);
 		} else {
 			UARTprintf(zCmdLine);
 		}
@@ -230,7 +243,7 @@ void MainLoop() {
 			OnCommand(g_zInput);
 		} else if (g_oEsp8266.RxEndOfLine()) {
 			g_oEsp8266.ReadLine(g_zInput, sizeof(g_zInput));
-			char* zCmdLin = GetCommand(g_zInput);
+			char* zCmdLin = RemoteCommand(g_zInput);
 			if (zCmdLin) {
 				OnCommand(zCmdLin);
 			}
