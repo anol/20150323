@@ -103,18 +103,28 @@ const drv8711_field DRV8711_Fields[] =
 				{ 0, 0, 0, 0, 0 },
 
 		};
-
+//--------------------------------
+static int GetFieldValue(int nValue, int nPosition, int nSize) {
+	const int Mask[] = { 0, 1, 3, 7, 15, 31, 63, 127, 255, 511, 1023, 2047 };
+	int nFieldValue = nValue >>= nPosition;
+	if ((0 <= nSize) && (nSize < (sizeof(Mask) / sizeof(int)))) {
+		nFieldValue &= Mask[nSize];
+	}
+	return nFieldValue;
+}
+//--------------------------------
 bool drv8711_registers_Print(int nRegister, int nValue,
 		drv8711_register_PrintFunction pPrintFunction, void* pUserData) {
 	bool bContinue;
 	if (pPrintFunction) {
 		int nIndex = 0;
 		int nPosition = 0;
-		int nValue;
 		bContinue = true;
 		while (bContinue && DRV8711_Fields[nIndex].nSize) {
 			if (DRV8711_Fields[nIndex].nRegister == nRegister) {
 				if (DRV8711_Fields[nIndex].nPosition == nPosition) {
+					int nFieldValue = GetFieldValue(nValue, nPosition,
+							DRV8711_Fields[nIndex].nSize);
 					bContinue = pPrintFunction(DRV8711_Fields[nIndex].zName,
 							nValue, DRV8711_Fields[nIndex].zDescription,
 							pUserData);
@@ -128,3 +138,4 @@ bool drv8711_registers_Print(int nRegister, int nValue,
 	}
 	return bContinue;
 }
+//--------------------------------

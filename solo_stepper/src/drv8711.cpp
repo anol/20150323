@@ -166,7 +166,7 @@ void drv8711::PrintAllRegisters() {
 	int nValue = 0xFFFF;
 	for (int nRegister = 0; 8 > nRegister; nRegister++) {
 		nValue = m_oSsiDrv8711.GetRegister(nRegister);
-		UARTprintf("  Register %d=%03X, ", nRegister, nValue);
+		UARTprintf("  Reg. %d =  %03X\n", nRegister, nValue);
 		drv8711_registers_Print(nRegister, nValue, MyPrintFunction, 0);
 	}
 	if (nValue) {

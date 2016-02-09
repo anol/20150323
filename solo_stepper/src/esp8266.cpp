@@ -67,18 +67,11 @@ esp8266::esp8266() :
 esp8266::~esp8266() {
 }
 //--------------------------------
-int esp8266::Initialize() {
+void esp8266::Reset() {
 	char zReceived[50];
-	int nCommandIndex = 0;
-	pTheOneAndOnlyEsp8266 = this;
-	// Setup the ESP8266 Reset Control Pin
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
-	GPIOPadConfigSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_STRENGTH_2MA,
-	GPIO_PIN_TYPE_STD);
-	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_DIR_MODE_OUT);
+	SetBitrate(74880);
 	GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0);
-	//
-	ConfigureUART(74880);
+	SysCtlDelay(SysCtlClockGet() / 5);
 	GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_PIN_6);
 	SysCtlDelay(SysCtlClockGet() / 5);
 	while (ReadLine(zReceived, sizeof(zReceived))) {
@@ -90,6 +83,21 @@ int esp8266::Initialize() {
 	while (ReadLine(zReceived, sizeof(zReceived))) {
 	}
 	SetBitrate(115200);
+}
+//--------------------------------
+int esp8266::Initialize() {
+	int nCommandIndex = 0;
+	pTheOneAndOnlyEsp8266 = this;
+	// Setup the ESP8266 Reset Control Pin
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
+	GPIOPadConfigSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_STRENGTH_2MA,
+	GPIO_PIN_TYPE_STD);
+	GPIODirModeSet(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_DIR_MODE_OUT);
+	GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 0);
+	//
+	ConfigureUART(115200);
+	Reset();
+	GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, GPIO_PIN_6);
 	//
 	while (InitializationCommands[nCommandIndex].zCommand) {
 		if (Invoke(InitializationCommands[nCommandIndex].zCommand,
@@ -254,6 +262,8 @@ int esp8266::Write(const char* zString) {
 //--------------------------------
 void esp8266::Diag() {
 	UARTprintf("esp8266::Diag\r\n");
+	Invoke("AT+CIFSR", 0);
+	Invoke("AT+CWLAP", 0);
 }
 //--------------------------------
 } /* namespace aeo1 */

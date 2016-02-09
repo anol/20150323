@@ -21,6 +21,7 @@ public:
 
 public:
 	int Initialize();
+	void Reset();
 	void Diag();
 	void OnUart(uint32_t ui32Ints);
 	int Write(const char* zString);

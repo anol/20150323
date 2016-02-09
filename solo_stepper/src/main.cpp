@@ -4,6 +4,7 @@
 //--------------------------------
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
 #include <math.h>
 #include <time.h>
 #include "inc/hw_types.h"
@@ -74,6 +75,7 @@ int CMD_stop(int argc, char **argv) {
 //--------------------------------
 int CMD_diag(int argc, char **argv) {
 	g_oDrv8711.Diag();
+	g_oEsp8266.Diag();
 	return (0);
 }
 //--------------------------------
@@ -84,8 +86,17 @@ int CMD_sleep(int argc, char **argv) {
 	return (0);
 }
 //--------------------------------
-int CMD_reset(int argc, char **argv) {
+int CMD_mreset(int argc, char **argv) {
 	g_oDrv8711.Reset();
+	return (0);
+}
+//--------------------------------
+int CMD_wreset(int argc, char **argv) {
+	g_oEsp8266.Reset();
+	return (0);
+}
+//--------------------------------
+int CMD_reset(int argc, char **argv) {
 	return (0);
 }
 //--------------------------------
@@ -125,7 +136,11 @@ tCmdLineEntry g_psCmdTable[] = {
 
 { "noerr", CMD_noerr, " : Clear DRV8711 faults" },
 
-{ "reset", CMD_reset, " : Reset DRV8711" },
+{ "mreset", CMD_mreset, " : Reset DRV8711" },
+
+{ "wreset", CMD_wreset, " : Reset ESP8266" },
+
+{ "reset", CMD_reset, " : Reset controller" },
 
 { "help", CMD_help, " : Display list of commands" },
 
@@ -164,8 +179,24 @@ static void PrintProgramInfo() {
 	UARTprintf("\n\n");
 }
 //--------------------------------
-static void OnCommand() {
-	int32_t i32CommandStatus = CmdLineProcess(g_zInput);
+static char* GetCommand(char* zCmdLine) {
+	char* zCommand = 0;
+	if (zCmdLine && *zCmdLine) {
+		zCommand = strstr(zCmdLine, "+IPD,");
+		if (zCommand) {
+			zCommand = strchr(zCommand, ':');
+			if (zCommand) {
+				zCommand++;
+			}
+		} else {
+			UARTprintf(zCmdLine);
+		}
+	}
+	return zCommand;
+}
+//--------------------------------
+static void OnCommand(char* zCmdLine) {
+	int32_t i32CommandStatus = CmdLineProcess(zCmdLine);
 	if (i32CommandStatus == CMDLINE_BAD_CMD) {
 		UARTprintf("Bad command!\n");
 	} else if (i32CommandStatus == CMDLINE_TOO_MANY_ARGS) {
@@ -178,10 +209,13 @@ void MainLoop() {
 	while (1) {
 		if (-1 != UARTPeek('\r')) {
 			UARTgets(g_zInput, sizeof(g_zInput));
-			OnCommand();
+			OnCommand(g_zInput);
 		} else if (g_oEsp8266.RxEndOfLine()) {
 			g_oEsp8266.ReadLine(g_zInput, sizeof(g_zInput));
-			OnCommand();
+			char* zCmdLin = GetCommand(g_zInput);
+			if (zCmdLin) {
+				OnCommand(zCmdLin);
+			}
 		} else {
 			SysCtlDelay(SysCtlClockGet() / (1000 / 3));
 		}
