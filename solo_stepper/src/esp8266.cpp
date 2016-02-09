@@ -32,7 +32,7 @@ struct ESP8266_Command {
 	int nWaitCount;
 };
 //--------------------------------
-const ESP8266_Command InitializationCommands[] = {
+const ESP8266_Command InitCommands[] = {
 
 // Test for ready
 		{ "AT", "OK", "ERROR", 300 },
@@ -67,7 +67,7 @@ esp8266::esp8266() :
 esp8266::~esp8266() {
 }
 //--------------------------------
-int esp8266::Initialize() {
+bool esp8266::Initialize() {
 	pTheOneAndOnlyEsp8266 = this;
 	// Setup the ESP8266 Reset Control Pin
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
@@ -99,20 +99,20 @@ void esp8266::Reset() {
 	SetBitrate(115200);
 }
 //--------------------------------
-int esp8266::Setup() {
-	int nCommandIndex = 0;
-	while (InitializationCommands[nCommandIndex].zCommand) {
-		if (Invoke(InitializationCommands[nCommandIndex].zCommand,
-				InitializationCommands[nCommandIndex].zSuccess,
-				InitializationCommands[nCommandIndex].zFailure,
-				InitializationCommands[nCommandIndex].nWaitCount)) {
-			SysCtlDelay(SysCtlClockGet());
-			nCommandIndex++;
+bool esp8266::Setup() {
+	int nIndex = 0;
+	bool bSuccess = true;
+	while (bSuccess && InitCommands[nIndex].zCommand) {
+		if (Invoke(InitCommands[nIndex].zCommand,
+				InitCommands[nIndex].zSuccess,
+				InitCommands[nIndex].zFailure,
+				InitCommands[nIndex].nWaitCount)) {
+			nIndex++;
 		} else {
-			break;
+			bSuccess = false;
 		}
 	}
-	return nCommandIndex;
+	return bSuccess;
 }
 //--------------------------------
 bool esp8266::Invoke(const char* zCommand, const char* zSuccess,

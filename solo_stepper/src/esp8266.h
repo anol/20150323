@@ -20,9 +20,9 @@ public:
 	virtual ~esp8266();
 
 public:
-	int Initialize();
+	bool Initialize();
 	void Reset();
-	int Setup();
+	bool Setup();
 	void Diag();
 	void OnUart(uint32_t ui32Ints);
 	int Write(const char* zString);

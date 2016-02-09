@@ -147,7 +147,7 @@ tCmdLineEntry g_psCmdTable[] = {
 
 { 0, 0, 0 } };
 //--------------------------------
-static void ConfigureDebugUART() {
+static void SetupDebugUart() {
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
 	GPIOPinConfigure(GPIO_PA0_U0RX);
@@ -157,10 +157,18 @@ static void ConfigureDebugUART() {
 	UARTStdioConfig(0, 115200, 16000000);
 }
 //--------------------------------
+static void SetupDebugLeds() {
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
+	GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE,
+	GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
+	GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3,
+	GPIO_PIN_2);
+}
+//--------------------------------
 extern "C" void SysTickIntHandler(void) {
 }
 //--------------------------------
-static void Initialize() {
+static void SetupSys() {
 	FPUEnable();
 	FPUStackingEnable();
 	SysCtlClockSet(SYSCTL_SYSDIV_5 | SYSCTL_USE_PLL | SYSCTL_XTAL_16MHZ |
@@ -169,15 +177,23 @@ static void Initialize() {
 	SysTickEnable();
 	SysTickIntEnable();
 	IntMasterEnable();
-	ConfigureDebugUART();
-	g_oEsp8266.Initialize();
-	g_oDrv8711.Initialize();
 }
 //--------------------------------
-static void PrintProgramInfo() {
+static void Initialize() {
+	SetupSys();
+	SetupDebugUart();
+	SetupDebugLeds();
 	UARTprintf("\n\n");
 	UARTprintf(STRINGIZE(ProjName) " " __DATE__ " " __TIME__);
 	UARTprintf("\n\n");
+	if (g_oEsp8266.Initialize()) {
+		GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3,
+		GPIO_PIN_3);
+	} else {
+		GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3,
+		GPIO_PIN_1);
+	}
+	g_oDrv8711.Initialize();
 }
 //--------------------------------
 static char* GetCommand(char* zCmdLine) {
@@ -225,7 +241,6 @@ void MainLoop() {
 //--------------------------------
 int main(void) {
 	Initialize();
-	PrintProgramInfo();
 	MainLoop();
 	return 0;
 }
