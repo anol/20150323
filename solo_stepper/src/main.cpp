@@ -54,6 +54,50 @@ int CMD_halt(int argc, char **argv) {
 	return (0);
 }
 //--------------------------------
+int CMD_get(int argc, char **argv) {
+	char zValue[32] = "";
+	if (argc == 2) {
+		switch (g_oDrv8711.Get(argv[1], zValue, 32)) {
+		case aeo1::drv8711::Success:
+			UARTprintf("%s = %s\n", argv[1], zValue);
+			break;
+		case aeo1::drv8711::No_Such_Attribute_Name:
+			UARTprintf("No such attribute name: '%d'\n", argv[1]);
+			break;
+		default:
+			UARTprintf("Failed!\n");
+			break;
+		}
+	} else {
+		UARTprintf("Use: get <name>\n");
+	}
+	return (0);
+}
+//--------------------------------
+int CMD_set(int argc, char **argv) {
+	char zValue[32] = "";
+	if (argc == 3) {
+		switch (g_oDrv8711.Set(argv[1], argv[2])) {
+		case aeo1::drv8711::Success:
+			g_oDrv8711.Get(argv[1], zValue, 32);
+			UARTprintf("%s = %s\n", argv[1], zValue);
+			break;
+		case aeo1::drv8711::No_Such_Attribute_Name:
+			UARTprintf("No such attribute name: '%d'\n", argv[1]);
+			break;
+		case aeo1::drv8711::Illegal_Attribute_Value:
+			UARTprintf("Illegal attribute value: '%d'\n", argv[2]);
+			break;
+		default:
+			UARTprintf("Failed!\n");
+			break;
+		}
+	} else {
+		UARTprintf("Use: set <name> <value>\n");
+	}
+	return (0);
+}
+//--------------------------------
 int CMD_move(int argc, char **argv) {
 	if (argc == 2) {
 		uint32_t nValue = ustrtoul(argv[1], 0, 10);
@@ -127,6 +171,10 @@ tCmdLineEntry g_psCmdTable[] = {
 
 { "halt", CMD_halt, " : Halt (breake) the motor" },
 
+{ "set", CMD_set, " : Set attribute value" },
+
+{ "get", CMD_get, " : Get attribute value" },
+
 { "move", CMD_move, " : Move # steps" },
 
 { "stop", CMD_stop, " : Stop feed or move" },
@@ -171,8 +219,8 @@ extern "C" void SysTickIntHandler(void) {
 static void SetupSys() {
 	FPUEnable();
 	FPUStackingEnable();
-	SysCtlClockSet(SYSCTL_SYSDIV_5 | SYSCTL_USE_PLL | SYSCTL_XTAL_16MHZ |
-	SYSCTL_OSC_MAIN);
+	SysCtlClockSet(
+	SYSCTL_SYSDIV_5 | SYSCTL_USE_PLL | SYSCTL_XTAL_16MHZ | SYSCTL_OSC_MAIN);
 	SysTickPeriodSet(SysCtlClockGet() / APP_SYSTICKS_PER_SEC);
 	SysTickEnable();
 	SysTickIntEnable();

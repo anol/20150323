@@ -13,6 +13,7 @@
 #include "driverlib/rom_map.h"
 #include "driverlib/pin_map.h"
 #include "driverlib/sysctl.h"
+#include "utils/ustdlib.h"
 #include "utils/uartstdio.h"
 //--------------------------------
 #include "ssi_drv8711.h"
@@ -93,11 +94,37 @@ void drv8711::Reset() {
 	SetDefault();
 }
 //--------------------------------
-void drv8711::SetTorque(uint32_t nTorque) {
-	uint32_t nValue = m_oSsiDrv8711.Read(0);
-	nValue |= 0x100;
-	m_oSsiDrv8711.Write(0, nValue);
-	UARTprintf("Step\n");
+int drv8711::Get(const char* zName, char* zValue, int nSize) {
+	int nStatus;
+	int nRegister = drv8711_registers_GetRegisterNumber(zName);
+	if (0 <= nRegister) {
+		uint32_t nRegisterValue = m_oSsiDrv8711.Read(nRegister);
+		uint32_t nFieldValue = 0;
+		nStatus = drv8711_registers_GetFieldValue(zName, nRegisterValue,
+				nFieldValue);
+		if (Success == nStatus) {
+			usprintf(zValue, "%d", nFieldValue);
+		}
+	} else {
+		nStatus = No_Such_Attribute_Name;
+	}
+	return nStatus;
+}
+//--------------------------------
+int drv8711::Set(const char* zName, const char* zValue) {
+	int nStatus;
+	int nRegister = drv8711_registers_GetRegisterNumber(zName);
+	if (0 <= nRegister) {
+		uint32_t nRegisterValue = m_oSsiDrv8711.Read(nRegister);
+		nStatus = drv8711_registers_SetFieldValue(zName, nRegisterValue,
+				zValue);
+		if (Success == nStatus) {
+			m_oSsiDrv8711.Write(nRegister, nRegisterValue);
+		}
+	} else {
+		nStatus = No_Such_Attribute_Name;
+	}
+	return nStatus;
 }
 //--------------------------------
 void drv8711::Move(int32_t nSteps) {
