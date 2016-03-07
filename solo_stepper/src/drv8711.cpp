@@ -96,33 +96,42 @@ void drv8711::Reset() {
 //--------------------------------
 int drv8711::Get(const char* zName, char* zValue, int nSize) {
 	int nStatus;
-	int nRegister = drv8711_registers_GetRegisterNumber(zName);
-	if (0 <= nRegister) {
-		uint32_t nRegisterValue = m_oSsiDrv8711.Read(nRegister);
-		uint32_t nFieldValue = 0;
-		nStatus = drv8711_registers_GetFieldValue(zName, nRegisterValue,
-				nFieldValue);
-		if (Success == nStatus) {
-			usprintf(zValue, "%d", nFieldValue);
-		}
+	uint32_t nFieldValue = 0;
+	if (0 == strncmp(zName, "pwm", 3)) {
+		nStatus = m_oPwmStepper.Get(zName, nFieldValue);
 	} else {
-		nStatus = No_Such_Attribute_Name;
+		int nRegister = drv8711_registers_GetRegisterNumber(zName);
+		if (0 <= nRegister) {
+			uint32_t nRegisterValue = m_oSsiDrv8711.Read(nRegister);
+			nStatus = drv8711_registers_GetFieldValue(zName, nRegisterValue,
+					nFieldValue);
+		} else {
+			nStatus = No_Such_Attribute_Name;
+		}
+	}
+	if (Success == nStatus) {
+		usprintf(zValue, "%d", nFieldValue);
 	}
 	return nStatus;
 }
 //--------------------------------
 int drv8711::Set(const char* zName, const char* zValue) {
 	int nStatus;
-	int nRegister = drv8711_registers_GetRegisterNumber(zName);
-	if (0 <= nRegister) {
-		uint32_t nRegisterValue = m_oSsiDrv8711.Read(nRegister);
-		nStatus = drv8711_registers_SetFieldValue(zName, nRegisterValue,
-				zValue);
-		if (Success == nStatus) {
-			m_oSsiDrv8711.Write(nRegister, nRegisterValue);
-		}
+	if (0 == strncmp(zName, "pwm", 3)) {
+		int nValue = ustrtoul(zValue, 0, 10);
+		nStatus = m_oPwmStepper.Set(zName, nValue);
 	} else {
-		nStatus = No_Such_Attribute_Name;
+		int nRegister = drv8711_registers_GetRegisterNumber(zName);
+		if (0 <= nRegister) {
+			uint32_t nRegisterValue = m_oSsiDrv8711.Read(nRegister);
+			nStatus = drv8711_registers_SetFieldValue(zName, nRegisterValue,
+					zValue);
+			if (Success == nStatus) {
+				m_oSsiDrv8711.Write(nRegister, nRegisterValue);
+			}
+		} else {
+			nStatus = No_Such_Attribute_Name;
+		}
 	}
 	return nStatus;
 }
