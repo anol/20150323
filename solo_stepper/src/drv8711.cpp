@@ -194,7 +194,7 @@ void drv8711::ReadAllRegisters() {
 //--------------------------------
 static bool MyPrintFunction(const char* zName, int nValue,
 		const char* zDescription, void* pUserData) {
-	UARTprintf("    %8s= %4d %40s\n", zName, nValue, zDescription);
+	UARTprintf("    %10s= %6d %40s\n", zName, nValue, zDescription);
 	SysCtlDelay(SysCtlClockGet() / 500);
 	return true;
 }
@@ -203,7 +203,7 @@ void drv8711::PrintAllRegisters() {
 	int nValue = 0xFFFF;
 	for (int nRegister = 0; 8 > nRegister; nRegister++) {
 		nValue = m_oSsiDrv8711.GetRegister(nRegister);
-		UARTprintf("  Reg. %d    =  %03X\n", nRegister, nValue);
+		UARTprintf("  Reg. %d      =  0x%03X\n", nRegister, nValue);
 		drv8711_registers_Print(nRegister, nValue, MyPrintFunction, 0);
 	}
 	if (nValue) {

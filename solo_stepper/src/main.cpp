@@ -62,7 +62,7 @@ int CMD_get(int argc, char **argv) {
 			UARTprintf("%s = %s\n", argv[1], zValue);
 			break;
 		case aeo1::drv8711::No_Such_Attribute_Name:
-			UARTprintf("No such attribute name: '%d'\n", argv[1]);
+			UARTprintf("No such attribute name: '%s'\n", argv[1]);
 			break;
 		default:
 			UARTprintf("Failed!\n");
@@ -83,10 +83,10 @@ int CMD_set(int argc, char **argv) {
 			UARTprintf("%s = %s\n", argv[1], zValue);
 			break;
 		case aeo1::drv8711::No_Such_Attribute_Name:
-			UARTprintf("No such attribute name: '%d'\n", argv[1]);
+			UARTprintf("No such attribute name: '%s'\n", argv[1]);
 			break;
 		case aeo1::drv8711::Illegal_Attribute_Value:
-			UARTprintf("Illegal attribute value: '%d'\n", argv[2]);
+			UARTprintf("Illegal attribute value: '%s'\n", argv[2]);
 			break;
 		default:
 			UARTprintf("Failed!\n");

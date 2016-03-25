@@ -41,7 +41,8 @@ const ESP8266_Command InitCommands[] = {
 // Set mode
 		{ "AT+CWMODE_CUR=1", "OK", "ERROR", 1000 },
 // Join access point
-		{ "AT+CWJAP=\"Offline\",\"Unsoldered7\"", "OK", "ERROR", 3000 },
+//		{ "AT+CWJAP=\"Offline\",\"Unsoldered7\"", "OK", "ERROR", 5000 },
+		{ "AT+CWJAP=\"Hytten-2-4\",\"surfI321\"", "OK", "ERROR", 5000 },
 // Enable multiple connections
 		{ "AT+CIPMUX=1", "OK", "ERROR", 1000 },
 // Configure as TCP server (default port = 333)

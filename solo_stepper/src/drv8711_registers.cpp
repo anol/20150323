@@ -21,71 +21,71 @@ const drv8711_field DRV8711_Fields[] =
 
 // 0: Control Register
 
-				{ 0, 0, 1, "ENBL", "Enable" },
+				{ 0, 0, 1, "enbl", "Enable" },
 
-				{ 0, 1, 1, "RDIR", "Reverse direction" },
+				{ 0, 1, 1, "rdir", "Reverse direction" },
 
-				{ 0, 2, 1, "RSTEP", "Advance indexer one step" },
+				{ 0, 2, 1, "rstep", "Advance indexer one step" },
 
-				{ 0, 3, 4, "MODE", "Step mode: Full-step, half-step, ¼ step, …" },
+				{ 0, 3, 4, "mode", "Step mode: Full-step, half-step, ..." },
 
-				{ 0, 7, 1, "EXSTALL", "Use external stall detection" },
+				{ 0, 7, 1, "exstall", "Use external stall detection" },
 
-				{ 0, 8, 2, "ISGAIN", "Amplifier gain: *5, *10, *20, *40" },
+				{ 0, 8, 2, "isgain", "Amplifier gain: *5, *10, *20, *40" },
 
-				{ 0, 10, 2, "DTIME", "Dead time: 400ns, 450ns, 650ns, 850ns" },
+				{ 0, 10, 2, "dtime", "Dead time: 400ns, 450ns, 650ns, 850ns" },
 
 // 1: Torque Register
 
-				{ 1, 0, 8, "TORQUE", "Full-scale output current" },
+				{ 1, 0, 8, "torque", "Full-scale output current" },
 
-				{ 1, 8, 3, "SMPLTH",
-						"Back EMF sample threshold: 50us, 100us, 200us, …" },
+				{ 1, 8, 3, "smplth",
+						"Back EMF sample threshold: 50us, 100us, 200us, ..." },
 
 // 2: Off Time Register
 
-				{ 2, 0, 8, "TOFF", "Fixed off time: 500ns + N*500ns" },
+				{ 2, 0, 8, "toff", "Fixed off time: 500ns + N*500ns" },
 
-				{ 2, 8, 1, "PWMMODE", "Bypass indexer" },
+				{ 2, 8, 1, "indexer", "Bypass indexer" },
 
 // 3: Blanking Register
 
-				{ 3, 0, 8, "TBLANK", "Current trip blanking time: 1us + N*20ns" },
+				{ 3, 0, 8, "tblank", "Current trip blanking time: 1us + N*20ns" },
 
-				{ 3, 8, 1, "ABT", "Enable adaptive blanking time" },
+				{ 3, 8, 1, "abt", "Enable adaptive blanking time" },
 
 // 4: Decay Register
 
-				{ 4, 0, 8, "TDECAY", "Mixed decay transition time: N*500ns" },
+				{ 4, 0, 8, "tdecay", "Mixed decay transition time: N*500ns" },
 
-				{ 4, 8, 3, "DECMOD", "Decay mode: Slow, Mixed, Fast, Auto, …" },
+				{ 4, 8, 3, "mdecay", "Decay mode: Slow, Mixed, Fast, Auto, ..." },
 
 // 5: Stall Detect Register
 
-				{ 5, 0, 8, "SDTHR", "Stall detect threshold" },
+				{ 5, 0, 8, "sdthr", "Stall detect threshold" },
 
-				{ 5, 8, 2, "SDCNT",
+				{ 5, 8, 2, "sdcnt",
 						"Stall detect asserted count-down: 1, 2, 4, 8 steps" },
 
-				{ 5, 10, 2, "VDIV", "Back EMF divider: 1/32, 1/16, 1/8, 1/4" },
+				{ 5, 10, 2, "vdiv", "Back EMF divider: 1/32, 1/16, 1/8, 1/4" },
 
 // 6: Drive Register
 
-				{ 6, 0, 2, "OCPTH", "OCP threshold: 250mV, 500mV, 750mV, 1000mV" },
+				{ 6, 0, 2, "ocpth", "OCP threshold: 250mV, 500mV, 750mV, 1000mV" },
 
-				{ 6, 2, 2, "OCPDEG", "OCP deglitch time: 1us, 2us, 4us, 8us" },
+				{ 6, 2, 2, "ocpdeg", "OCP deglitch time: 1us, 2us, 4us, 8us" },
 
-				{ 6, 4, 2, "TDRIVEN",
+				{ 6, 4, 2, "tdriven",
 						"Low-side gate drive time: 250ns, 500ns, 1us, 2us" },
 
-				{ 6, 6, 2, "TDRIVEP",
+				{ 6, 6, 2, "tdrivep",
 						"High-side gate drive time: 250ns, 500ns, 1us, 2us" },
 
-				{ 6, 8, 2, "IDRIVEN",
-						"Low-side gate drive peak current: 100mA, 200mA, …" },
+				{ 6, 8, 2, "idriven",
+						"Low-side gate drive peak current: 100mA, 200mA, ..." },
 
-				{ 6, 10, 2, "IDRIVEP",
-						"High-side gate drive peak current: 50mA, 100mA, …" },
+				{ 6, 10, 2, "idrivep",
+						"High-side gate drive peak current: 50mA, 100mA, ..." },
 
 // 7: Status Register
 

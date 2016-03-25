@@ -159,10 +159,12 @@ int pwm_stepper::Set(const char* zName, uint32_t nFieldValue) {
 }
 //--------------------------------
 void pwm_stepper::Diag() {
-	UARTprintf("\npwm_stepper: Phase=%d, Steps=%d, Speed=%d, TargetSpeed=%d,\n",
-			m_nPhase, m_nSteps, m_nSpeed, m_nTargetSpeed);
-	UARTprintf("  Acceleration=%d, Deceleration=%d\n", m_nAcceleration,
-			m_nDeceleration);
+	UARTprintf("\npwm_stepper: Phase=%d, Steps=%d, Speed=%d\n",
+			m_nPhase, m_nSteps, m_nSpeed);
+	UARTprintf("    %10s= %6d %40s\n", "pwmstart", m_nStartSpeed, "Start speed pulse with");
+	UARTprintf("    %10s= %6d %40s\n", "pwmtarget", m_nTargetSpeed, "Target speed pulse width");
+	UARTprintf("    %10s= %6d %40s\n", "pwmaccel", m_nAcceleration, "Acceleration rate, -delta width");
+	UARTprintf("    %10s= %6d %40s\n", "pwmdecel", m_nDeceleration, "Deceleration rate, +delta width");
 }
 //--------------------------------
 } /* namespace aeo1 */
