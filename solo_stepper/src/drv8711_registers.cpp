@@ -119,15 +119,19 @@ static int GetFieldValue(int nValue, int nPosition, int nSize) {
 	return nFieldValue;
 }
 //--------------------------------
-static int SetFieldValue(int rRegisterValue, int nFieldValue, int nPosition,
+static int SetFieldValue(int nTargetValue, int nSourceValue, int nPosition,
 		int nSize) {
 	if ((0 <= nSize) && (nSize < (sizeof(DRV8711_Masks) / sizeof(int)))) {
-		nFieldValue <<= nPosition;
-		nFieldValue &= DRV8711_Masks[nSize];
-		rRegisterValue &= ~(DRV8711_Masks[nSize]);
-		rRegisterValue |= nFieldValue;
+		int nMask = (DRV8711_Masks[nSize] >> nPosition);
+		// Prepare the source
+		nSourceValue >>= nPosition;
+		nSourceValue &= nMask;
+		// Prepare the target
+		nTargetValue &= ~(nMask);
+		// Update the target
+		nTargetValue |= nSourceValue;
 	}
-	return rRegisterValue;
+	return nTargetValue;
 }
 //--------------------------------
 bool drv8711_registers_Print(int nRegister, int nValue,
