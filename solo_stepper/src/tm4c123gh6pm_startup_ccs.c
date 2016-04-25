@@ -58,6 +58,7 @@ extern uint32_t __STACK_TOP;
 //*****************************************************************************
 extern void SysTickIntHandler(void);
 extern void UARTStdioIntHandler(void);
+extern void esp8266_UARTIntHandler(void);
 extern void OnADCInterrupt(void);
 extern void OnSSI0Interrupt(void);
 extern void OnSSI1Interrupt(void);
@@ -100,7 +101,7 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // GPIO Port D
     OnGPIOEInterrupt,                       // GPIO Port E
     UARTStdioIntHandler,                    // UART0 Rx and Tx
-    IntDefaultHandler,                      // UART1 Rx and Tx
+	esp8266_UARTIntHandler,                 // UART1 Rx and Tx
     OnSSI0Interrupt,                      	// SSI0 Rx and Tx
     IntDefaultHandler,                      // I2C0 Master and Slave
     IntDefaultHandler,                      // PWM Fault

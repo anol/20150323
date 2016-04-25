@@ -13,25 +13,44 @@
 #include "driverlib/rom_map.h"
 #include "driverlib/pin_map.h"
 #include "driverlib/sysctl.h"
+#include "utils/ustdlib.h"
 #include "utils/uartstdio.h"
 //--------------------------------
 #include "ssi_drv8711.h"
 #include "pwm_stepper.h"
 #include "drv8711.h"
 #include "drv8711_registers.h"
-/*
- DRV8711 Register Settings
- 0: def=0xxxx, ref=0xF1C
- 1: def=0x0FF, ref=0x0BA
- 2: def=0x030, ref=0x030
- 3: def=0x080, ref=0x108
- 4: def=0x110, ref=0x510
- 5: def=0x040, ref=0xF40
- 6: def=0x032, ref=0x033
- 7: def=0x000, ref=0x000
- */
 //--------------------------------
 namespace aeo1 {
+//--------------------------------
+struct drv8711_registerset {
+	int nRegValue[8];
+};
+//--------------------------------
+static const drv8711_registerset RegisterSet_Default = {
+
+0x000, 0x0FF, 0x030, 0x080, 0x110, 0x040, 0x032, 0x000
+
+};
+//--------------------------------
+static const drv8711_registerset RegisterSet_Alpha = {
+
+0xF1C, 0x0BA, 0x030, 0x108, 0x510, 0xF40, 0x033, 0x000
+
+};
+//--------------------------------
+static const drv8711_registerset RegisterSet_Guide = {
+
+0xC11, //850 ns dead time, gain of 5, internal stall detect, 1/4 step, enable
+		0x1A0, // 100-us sample
+		0x032, // Internal indexer, 25 us off time
+		0x100, // Adaptive blanking, 1-us current blanking
+		0x510, // Use auto mixed decay, mixed decay time has no effect.
+		0xA02, // BEMF/8, Stall after 2, approximately 20 mV (requires experimentation)
+		0x000, // Minimal drive, minimum OCP deglitch and threshold
+		0x000
+
+};
 //--------------------------------
 drv8711::drv8711() :
 		m_oSsiDrv8711(), m_oPwmStepper() {
@@ -48,15 +67,17 @@ void drv8711::Initialize() {
 }
 //--------------------------------
 void drv8711::SetDefault() {
-	m_oSsiDrv8711.Write(0, 0xF18);  // Microstepping 1/8
-	m_oSsiDrv8711.Write(1, 0x0BA);
-	m_oSsiDrv8711.Write(2, 0x030);
-	m_oSsiDrv8711.Write(3, 0x108);
-	m_oSsiDrv8711.Write(4, 0x310);
-	m_oSsiDrv8711.Write(5, 0xF40);
-	m_oSsiDrv8711.Write(6, 0x055);
-	m_oSsiDrv8711.Write(7, 0x000);
-	UARTprintf("SetDefault\n");
+	// Choose which register-set should be default
+	const int* pRegValue = RegisterSet_Guide.nRegValue;
+	//
+	UARTprintf("drv8711::SetDefault\n");
+	for (int nReg = 0; 8 > nReg; nReg++) {
+		int nValue = *pRegValue++;
+		m_oSsiDrv8711.Write(nReg, nValue);
+		UARTprintf("Reg %d = 0x%03X\n", nReg, nValue);
+	}
+	//
+	UARTprintf("\n");
 }
 //--------------------------------
 void drv8711::Idle() {
@@ -93,11 +114,46 @@ void drv8711::Reset() {
 	SetDefault();
 }
 //--------------------------------
-void drv8711::SetTorque(uint32_t nTorque) {
-	uint32_t nValue = m_oSsiDrv8711.Read(0);
-	nValue |= 0x100;
-	m_oSsiDrv8711.Write(0, nValue);
-	UARTprintf("Step\n");
+int drv8711::Get(const char* zName, char* zValue, int nSize) {
+	int nStatus;
+	uint32_t nFieldValue = 0;
+	if (0 == strncmp(zName, "pwm", 3)) {
+		nStatus = m_oPwmStepper.Get(zName, nFieldValue);
+	} else {
+		int nRegister = drv8711_registers_GetRegisterNumber(zName);
+		if (0 <= nRegister) {
+			uint32_t nRegisterValue = m_oSsiDrv8711.Read(nRegister);
+			nStatus = drv8711_registers_GetFieldValue(zName, nRegisterValue,
+					nFieldValue);
+		} else {
+			nStatus = No_Such_Attribute_Name;
+		}
+	}
+	if (Success == nStatus) {
+		usprintf(zValue, "%d", nFieldValue);
+	}
+	return nStatus;
+}
+//--------------------------------
+int drv8711::Set(const char* zName, const char* zValue) {
+	int nStatus;
+	if (0 == strncmp(zName, "pwm", 3)) {
+		int nValue = ustrtoul(zValue, 0, 10);
+		nStatus = m_oPwmStepper.Set(zName, nValue);
+	} else {
+		int nRegister = drv8711_registers_GetRegisterNumber(zName);
+		if (0 <= nRegister) {
+			uint32_t nRegisterValue = m_oSsiDrv8711.Read(nRegister);
+			nStatus = drv8711_registers_SetFieldValue(zName, nRegisterValue,
+					zValue);
+			if (Success == nStatus) {
+				m_oSsiDrv8711.Write(nRegister, nRegisterValue);
+			}
+		} else {
+			nStatus = No_Such_Attribute_Name;
+		}
+	}
+	return nStatus;
 }
 //--------------------------------
 void drv8711::Move(int32_t nSteps) {
@@ -112,7 +168,7 @@ void drv8711::Move(int32_t nSteps) {
 		UARTprintf("Forward %d u-steps\n", nSteps);
 	}
 	m_oSsiDrv8711.Write(0, nControlRegister);
-	// nSteps *= 8; // Microstepping 1/8
+// nSteps *= 8; // Microstepping 1/8
 	m_oPwmStepper.Move(nSteps);
 }
 //--------------------------------
@@ -158,7 +214,8 @@ void drv8711::ReadAllRegisters() {
 //--------------------------------
 static bool MyPrintFunction(const char* zName, int nValue,
 		const char* zDescription, void* pUserData) {
-	UARTprintf("  %8s= %4d %40s\n", zName, nValue, zDescription);
+	UARTprintf("    %10s= %6d %40s\n", zName, nValue, zDescription);
+	SysCtlDelay(SysCtlClockGet() / 500);
 	return true;
 }
 //--------------------------------
@@ -166,7 +223,7 @@ void drv8711::PrintAllRegisters() {
 	int nValue = 0xFFFF;
 	for (int nRegister = 0; 8 > nRegister; nRegister++) {
 		nValue = m_oSsiDrv8711.GetRegister(nRegister);
-		UARTprintf("  Register %d=%03X, ", nRegister, nValue);
+		UARTprintf("  Reg. %d      =  0x%03X\n", nRegister, nValue);
 		drv8711_registers_Print(nRegister, nValue, MyPrintFunction, 0);
 	}
 	if (nValue) {
@@ -175,11 +232,35 @@ void drv8711::PrintAllRegisters() {
 	}
 }
 //--------------------------------
+// nTorque = 255 & (256 * nIsGain * (nRsense * 1000) * nIfs / 2750 );
+// nIfs = ( nTorque * 2750 ) / ( nIsGain * (nRsense * 1000))
+void drv8711::PrintDerivedInfo() {
+	const int nRsense = 50; // nRsense * 1000
+	int nReg0 = m_oSsiDrv8711.GetRegister(0);
+	int nReg1 = m_oSsiDrv8711.GetRegister(1);
+	uint32_t nIsGain = drv8711_registers_GetValue("isgain", nReg0);
+	uint32_t nMode = drv8711_registers_GetValue("mode", nReg0);
+	uint32_t nTorque = drv8711_registers_GetValue("torque", nReg1);
+	uint32_t nPeriod = m_oPwmStepper.Get("pwmtarget" );
+	uint32_t nClock = SysCtlClockGet();
+	if (nIsGain && nRsense) {
+		int nIfs = (nTorque * 275000) / (nIsGain * nRsense);
+		UARTprintf("Target full-scale current = %d.%02d A\n", nIfs / 100,
+				nIfs % 2);
+	}
+	if (nMode) {
+		int nSteps = nClock / nPeriod;
+		int nRpm = ( 60 * nSteps ) / ( 200 * nMode); // 60 sec/min, 200 steps per revolution
+		UARTprintf("Sustained speed (mode 1/%d) = %4d RPM, %d s/s \n", nMode, nRpm, nSteps);
+	}
+}
+//--------------------------------
 void drv8711::Diag() {
 	m_oSsiDrv8711.Diag();
 	m_oPwmStepper.Diag();
 	ReadAllRegisters();
 	PrintAllRegisters();
+	PrintDerivedInfo();
 }
 //--------------------------------
 } /* namespace aeo1 */

@@ -14,6 +14,10 @@
 namespace aeo1 {
 class drv8711 {
 public:
+	enum {
+		Success, No_Such_Attribute_Name, Illegal_Attribute_Value
+	};
+public:
 	drv8711();
 	virtual ~drv8711();
 
@@ -21,9 +25,9 @@ public:
 	void Initialize();
 	void Idle();
 	void Halt();
+	int Get(const char* zName, char* zValue, int nSize);
+	int Set(const char* zName, const char* zValue);
 	void Move(int32_t nSteps);
-	void SetTorque(uint32_t nTorque);
-	void SetDefault();
 	void Stop(bool bHard);
 	void Diag();
 	void Sleep(bool bSleep);
@@ -31,8 +35,10 @@ public:
 	void Reset();
 
 private:
+	void SetDefault();
 	void ReadAllRegisters();
 	void PrintAllRegisters();
+	void PrintDerivedInfo();
 	void PrintStatus(uint32_t nStatus);
 
 private:

@@ -59,8 +59,13 @@ extern uint32_t __STACK_TOP;
 extern void SysTickIntHandler(void);
 extern void UARTStdioIntHandler(void);
 extern void OnADCInterrupt(void);
+extern void OnSSI0Interrupt(void);
 extern void OnSSI1Interrupt(void);
+extern void OnSSI2Interrupt(void);
 extern void OnSSI3Interrupt(void);
+extern void OnGPIOBInterrupt(void);
+extern void OnGPIOEInterrupt(void);
+extern void OnPWM1Gen1Interrupt(void);
 
 //*****************************************************************************
 //
@@ -90,13 +95,13 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // The PendSV handler
     SysTickIntHandler,                      // The SysTick handler
     IntDefaultHandler,                      // GPIO Port A
-    IntDefaultHandler,                      // GPIO Port B
+    OnGPIOBInterrupt,                       // GPIO Port B
     IntDefaultHandler,                      // GPIO Port C
     IntDefaultHandler,                      // GPIO Port D
-    IntDefaultHandler,                      // GPIO Port E
+    OnGPIOEInterrupt,                       // GPIO Port E
     UARTStdioIntHandler,                    // UART0 Rx and Tx
     IntDefaultHandler,                      // UART1 Rx and Tx
-    IntDefaultHandler,                      // SSI0 Rx and Tx
+    OnSSI0Interrupt,                      	// SSI0 Rx and Tx
     IntDefaultHandler,                      // I2C0 Master and Slave
     IntDefaultHandler,                      // PWM Fault
     IntDefaultHandler,                      // PWM Generator 0
@@ -106,7 +111,7 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // ADC Sequence 0
     IntDefaultHandler,                      // ADC Sequence 1
     IntDefaultHandler,                      // ADC Sequence 2
-    OnADCInterrupt,                      // ADC Sequence 3
+    OnADCInterrupt,                      	// ADC Sequence 3
     IntDefaultHandler,                      // Watchdog timer
     IntDefaultHandler,                      // Timer 0 subtimer A
     IntDefaultHandler,                      // Timer 0 subtimer B
@@ -146,8 +151,8 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // GPIO Port J
     IntDefaultHandler,                      // GPIO Port K
     IntDefaultHandler,                      // GPIO Port L
-    IntDefaultHandler,                      // SSI2 Rx and Tx
-    OnSSI3Interrupt,                      // SSI3 Rx and Tx
+    OnSSI2Interrupt,                      	// SSI2 Rx and Tx
+    OnSSI3Interrupt,                      	// SSI3 Rx and Tx
     IntDefaultHandler,                      // UART3 Rx and Tx
     IntDefaultHandler,                      // UART4 Rx and Tx
     IntDefaultHandler,                      // UART5 Rx and Tx
@@ -224,7 +229,7 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // GPIO Port R
     IntDefaultHandler,                      // GPIO Port S
     IntDefaultHandler,                      // PWM 1 Generator 0
-    IntDefaultHandler,                      // PWM 1 Generator 1
+    OnPWM1Gen1Interrupt,                    // PWM 1 Generator 1
     IntDefaultHandler,                      // PWM 1 Generator 2
     IntDefaultHandler,                      // PWM 1 Generator 3
     IntDefaultHandler                       // PWM 1 Fault

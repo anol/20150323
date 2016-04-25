@@ -22,6 +22,8 @@
 //
 //*****************************************************************************
 
+#include "../z_utils/uartstdio.h"
+
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdarg.h>
@@ -35,7 +37,6 @@
 #include "driverlib/rom_map.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/uart.h"
-#include "utils/uartstdio.h"
 
 //*****************************************************************************
 //

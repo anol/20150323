@@ -5,8 +5,12 @@
  *      Author: Anders
  */
 //--------------------------------
+#include "../z_aeo1_drivers/ssi_display.h"
+
 #include <stdbool.h>
 #include <stdint.h>
+
+#include "../z_utils/uartstdio.h"
 #include "inc/hw_memmap.h"
 #include "driverlib/rom.h"
 #include "driverlib/rom_map.h"
@@ -15,11 +19,8 @@
 #include "driverlib/interrupt.h"
 #include "driverlib/ssi.h"
 #include "driverlib/sysctl.h"
-#include "utils/uartstdio.h"
-//--------------------------------
 #include "inc/tm4c123gh6pm.h"
 //--------------------------------
-#include "ssi_display.h"
 //--------------------------------
 extern "C" void OnSSI1Interrupt(void) {
 	if (aeo1::ssi_display::m_pTheSSI1) {

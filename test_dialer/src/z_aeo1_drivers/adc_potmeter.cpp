@@ -5,11 +5,15 @@
  *      Author: Anders
  */
 //--------------------------------
+#include "../z_aeo1_drivers/adc_potmeter.h"
+
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 #include <inc/hw_memmap.h>
+
+#include "../z_utils/uartstdio.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/rom.h"
 #include "driverlib/rom_map.h"
@@ -18,13 +22,8 @@
 #include "driverlib/uart.h"
 #include "driverlib/adc.h"
 #include "driverlib/gpio.h"
-#include "utils/uartstdio.h"
-//--------------------------------
-// Stellaris lm4f120h5qr is Tiva tm4c1233h6pm
-//#include "inc/tm4c1233h6pm.h"
 #include "inc/tm4c123gh6pm.h"
 //--------------------------------
-#include "adc_potmeter.h"
 //--------------------------------
 extern "C" void OnADCInterrupt(void) {
 	if (aeo1::adc_potmeter::m_pTheOneAndOnly) {
