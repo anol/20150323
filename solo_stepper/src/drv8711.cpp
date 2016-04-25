@@ -20,17 +20,6 @@
 #include "pwm_stepper.h"
 #include "drv8711.h"
 #include "drv8711_registers.h"
-/*
- DRV8711 Register Settings
- 0: def=0xxxx, ref=0xF1C
- 1: def=0x0FF, ref=0x0BA
- 2: def=0x030, ref=0x030
- 3: def=0x080, ref=0x108
- 4: def=0x110, ref=0x510
- 5: def=0x040, ref=0xF40
- 6: def=0x032, ref=0x033
- 7: def=0x000, ref=0x000
- */
 //--------------------------------
 namespace aeo1 {
 //--------------------------------
@@ -78,9 +67,8 @@ void drv8711::Initialize() {
 }
 //--------------------------------
 void drv8711::SetDefault() {
-	const int* pRegValue;
 	// Choose which register-set should be default
-	pRegValue = RegisterSet_Guide.nRegValue;
+	const int* pRegValue = RegisterSet_Guide.nRegValue;
 	//
 	UARTprintf("drv8711::SetDefault\n");
 	for (int nReg = 0; 8 > nReg; nReg++) {
@@ -88,6 +76,7 @@ void drv8711::SetDefault() {
 		m_oSsiDrv8711.Write(nReg, nValue);
 		UARTprintf("Reg %d = 0x%03X\n", nReg, nValue);
 	}
+	//
 	UARTprintf("\n");
 }
 //--------------------------------
@@ -243,11 +232,29 @@ void drv8711::PrintAllRegisters() {
 	}
 }
 //--------------------------------
+// nTorque = 255 & (256 * nIsGain * (nRsense * 1000) * nIfs / 2750 );
+// nIfs = ( nTorque * 2750 ) / ( nIsGain * (nRsense * 1000))
+void drv8711::PrintDerivedInfo() {
+	const int nRsense = 50; // nRsense * 1000
+	int nReg0 = m_oSsiDrv8711.GetRegister(0);
+	int nReg1 = m_oSsiDrv8711.GetRegister(1);
+	uint32_t nIsGain = 0;
+	uint32_t nTorque = 0;
+	drv8711_registers_GetFieldValue("isgain", nReg0, nIsGain);
+	drv8711_registers_GetFieldValue("torque", nReg1, nTorque);
+	if (nIsGain && nRsense) {
+		int nIfs = (nTorque * 275000) / (nIsGain * nRsense);
+		UARTprintf("Target full-scale current (Ifs) = %d.%02d A\n", nIfs / 100,
+				nIfs % 2);
+	}
+}
+//--------------------------------
 void drv8711::Diag() {
 	m_oSsiDrv8711.Diag();
 	m_oPwmStepper.Diag();
 	ReadAllRegisters();
 	PrintAllRegisters();
+	PrintDerivedInfo();
 }
 //--------------------------------
 } /* namespace aeo1 */

@@ -38,6 +38,7 @@ private:
 	void SetDefault();
 	void ReadAllRegisters();
 	void PrintAllRegisters();
+	void PrintDerivedInfo();
 	void PrintStatus(uint32_t nStatus);
 
 private:
