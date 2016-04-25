@@ -126,45 +126,57 @@ void pwm_stepper::Stop(bool bHard) {
 	}
 }
 //--------------------------------
-int pwm_stepper::Get(const char* zName, uint32_t& rFieldValue) {
-	int nStatus = 0;
+uint32_t pwm_stepper::Get(const char* zName) {
+	uint32_t nValue = 0;
 	if (0 == strcmp(zName, "pwmstart")) {
-		rFieldValue = m_nStartSpeed;
+		nValue = m_nStartSpeed;
 	} else if (0 == strcmp(zName, "pwmtarget")) {
-		rFieldValue = m_nTargetSpeed;
+		nValue = m_nTargetSpeed;
 	} else if (0 == strcmp(zName, "pwmaccel")) {
-		rFieldValue = m_nAcceleration;
+		nValue = m_nAcceleration;
 	} else if (0 == strcmp(zName, "pwmdecel")) {
-		rFieldValue = m_nDeceleration;
-	} else {
-		nStatus = -2;
+		nValue = m_nDeceleration;
 	}
-	return nStatus;
+	return nValue;
+}
+//--------------------------------
+int pwm_stepper::Get(const char* zName, uint32_t& rFieldValue) {
+	uint32_t nValue = Get(zName);
+	// Zero is illegal value for all attributes
+	return nValue ? 0 : -2;
 }
 //--------------------------------
 int pwm_stepper::Set(const char* zName, uint32_t nFieldValue) {
 	int nStatus = 0;
-	if (0 == strcmp(zName, "pwmstart")) {
-		m_nStartSpeed = nFieldValue;
-	} else if (0 == strcmp(zName, "pwmtarget")) {
-		m_nTargetSpeed = nFieldValue;
-	} else if (0 == strcmp(zName, "pwmaccel")) {
-		m_nAcceleration = nFieldValue;
-	} else if (0 == strcmp(zName, "pwmdecel")) {
-		m_nDeceleration = nFieldValue;
+	if (nFieldValue) {
+		if (0 == strcmp(zName, "pwmstart")) {
+			m_nStartSpeed = nFieldValue;
+		} else if (0 == strcmp(zName, "pwmtarget")) {
+			m_nTargetSpeed = nFieldValue;
+		} else if (0 == strcmp(zName, "pwmaccel")) {
+			m_nAcceleration = nFieldValue;
+		} else if (0 == strcmp(zName, "pwmdecel")) {
+			m_nDeceleration = nFieldValue;
+		} else {
+			nStatus = -2;
+		}
 	} else {
-		nStatus = -2;
+		nStatus = -3;
 	}
 	return nStatus;
 }
 //--------------------------------
 void pwm_stepper::Diag() {
-	UARTprintf("\npwm_stepper: Phase=%d, Steps=%d, Speed=%d\n",
-			m_nPhase, m_nSteps, m_nSpeed);
-	UARTprintf("    %10s= %6d %40s\n", "pwmstart", m_nStartSpeed, "Start speed pulse with");
-	UARTprintf("    %10s= %6d %40s\n", "pwmtarget", m_nTargetSpeed, "Target speed pulse width");
-	UARTprintf("    %10s= %6d %40s\n", "pwmaccel", m_nAcceleration, "Acceleration rate, -delta width");
-	UARTprintf("    %10s= %6d %40s\n", "pwmdecel", m_nDeceleration, "Deceleration rate, +delta width");
+	UARTprintf("\npwm_stepper: Phase=%d, Steps=%d, Speed=%d\n", m_nPhase,
+			m_nSteps, m_nSpeed);
+	UARTprintf("    %10s= %6d %40s\n", "pwmstart", m_nStartSpeed,
+			"Start speed pulse with");
+	UARTprintf("    %10s= %6d %40s\n", "pwmtarget", m_nTargetSpeed,
+			"Target speed pulse width");
+	UARTprintf("    %10s= %6d %40s\n", "pwmaccel", m_nAcceleration,
+			"Acceleration rate, -delta width");
+	UARTprintf("    %10s= %6d %40s\n", "pwmdecel", m_nDeceleration,
+			"Deceleration rate, +delta width");
 }
 //--------------------------------
 } /* namespace aeo1 */

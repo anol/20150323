@@ -173,23 +173,6 @@ int drv8711_registers_GetRegisterNumber(const char* zName) {
 	return nRegister;
 }
 //--------------------------------
-int drv8711_registers_GetFieldValue(const char* zName, int nRegisterValue,
-		uint32_t& rFieldValue) {
-	int nIndex = 0;
-	int nSize = 0;
-	int nPosition = 0;
-	while ((0 == nSize) && DRV8711_Fields[nIndex].nSize) {
-		if (0 == strcmp(DRV8711_Fields[nIndex].zName, zName)) {
-			nSize = DRV8711_Fields[nIndex].nSize;
-			nPosition = DRV8711_Fields[nIndex].nPosition;
-			rFieldValue = GetFieldValue(nRegisterValue, nPosition, nSize);
-		} else {
-			nIndex++;
-		}
-	}
-	return nSize ? 0 : -1;
-}
-//--------------------------------
 int drv8711_registers_SetFieldValue(const char* zName, uint32_t& rRegisterValue,
 		const char* zValue) {
 	int nIndex = 0;
@@ -207,5 +190,62 @@ int drv8711_registers_SetFieldValue(const char* zName, uint32_t& rRegisterValue,
 		}
 	}
 	return nSize ? 0 : -1;
+}
+//--------------------------------
+int drv8711_registers_GetFieldValue(const char* zName, int nRegisterValue,
+		uint32_t& rFieldValue) {
+	int nIndex = 0;
+	int nSize = 0;
+	int nPosition = 0;
+	while ((0 == nSize) && DRV8711_Fields[nIndex].nSize) {
+		if (0 == strcmp(DRV8711_Fields[nIndex].zName, zName)) {
+			nSize = DRV8711_Fields[nIndex].nSize;
+			nPosition = DRV8711_Fields[nIndex].nPosition;
+			rFieldValue = GetFieldValue(nRegisterValue, nPosition, nSize);
+		} else {
+			nIndex++;
+		}
+	}
+	return nSize ? 0 : -1;
+}
+//--------------------------------
+int drv8711_registers_GetValue(const char* zName, int nRegisterValue) {
+	int nIndex = 0;
+	int nSize = 0;
+	int nPosition = 0;
+	int nValue = -1;
+	int nFieldValue = -1;
+	while ((0 == nSize) && DRV8711_Fields[nIndex].nSize) {
+		if (0 == strcmp(DRV8711_Fields[nIndex].zName, zName)) {
+			nSize = DRV8711_Fields[nIndex].nSize;
+			nPosition = DRV8711_Fields[nIndex].nPosition;
+			nFieldValue = GetFieldValue(nRegisterValue, nPosition, nSize);
+		} else {
+			nIndex++;
+		}
+	}
+	if (nSize) {
+		if (0 == strcmp("mode", zName)) {
+			nValue = 1 >> nFieldValue;
+		} else if (0 == strcmp("isgain", zName)) {
+			switch (nFieldValue) {
+			default:
+				nValue = 5;
+				break;
+			case 1:
+				nValue = 10;
+				break;
+			case 2:
+				nValue = 20;
+				break;
+			case 3:
+				nValue = 40;
+				break;
+			}
+		} else {
+			nValue = nFieldValue;
+		}
+	}
+	return nValue;
 }
 //--------------------------------

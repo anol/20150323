@@ -15,4 +15,6 @@ int drv8711_registers_SetFieldValue(const char* zName, uint32_t& rRegisterValue,
 int drv8711_registers_GetFieldValue(const char* zName, int nRegisterValue,
 		uint32_t& rFieldValue);
 
+int drv8711_registers_GetValue(const char* zName, int nRegisterValue);
+
 #endif

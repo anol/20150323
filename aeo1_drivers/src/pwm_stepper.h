@@ -37,6 +37,7 @@ public:
 	void Move(uint32_t nSteps);
 	void Stop(bool bHard);
 	void OnInterrupt();
+	uint32_t Get(const char* zName);
 	int Get(const char* zName, uint32_t& rFieldValue);
 	int Set(const char* zName, uint32_t nFieldValue);
 

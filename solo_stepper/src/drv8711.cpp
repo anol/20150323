@@ -238,14 +238,20 @@ void drv8711::PrintDerivedInfo() {
 	const int nRsense = 50; // nRsense * 1000
 	int nReg0 = m_oSsiDrv8711.GetRegister(0);
 	int nReg1 = m_oSsiDrv8711.GetRegister(1);
-	uint32_t nIsGain = 0;
-	uint32_t nTorque = 0;
-	drv8711_registers_GetFieldValue("isgain", nReg0, nIsGain);
-	drv8711_registers_GetFieldValue("torque", nReg1, nTorque);
+	uint32_t nIsGain = drv8711_registers_GetValue("isgain", nReg0);
+	uint32_t nMode = drv8711_registers_GetValue("mode", nReg0);
+	uint32_t nTorque = drv8711_registers_GetValue("torque", nReg1);
+	uint32_t nPeriod = m_oPwmStepper.Get("pwmtarget" );
+	uint32_t nClock = SysCtlClockGet();
 	if (nIsGain && nRsense) {
 		int nIfs = (nTorque * 275000) / (nIsGain * nRsense);
-		UARTprintf("Target full-scale current (Ifs) = %d.%02d A\n", nIfs / 100,
+		UARTprintf("Target full-scale current = %d.%02d A\n", nIfs / 100,
 				nIfs % 2);
+	}
+	if (nMode) {
+		int nSteps = nClock / nPeriod;
+		int nRpm = ( 60 * nSteps ) / ( 200 * nMode); // 60 sec/min, 200 steps per revolution
+		UARTprintf("Sustained speed (mode 1/%d) = %4d RPM, %d s/s \n", nMode, nRpm, nSteps);
 	}
 }
 //--------------------------------
