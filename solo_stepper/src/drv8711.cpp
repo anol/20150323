@@ -34,6 +34,35 @@
 //--------------------------------
 namespace aeo1 {
 //--------------------------------
+struct drv8711_registerset {
+	int nRegValue[8];
+};
+//--------------------------------
+static const drv8711_registerset RegisterSet_Default = {
+
+0x000, 0x0FF, 0x030, 0x080, 0x110, 0x040, 0x032, 0x000
+
+};
+//--------------------------------
+static const drv8711_registerset RegisterSet_Alpha = {
+
+0xF1C, 0x0BA, 0x030, 0x108, 0x510, 0xF40, 0x033, 0x000
+
+};
+//--------------------------------
+static const drv8711_registerset RegisterSet_Guide = {
+
+0xC11, //850 ns dead time, gain of 5, internal stall detect, 1/4 step, enable
+		0x1A0, // 100-us sample
+		0x032, // Internal indexer, 25 us off time
+		0x100, // Adaptive blanking, 1-us current blanking
+		0x510, // Use auto mixed decay, mixed decay time has no effect.
+		0xA02, // BEMF/8, Stall after 2, approximately 20 mV (requires experimentation)
+		0x000, // Minimal drive, minimum OCP deglitch and threshold
+		0x000
+
+};
+//--------------------------------
 drv8711::drv8711() :
 		m_oSsiDrv8711(), m_oPwmStepper() {
 }
@@ -49,15 +78,17 @@ void drv8711::Initialize() {
 }
 //--------------------------------
 void drv8711::SetDefault() {
-	m_oSsiDrv8711.Write(0, 0xF18);  // Microstepping 1/8
-	m_oSsiDrv8711.Write(1, 0x0BA);
-	m_oSsiDrv8711.Write(2, 0x030);
-	m_oSsiDrv8711.Write(3, 0x108);
-	m_oSsiDrv8711.Write(4, 0x310);
-	m_oSsiDrv8711.Write(5, 0xF40);
-	m_oSsiDrv8711.Write(6, 0x055);
-	m_oSsiDrv8711.Write(7, 0x000);
-	UARTprintf("SetDefault\n");
+	const int* pRegValue;
+	// Choose which register-set should be default
+	pRegValue = RegisterSet_Guide.nRegValue;
+	//
+	UARTprintf("drv8711::SetDefault\n");
+	for (int nReg = 0; 8 > nReg; nReg++) {
+		int nValue = *pRegValue++;
+		m_oSsiDrv8711.Write(nReg, nValue);
+		UARTprintf("Reg %d = 0x%03X\n", nReg, nValue);
+	}
+	UARTprintf("\n");
 }
 //--------------------------------
 void drv8711::Idle() {
@@ -148,7 +179,7 @@ void drv8711::Move(int32_t nSteps) {
 		UARTprintf("Forward %d u-steps\n", nSteps);
 	}
 	m_oSsiDrv8711.Write(0, nControlRegister);
-	// nSteps *= 8; // Microstepping 1/8
+// nSteps *= 8; // Microstepping 1/8
 	m_oPwmStepper.Move(nSteps);
 }
 //--------------------------------
