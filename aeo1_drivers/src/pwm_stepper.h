@@ -16,9 +16,9 @@ private:
 	enum {
 		Base = PWM1_BASE,
 		Generator = PWM_GEN_1,
-		StartSpeed = 16000,
-		MaxSpeed = 4000,
-		Acceleration = 10
+		Default_StartSpeed = 16000,
+		Default_TargetSpeed = 4000,
+		Default_Acceleration = 10
 	};
 	enum Phase {
 		Phase_Idle,
@@ -28,6 +28,7 @@ private:
 		Phase_Stop,
 		Phase_Halt
 	};
+
 public:
 	pwm_stepper();
 	virtual ~pwm_stepper();
@@ -36,9 +37,14 @@ public:
 	void Move(uint32_t nSteps);
 	void Stop(bool bHard);
 	void OnInterrupt();
+	uint32_t Get(const char* zName);
+	int Get(const char* zName, uint32_t& rFieldValue);
+	int Set(const char* zName, uint32_t nFieldValue);
+
 private:
 	int32_t m_nSteps;
 	int32_t m_nSpeed;
+	int32_t m_nStartSpeed;
 	int32_t m_nTargetSpeed;
 	int32_t m_nAcceleration;
 	int32_t m_nDeceleration;
