@@ -31,15 +31,15 @@
 #define STRINGIZE_NX(A) #A
 #define STRINGIZE(A) STRINGIZE_NX(A)
 //--------------------------------
-aeo1::ssi_display g_oDisplay1(aeo1::ssi_display::SSI1);
-aeo1::ssi_display g_oDisplay2(aeo1::ssi_display::SSI3);
-aeo1::qei_sensor g_oScale1(aeo1::qei_sensor::QEI0);
-aeo1::qei_sensor g_oScale2(aeo1::qei_sensor::QEI1);
+aeo1::ssi_display g_oDisplayX(aeo1::ssi_display::SSI1);
+aeo1::ssi_display g_oDisplayY(aeo1::ssi_display::SSI3);
+aeo1::qei_sensor g_oScaleX(aeo1::qei_sensor::QEI0);
+aeo1::qei_sensor g_oScaleY(aeo1::qei_sensor::QEI1);
 static char g_zInput[APP_INPUT_BUF_SIZE];
 //--------------------------------
 extern "C" void SysTickIntHandler(void) {
-	g_oDisplay1.Set(g_oScale1.Get());
-	g_oDisplay2.Set(g_oScale2.Get());
+	g_oDisplayX.Set(g_oScaleX.Get());
+	g_oDisplayY.Set(g_oScaleY.Get());
 }
 //--------------------------------
 static void SetupDebugUart() {
@@ -75,10 +75,10 @@ static void Initialize() {
 	SetupSys();
 	SetupDebugUart();
 	SetupDebugLeds();
-	g_oDisplay1.Initialize();
-	g_oDisplay2.Initialize();
-	g_oScale1.Initialize();
-	g_oScale2.Initialize();
+	g_oDisplayX.Initialize();
+	g_oDisplayY.Initialize();
+	g_oScaleX.Initialize();
+	g_oScaleY.Initialize();
 	SysTickPeriodSet(SysCtlClockGet() / APP_SYSTICKS_PER_SEC);
 	SysTickEnable();
 	SysTickIntEnable();

@@ -43,8 +43,8 @@
 //
 //*****************************************************************************
 extern int CMD_help (int argc, char **argv);
-extern int CMD_set_dialer (int argc, char **argv);
-extern int CMD_set_scale (int argc, char **argv);
+extern int CMD_setx (int argc, char **argv);
+extern int CMD_sety (int argc, char **argv);
 extern int CMD_diag (int argc, char **argv);
 extern int CMD_dummy (int argc, char **argv);
 

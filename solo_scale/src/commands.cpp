@@ -35,18 +35,16 @@
 #include "driverlib/qei.h"
 //--------------------------------
 #include "commands.h"
-
-#include "adc_potmeter.h"
 #include "qei_sensor.h"
 #include "ssi_display.h"
 #include "cmdline.h"
 #include "uartstdio.h"
 #include "ustdlib.h"
 //--------------------------------
-extern aeo1::ssi_display g_oDisplay1;
-extern aeo1::ssi_display g_oDisplay2;
-extern aeo1::qei_sensor g_oRotaryDialer;
-extern aeo1::qei_sensor g_oLinearScale;
+extern aeo1::ssi_display g_oDisplayX;
+extern aeo1::ssi_display g_oDisplayY;
+extern aeo1::qei_sensor g_oScaleX;
+extern aeo1::qei_sensor g_oScaleY;
 //*****************************************************************************
 //
 // Table of valid command strings, callback functions and help messages.  This
@@ -57,9 +55,9 @@ tCmdLineEntry g_psCmdTable[] = {
 
 { "help", CMD_help, " : Display list of commands" },
 
-{ "set_dialer", CMD_set_dialer, " : Set the dialer value" },
+{ "setx", CMD_setx, " : Set the X value" },
 
-{ "set_scale", CMD_set_scale, " : Set set the scale value" },
+{ "sety", CMD_sety, " : Set the Y value" },
 
 { "diag", CMD_diag, " : Show diagnostic information" },
 
@@ -96,30 +94,29 @@ int CMD_dummy(int argc, char **argv) {
 	return (0);
 }
 //--------------------------------
-int CMD_set_dialer(int argc, char **argv) {
+int CMD_setx(int argc, char **argv) {
 	if (argc == 2) {
 		uint32_t nValue = ustrtoul(argv[1], 0, 10);
-		g_oDisplay1.Set(nValue, 2);
-		g_oRotaryDialer.Set(nValue);
+		g_oDisplayX.Set(nValue, 2);
+		g_oScaleX.Set(nValue);
 	}
 	return (0);
 }
 //--------------------------------
-int CMD_set_scale(int argc, char **argv) {
+int CMD_sety(int argc, char **argv) {
 	if (argc == 2) {
 		uint32_t nValue = ustrtoul(argv[1], 0, 10);
-		g_oDisplay2.Set(nValue, 2);
-		g_oLinearScale.Set(nValue);
+		g_oDisplayY.Set(nValue, 2);
+		g_oScaleY.Set(nValue);
 	}
 	return (0);
 }
 //--------------------------------
 int CMD_diag(int argc, char **argv) {
-	g_oDisplay1.Diag();
-	g_oDisplay2.Diag();
-	g_oRotaryDialer.Diag();
-	g_oLinearScale.Diag();
-	aeo1::adc_potmeter::Diag();
+	g_oDisplayX.Diag();
+	g_oDisplayY.Diag();
+	g_oScaleX.Diag();
+	g_oScaleY.Diag();
 	return (0);
 }
 //--------------------------------

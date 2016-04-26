@@ -130,10 +130,10 @@ EXE_OUTPUTS__QUOTED += \
 "solo_scale.out" \
 
 BIN_OUTPUTS += \
-solo_scale.hex \
+solo_scale.bin \
 
 BIN_OUTPUTS__QUOTED += \
-"solo_scale.hex" \
+"solo_scale.bin" \
 
 
 # All Target
@@ -150,12 +150,14 @@ solo_scale.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS) C:/Users/Anders/git/20150323/aeo
 	"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 --abi=eabi -me -g --gcc --define=ccs="ccs" --define=PART_TM4C123GH6PM --define=TARGET_IS_TM4C123_RB1 --define=UART_BUFFERED --define="ProjName=solo_scale" --diag_wrap=off --display_error_number --diag_warning=225 -z -m"solo_scale.map" --heap_size=0 --stack_size=512 -i"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/lib" -i"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/include" --reread_libs --display_error_number --diag_wrap=off --warn_sections --xml_link_info="solo_scale_linkInfo.xml" --rom_model -o "solo_scale.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
+	@$(MAKE) --no-print-directory post-build
 
-solo_scale.hex: $(EXE_OUTPUTS)
+solo_scale.bin: $(EXE_OUTPUTS)
 	@echo 'Invoking: ARM Hex Utility'
-	"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/bin/armhex"  -o "solo_scale.hex" $(EXE_OUTPUTS__QUOTED)
+	"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/bin/armhex"  -o "solo_scale.bin" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $@'
 	@echo ' '
+	@$(MAKE) --no-print-directory post-build
 
 # Other Targets
 clean:
@@ -166,8 +168,12 @@ clean:
 	-@echo 'Finished clean'
 	-@echo ' '
 
+post-build:
+	-"C:/ti/ccsv6/utils/tiobj2bin/tiobj2bin" "solo_scale.out" "solo_scale.bin" "C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/bin/armofd" "C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/bin/armhex" "C:/ti/ccsv6/utils/tiobj2bin/mkhex4bin"
+	-@echo ' '
+
 .PHONY: all clean dependents
-.SECONDARY:
+.SECONDARY: post-build
 C:/Users/Anders/git/20150323/aeo1_drivers/Debug/aeo1_drivers.lib:
 C:/Users/Anders/git/20150323/tiva_utils/Debug/tiva_utils.lib:
 
