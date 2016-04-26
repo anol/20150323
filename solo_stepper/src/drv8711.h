@@ -33,12 +33,12 @@ public:
 	void Sleep(bool bSleep);
 	void ClearFaults();
 	void Reset();
+	void DiagExtra();
 
 private:
 	void SetDefault();
 	void ReadAllRegisters();
 	void PrintAllRegisters();
-	void PrintDerivedInfo();
 	void PrintStatus(uint32_t nStatus);
 
 private:

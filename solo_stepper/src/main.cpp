@@ -119,13 +119,17 @@ int CMD_stop(int argc, char **argv) {
 //--------------------------------
 int CMD_diag(int argc, char **argv) {
 	if (argc == 2) {
-		if( 'w' == *argv[1] ){
+		if ('w' == *argv[1]) {
 			g_oEsp8266.Diag();
+		} else if ('x' == *argv[1]) {
+			g_oDrv8711.DiagExtra();
 		} else {
 			g_oDrv8711.Diag();
+			g_oDrv8711.DiagExtra();
 		}
 	} else {
 		g_oDrv8711.Diag();
+		g_oDrv8711.DiagExtra();
 		g_oEsp8266.Diag();
 	}
 	return (0);
@@ -187,7 +191,9 @@ tCmdLineEntry g_psCmdTable[] = {
 
 { "stop", CMD_stop, " : Stop feed or move" },
 
-{ "diag", CMD_diag, " : Show diagnostic information, diag [w|m] (w=wifi, m=motor)" },
+{ "diag", CMD_diag,
+
+" : Show diagnostic information, diag [w|m|x] (Wifi, Motor, eXtra)" },
 
 { "sleep", CMD_sleep, " : Toggle DRV8711 Sleep" },
 
