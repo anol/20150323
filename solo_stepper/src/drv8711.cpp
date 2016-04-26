@@ -246,7 +246,7 @@ void drv8711::PrintDerivedInfo() {
 	if (nIsGain && nRsense) {
 		int nIfs = (nTorque * 275000) / (nIsGain * nRsense);
 		UARTprintf("Target full-scale current = %d.%02d A\n", nIfs / 100,
-				nIfs % 2);
+				nIfs % 100);
 	}
 	if (nMode) {
 		int nSteps = nClock / nPeriod;
