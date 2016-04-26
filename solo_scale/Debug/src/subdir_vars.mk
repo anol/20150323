@@ -5,7 +5,8 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../src/commands.cpp \
-../src/main.cpp 
+../src/main.cpp \
+../src/primary_activity.cpp 
 
 C_SRCS += \
 ../src/tm4c123gh6pm_startup_ccs.c 
@@ -13,18 +14,21 @@ C_SRCS += \
 OBJS += \
 ./src/commands.obj \
 ./src/main.obj \
+./src/primary_activity.obj \
 ./src/tm4c123gh6pm_startup_ccs.obj 
 
 CPP_DEPS += \
 ./src/commands.pp \
-./src/main.pp 
+./src/main.pp \
+./src/primary_activity.pp 
 
 C_DEPS += \
 ./src/tm4c123gh6pm_startup_ccs.pp 
 
 CPP_DEPS__QUOTED += \
 "src\commands.pp" \
-"src\main.pp" 
+"src\main.pp" \
+"src\primary_activity.pp" 
 
 C_DEPS__QUOTED += \
 "src\tm4c123gh6pm_startup_ccs.pp" 
@@ -32,11 +36,13 @@ C_DEPS__QUOTED += \
 OBJS__QUOTED += \
 "src\commands.obj" \
 "src\main.obj" \
+"src\primary_activity.obj" \
 "src\tm4c123gh6pm_startup_ccs.obj" 
 
 CPP_SRCS__QUOTED += \
 "../src/commands.cpp" \
-"../src/main.cpp" 
+"../src/main.cpp" \
+"../src/primary_activity.cpp" 
 
 C_SRCS__QUOTED += \
 "../src/tm4c123gh6pm_startup_ccs.c" 

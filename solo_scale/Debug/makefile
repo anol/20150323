@@ -12,6 +12,7 @@ GEN_CMDS__FLAG :=
 ORDERED_OBJS += \
 "./src/commands.obj" \
 "./src/main.obj" \
+"./src/primary_activity.obj" \
 "./src/tm4c123gh6pm_startup_ccs.obj" \
 "../tm4c123gh6pm.cmd" \
 $(GEN_CMDS__FLAG) \
@@ -162,9 +163,9 @@ solo_scale.bin: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)$(BIN_OUTPUTS__QUOTED)
-	-$(RM) "src\commands.pp" "src\main.pp" 
+	-$(RM) "src\commands.pp" "src\main.pp" "src\primary_activity.pp" 
 	-$(RM) "src\tm4c123gh6pm_startup_ccs.pp" 
-	-$(RM) "src\commands.obj" "src\main.obj" "src\tm4c123gh6pm_startup_ccs.obj" 
+	-$(RM) "src\commands.obj" "src\main.obj" "src\primary_activity.obj" "src\tm4c123gh6pm_startup_ccs.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

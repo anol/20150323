@@ -24,6 +24,7 @@
 #include "ssi_display.h"
 #include "cmdline.h"
 #include "uartstdio.h"
+#include "primary_activity.h"
 //--------------------------------
 #define APP_SYSTICKS_PER_SEC 32
 #define APP_INPUT_BUF_SIZE 128
@@ -31,15 +32,12 @@
 #define STRINGIZE_NX(A) #A
 #define STRINGIZE(A) STRINGIZE_NX(A)
 //--------------------------------
-aeo1::ssi_display g_oDisplayX(aeo1::ssi_display::SSI1);
-aeo1::ssi_display g_oDisplayY(aeo1::ssi_display::SSI3);
-aeo1::qei_sensor g_oScaleX(aeo1::qei_sensor::QEI0);
-aeo1::qei_sensor g_oScaleY(aeo1::qei_sensor::QEI1);
 static char g_zInput[APP_INPUT_BUF_SIZE];
 //--------------------------------
+primary_activity g_oPrimaryActivity;
+//--------------------------------
 extern "C" void SysTickIntHandler(void) {
-	g_oDisplayX.Set(g_oScaleX.Get());
-	g_oDisplayY.Set(g_oScaleY.Get());
+	g_oPrimaryActivity.OnTick();
 }
 //--------------------------------
 static void SetupDebugUart() {
@@ -75,10 +73,7 @@ static void Initialize() {
 	SetupSys();
 	SetupDebugUart();
 	SetupDebugLeds();
-	g_oDisplayX.Initialize();
-	g_oDisplayY.Initialize();
-	g_oScaleX.Initialize();
-	g_oScaleY.Initialize();
+	g_oPrimaryActivity.Initialize();
 	SysTickPeriodSet(SysCtlClockGet() / APP_SYSTICKS_PER_SEC);
 	SysTickEnable();
 	SysTickIntEnable();

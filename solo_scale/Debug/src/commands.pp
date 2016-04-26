@@ -26,6 +26,7 @@ src/commands.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/include/stdarg.h
 src/commands.obj: C:/Users/Anders/git/20150323/tiva_utils/utils/ustdlib.h
 src/commands.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/include/stdarg.h
 src/commands.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/include/time.h
+src/commands.obj: ../src/primary_activity.h
 
 ../src/commands.cpp: 
 C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/include/stdint.h: 
@@ -53,3 +54,4 @@ C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/include/stdarg.h:
 C:/Users/Anders/git/20150323/tiva_utils/utils/ustdlib.h: 
 C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/include/stdarg.h: 
 C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/include/time.h: 
+../src/primary_activity.h: 

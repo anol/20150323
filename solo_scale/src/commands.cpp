@@ -41,10 +41,10 @@
 #include "uartstdio.h"
 #include "ustdlib.h"
 //--------------------------------
-extern aeo1::ssi_display g_oDisplayX;
-extern aeo1::ssi_display g_oDisplayY;
-extern aeo1::qei_sensor g_oScaleX;
-extern aeo1::qei_sensor g_oScaleY;
+#include "primary_activity.h"
+//--------------------------------
+extern primary_activity g_oPrimaryActivity;
+//--------------------------------
 //*****************************************************************************
 //
 // Table of valid command strings, callback functions and help messages.  This
@@ -60,8 +60,6 @@ tCmdLineEntry g_psCmdTable[] = {
 { "sety", CMD_sety, " : Set the Y value" },
 
 { "diag", CMD_diag, " : Show diagnostic information" },
-
-{ "dummy", CMD_dummy, " : Dummy command" },
 
 { 0, 0, 0 } };
 
@@ -87,18 +85,10 @@ int CMD_help(int argc, char **argv) {
 	return (0);
 }
 //--------------------------------
-int CMD_dummy(int argc, char **argv) {
-	// Keep the compiler happy.
-	(void) argc;
-	(void) argv;
-	return (0);
-}
-//--------------------------------
 int CMD_setx(int argc, char **argv) {
 	if (argc == 2) {
 		uint32_t nValue = ustrtoul(argv[1], 0, 10);
-		g_oDisplayX.Set(nValue, 2);
-		g_oScaleX.Set(nValue);
+		g_oPrimaryActivity.SetX(nValue);
 	}
 	return (0);
 }
@@ -106,17 +96,13 @@ int CMD_setx(int argc, char **argv) {
 int CMD_sety(int argc, char **argv) {
 	if (argc == 2) {
 		uint32_t nValue = ustrtoul(argv[1], 0, 10);
-		g_oDisplayY.Set(nValue, 2);
-		g_oScaleY.Set(nValue);
+		g_oPrimaryActivity.SetY(nValue);
 	}
 	return (0);
 }
 //--------------------------------
 int CMD_diag(int argc, char **argv) {
-	g_oDisplayX.Diag();
-	g_oDisplayY.Diag();
-	g_oScaleX.Diag();
-	g_oScaleY.Diag();
+	g_oPrimaryActivity.Diag();
 	return (0);
 }
 //--------------------------------

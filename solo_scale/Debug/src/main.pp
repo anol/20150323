@@ -30,6 +30,7 @@ src/main.obj: C:/Users/Anders/git/20150323/aeo1_drivers/src/ssi_peripheral.h
 src/main.obj: C:/Users/Anders/git/20150323/tiva_utils/utils/cmdline.h
 src/main.obj: C:/Users/Anders/git/20150323/tiva_utils/utils/uartstdio.h
 src/main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/include/stdarg.h
+src/main.obj: ../src/primary_activity.h
 
 ../src/main.cpp: 
 C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/include/stdint.h: 
@@ -61,3 +62,4 @@ C:/Users/Anders/git/20150323/aeo1_drivers/src/ssi_peripheral.h:
 C:/Users/Anders/git/20150323/tiva_utils/utils/cmdline.h: 
 C:/Users/Anders/git/20150323/tiva_utils/utils/uartstdio.h: 
 C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/include/stdarg.h: 
+../src/primary_activity.h: 
