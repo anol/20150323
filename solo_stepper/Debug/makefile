@@ -4,7 +4,7 @@
 
 SHELL = cmd.exe
 
-CG_TOOL_ROOT := D:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6
+CG_TOOL_ROOT := C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7
 
 GEN_OPTS__FLAG := 
 GEN_CMDS__FLAG := 
@@ -18,9 +18,9 @@ ORDERED_OBJS += \
 "../tm4c123gh6pm.cmd" \
 $(GEN_CMDS__FLAG) \
 -l"libc.a" \
--l"D:\aeols\git\anol\20150323\aeo1_drivers\Debug\aeo1_drivers.lib" \
--l"D:\aeols\git\anol\20150323\tiva_utils\Debug\tiva_utils.lib" \
--l"D:\ti\TivaWare_C_Series-2.1.2.111/driverlib/ccs/Debug/driverlib.lib" \
+-l"C:\Users\Anders\git\20150323\aeo1_drivers\Debug\aeo1_drivers.lib" \
+-l"C:\Users\Anders\git\20150323\tiva_utils\Debug\tiva_utils.lib" \
+-l"C:\ti\TivaWare_C_Series-2.1.2.111/driverlib/ccs/Debug/driverlib.lib" \
 
 -include ../makefile.init
 
@@ -142,21 +142,21 @@ BIN_OUTPUTS__QUOTED += \
 all: solo_stepper.out
 
 dependents:
-	-cd D:/aeols/git/anol/20150323/aeo1_drivers/Debug && $(MAKE) clean all
-	-cd D:/aeols/git/anol/20150323/tiva_utils/Debug && $(MAKE) clean all
+	-cd C:/Users/Anders/git/20150323/aeo1_drivers/Debug && $(MAKE) clean all
+	-cd C:/Users/Anders/git/20150323/tiva_utils/Debug && $(MAKE) clean all
 
 # Tool invocations
-solo_stepper.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS) D:/aeols/git/anol/20150323/aeo1_drivers/Debug/aeo1_drivers.lib D:/aeols/git/anol/20150323/tiva_utils/Debug/tiva_utils.lib
+solo_stepper.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS) C:/Users/Anders/git/20150323/aeo1_drivers/Debug/aeo1_drivers.lib C:/Users/Anders/git/20150323/tiva_utils/Debug/tiva_utils.lib
 	@echo 'Building target: $@'
 	@echo 'Invoking: ARM Linker'
-	"D:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 --abi=eabi -me -g --gcc --define=ccs="ccs" --define=TARGET_IS_TM4C123_RB1 --define=PART_TM4C123GH6PM --define=UART_BUFFERED --define="ProjName=solo_stepper" --display_error_number --diag_warning=225 --diag_wrap=off -z -m"solo_stepper.map" --heap_size=0 --stack_size=512 -i"D:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/lib" -i"D:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/include" --reread_libs --define="ProjName=solo_stepper" --warn_sections --display_error_number --diag_wrap=off --xml_link_info="solo_stepper_linkInfo.xml" --rom_model -o "solo_stepper.out" $(ORDERED_OBJS)
+	"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 --abi=eabi -me -g --gcc --define=ccs="ccs" --define=TARGET_IS_TM4C123_RB1 --define=PART_TM4C123GH6PM --define=UART_BUFFERED --define="ProjName=solo_stepper" --display_error_number --diag_warning=225 --diag_wrap=off -z -m"solo_stepper.map" --heap_size=0 --stack_size=512 -i"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/lib" -i"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/include" --reread_libs --define="ProjName=solo_stepper" --warn_sections --display_error_number --diag_wrap=off --xml_link_info="solo_stepper_linkInfo.xml" --rom_model -o "solo_stepper.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	@$(MAKE) --no-print-directory post-build
 
 solo_stepper.bin: $(EXE_OUTPUTS)
 	@echo 'Invoking: ARM Hex Utility'
-	"D:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/bin/armhex"  -o "solo_stepper.bin" $(EXE_OUTPUTS__QUOTED)
+	"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/bin/armhex"  -o "solo_stepper.bin" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $@'
 	@echo ' '
 	@$(MAKE) --no-print-directory post-build
@@ -171,13 +171,13 @@ clean:
 	-@echo ' '
 
 post-build:
-	-"D:/ti/ccsv6/utils/tiobj2bin/tiobj2bin" "solo_stepper.out" "solo_stepper.bin" "D:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/bin/armofd" "D:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.6/bin/armhex" "D:/ti/ccsv6/utils/tiobj2bin/mkhex4bin"
+	-"C:/ti/ccsv6/utils/tiobj2bin/tiobj2bin" "solo_stepper.out" "solo_stepper.bin" "C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/bin/armofd" "C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/bin/armhex" "C:/ti/ccsv6/utils/tiobj2bin/mkhex4bin"
 	-@echo ' '
 
 .PHONY: all clean dependents
 .SECONDARY: post-build
-D:/aeols/git/anol/20150323/aeo1_drivers/Debug/aeo1_drivers.lib:
-D:/aeols/git/anol/20150323/tiva_utils/Debug/tiva_utils.lib:
+C:/Users/Anders/git/20150323/aeo1_drivers/Debug/aeo1_drivers.lib:
+C:/Users/Anders/git/20150323/tiva_utils/Debug/tiva_utils.lib:
 
 -include ../makefile.targets
 
