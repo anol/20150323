@@ -112,7 +112,7 @@ const drv8711_field DRV8711_Fields[] =
 		};
 //--------------------------------
 static int GetFieldValue(int nValue, int nPosition, int nSize) {
-	int nFieldValue = nValue >>= nPosition;
+	int nFieldValue = nValue >> nPosition;
 	if ((0 <= nSize) && (nSize < (sizeof(DRV8711_Masks) / sizeof(int)))) {
 		nFieldValue &= DRV8711_Masks[nSize];
 	}
@@ -226,7 +226,7 @@ int drv8711_registers_GetValue(const char* zName, int nRegisterValue) {
 	}
 	if (nSize) {
 		if (0 == strcmp("mode", zName)) {
-			nValue = 1 >> nFieldValue;
+			nValue = 1 << nFieldValue;
 		} else if (0 == strcmp("isgain", zName)) {
 			switch (nFieldValue) {
 			default:
