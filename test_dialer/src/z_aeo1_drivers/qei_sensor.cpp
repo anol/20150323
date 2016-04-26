@@ -5,8 +5,12 @@
  *      Author: Anders
  */
 //--------------------------------
+#include "../z_aeo1_drivers/qei_sensor.h"
+
 #include <stdint.h>
 #include <stdbool.h>
+
+#include "../z_utils/uartstdio.h"
 #include "inc/hw_types.h"
 #include "inc/hw_memmap.h"
 #include "inc/hw_gpio.h"
@@ -16,9 +20,7 @@
 #include "driverlib/sysctl.h"
 #include "driverlib/systick.h"
 #include "driverlib/qei.h"
-#include "utils/uartstdio.h"
 //--------------------------------
-#include "qei_sensor.h"
 //--------------------------------
 namespace aeo1 {
 //--------------------------------

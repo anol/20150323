@@ -20,11 +20,10 @@
 #include "driverlib/uart.h"
 #include "driverlib/adc.h"
 #include "driverlib/qei.h"
-#include "utils/uartstdio.h"
-#include "utils/cmdline.h"
-//--------------------------------
-#include "aeo1_drivers/ssi_display.h"
-#include "aeo1_drivers/qei_sensor.h"
+#include "qei_sensor.h"
+#include "ssi_display.h"
+#include "cmdline.h"
+#include "uartstdio.h"
 //--------------------------------
 #define APP_SYSTICKS_PER_SEC 32
 #define APP_INPUT_BUF_SIZE 128

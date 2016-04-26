@@ -25,10 +25,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "inc/hw_types.h"
-#include "utils/ustdlib.h"
-#include "utils/uartstdio.h"
-#include "utils/cmdline.h"
-//--------------------------------
 #include "inc/tm4c123gh6pm.h"
 #include "inc/hw_memmap.h"
 #include "driverlib/gpio.h"
@@ -36,15 +32,21 @@
 #include "driverlib/ssi.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/adc.h"
-//--------------------------------
-#include "aeo1_drivers/ssi_display.h"
-#include "aeo1_drivers/adc_potmeter.h"
-#include "aeo1_drivers/qei_sensor.h"
+#include "driverlib/qei.h"
 //--------------------------------
 #include "commands.h"
+
+#include "adc_potmeter.h"
+#include "qei_sensor.h"
+#include "ssi_display.h"
+#include "cmdline.h"
+#include "uartstdio.h"
+#include "ustdlib.h"
 //--------------------------------
 extern aeo1::ssi_display g_oDisplay1;
 extern aeo1::ssi_display g_oDisplay2;
+extern aeo1::qei_sensor g_oRotaryDialer;
+extern aeo1::qei_sensor g_oLinearScale;
 //*****************************************************************************
 //
 // Table of valid command strings, callback functions and help messages.  This
@@ -98,6 +100,7 @@ int CMD_set_dialer(int argc, char **argv) {
 	if (argc == 2) {
 		uint32_t nValue = ustrtoul(argv[1], 0, 10);
 		g_oDisplay1.Set(nValue, 2);
+		g_oRotaryDialer.Set(nValue);
 	}
 	return (0);
 }
@@ -106,14 +109,17 @@ int CMD_set_scale(int argc, char **argv) {
 	if (argc == 2) {
 		uint32_t nValue = ustrtoul(argv[1], 0, 10);
 		g_oDisplay2.Set(nValue, 2);
+		g_oLinearScale.Set(nValue);
 	}
 	return (0);
 }
 //--------------------------------
 int CMD_diag(int argc, char **argv) {
-	aeo1::ssi_display::Diag();
+	g_oDisplay1.Diag();
+	g_oDisplay2.Diag();
+	g_oRotaryDialer.Diag();
+	g_oLinearScale.Diag();
 	aeo1::adc_potmeter::Diag();
-	aeo1::qei_sensor::Diag();
 	return (0);
 }
 //--------------------------------
