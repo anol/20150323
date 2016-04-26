@@ -234,7 +234,7 @@ void drv8711::PrintAllRegisters() {
 //--------------------------------
 // nTorque = 255 & (256 * nIsGain * (nRsense * 1000) * nIfs / 2750 );
 // nIfs = ( nTorque * 2750 ) / ( nIsGain * (nRsense * 1000))
-void drv8711::PrintDerivedInfo() {
+void drv8711::DiagExtra() {
 	const int nRsense = 50; // nRsense * 1000
 	int nReg0 = m_oSsiDrv8711.GetRegister(0);
 	int nReg1 = m_oSsiDrv8711.GetRegister(1);
@@ -260,7 +260,6 @@ void drv8711::Diag() {
 	m_oPwmStepper.Diag();
 	ReadAllRegisters();
 	PrintAllRegisters();
-	PrintDerivedInfo();
 }
 //--------------------------------
 } /* namespace aeo1 */
