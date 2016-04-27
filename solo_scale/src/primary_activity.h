@@ -21,11 +21,15 @@ public:
 	void SetY(int nValue);
 
 private:
-	aeo1::ssi_display m_oDisplayX;
-	aeo1::ssi_display m_oDisplayY;
-	aeo1::qei_sensor m_oScaleX;
-	aeo1::qei_sensor m_oScaleY;
+	bool CheckInputs(int& rCount, bool bButton, bool bIndex) const;
 
+private:
+	aeo1::ssi_display m_oDisplay_X;
+	aeo1::ssi_display m_oDisplay_Y;
+	aeo1::qei_sensor m_oScale_X;
+	aeo1::qei_sensor m_oScale_Y;
+	int m_nPressedCount_X;
+	int m_nPressedCount_Y;
 };
 
 #endif /* primary_activity_h */

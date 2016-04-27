@@ -48,8 +48,8 @@ static void ConfigureQei0(uint32_t nConfig) {
 	GPIOPadConfigSet(GPIO_PORTF_BASE, GPIO_PIN_4, GPIO_STRENGTH_2MA,
 	GPIO_PIN_TYPE_STD_WPU);
 	GPIOPinTypeQEI(GPIO_PORTD_BASE, GPIO_PIN_6 | GPIO_PIN_7);
-	GPIOPinTypeQEI(GPIO_PORTF_BASE, GPIO_PIN_4);
-	GPIOPinConfigure(GPIO_PF4_IDX0);
+//	GPIOPinTypeQEI(GPIO_PORTF_BASE, GPIO_PIN_4);
+//	GPIOPinConfigure(GPIO_PF4_IDX0);
 	GPIOPinConfigure(GPIO_PD6_PHA0);
 	GPIOPinConfigure(GPIO_PD7_PHB0);
 	QEIConfigure(QEI0_BASE, nConfig, MaxPosition);
@@ -61,8 +61,9 @@ static void ConfigureQei1(uint32_t nConfig) {
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_QEI1);
 	GPIOPadConfigSet(GPIO_PORTC_BASE, GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,
 	GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU);
-	GPIOPinTypeQEI(GPIO_PORTC_BASE, GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6);
-	GPIOPinConfigure(GPIO_PC4_IDX1);
+	GPIOPinTypeQEI(GPIO_PORTC_BASE, GPIO_PIN_5 | GPIO_PIN_6);
+//	GPIOPinTypeQEI(GPIO_PORTC_BASE, GPIO_PIN_4);
+//	GPIOPinConfigure(GPIO_PC4_IDX1);
 	GPIOPinConfigure(GPIO_PC5_PHA1);
 	GPIOPinConfigure(GPIO_PC6_PHB1);
 	QEIConfigure(QEI1_BASE, nConfig, MaxPosition);
@@ -121,10 +122,12 @@ void qei_sensor::Zero() {
 void qei_sensor::Diag() {
 	switch (m_nDevice) {
 	case QEI0:
-		UARTprintf("\nqei_sensor: QEI0, val=%d, pos=%d\n", Get(), QEIPositionGet(QEI0_BASE));
+		UARTprintf("\nqei_sensor: QEI0, val=%d, pos=%d\n", Get(),
+				QEIPositionGet(QEI0_BASE));
 		break;
 	case QEI1:
-		UARTprintf("\nqei_sensor: QEI1, val=%d, pos=%d\n", Get(), QEIPositionGet(QEI1_BASE));
+		UARTprintf("\nqei_sensor: QEI1, val=%d, pos=%d\n", Get(),
+				QEIPositionGet(QEI1_BASE));
 		break;
 	default:
 		UARTprintf("\nqei-void!\n");

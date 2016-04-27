@@ -39,7 +39,6 @@ primary_activity g_oPrimaryActivity;
 extern "C" void SysTickIntHandler(void) {
 	g_oPrimaryActivity.OnTick();
 }
-
 //--------------------------------
 static void SetupDebugUart() {
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
