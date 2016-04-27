@@ -32,10 +32,10 @@ extern "C" void OnPWM1Gen1Interrupt(void) {
 namespace aeo1 {
 //--------------------------------
 pwm_stepper::pwm_stepper() :
-		m_nSteps(0), m_nSpeed(Default_StartSpeed), m_nStartSpeed(
+		m_nRelativeSteps(0), m_nSteps(0), m_nSpeed(Default_StartSpeed), m_nStartSpeed(
 				Default_StartSpeed), m_nTargetSpeed(Default_TargetSpeed), m_nAcceleration(
 				Default_Acceleration), m_nDeceleration(Default_Acceleration), m_nPhase(
-				Phase_Idle) {
+				Phase_Idle), m_bDirectionForward(true) {
 }
 //--------------------------------
 pwm_stepper::~pwm_stepper() {
@@ -74,6 +74,11 @@ void pwm_stepper::OnInterrupt() {
 	if (0 >= m_nSteps) {
 		m_nSteps = 0;
 		m_nPhase = Phase_Stop;
+	}
+	if (m_bDirectionForward) {
+		m_nRelativeSteps++;
+	} else {
+		m_nRelativeSteps--;
 	}
 	switch (m_nPhase) {
 	case Phase_Accel:
@@ -118,6 +123,10 @@ void pwm_stepper::Move(uint32_t nSteps) {
 	PWMGenEnable(Base, Generator);
 }
 //--------------------------------
+void pwm_stepper::Direction(bool bForward) {
+	m_bDirectionForward = bForward;
+}
+//--------------------------------
 void pwm_stepper::Stop(bool bHard) {
 	if (bHard) {
 		PWMGenDisable(Base, Generator);
@@ -136,6 +145,8 @@ uint32_t pwm_stepper::Get(const char* zName) {
 		nValue = m_nAcceleration;
 	} else if (0 == strcmp(zName, "pwmdecel")) {
 		nValue = m_nDeceleration;
+	} else if (0 == strcmp(zName, "pwmrel")) {
+		nValue = m_nRelativeSteps;
 	}
 	return nValue;
 }
@@ -157,6 +168,8 @@ int pwm_stepper::Set(const char* zName, uint32_t nFieldValue) {
 			m_nAcceleration = nFieldValue;
 		} else if (0 == strcmp(zName, "pwmdecel")) {
 			m_nDeceleration = nFieldValue;
+		} else if (0 == strcmp(zName, "pwmrel")) {
+			m_nRelativeSteps = nFieldValue;
 		} else {
 			nStatus = -2;
 		}
@@ -177,6 +190,8 @@ void pwm_stepper::Diag() {
 			"Acceleration rate, -delta width");
 	UARTprintf("    %10s= %6d %40s\n", "pwmdecel", m_nDeceleration,
 			"Deceleration rate, +delta width");
+	UARTprintf("    %10s= %6d %40s\n", "pwmrel", m_nRelativeSteps,
+			"Relative step number");
 }
 //--------------------------------
 } /* namespace aeo1 */

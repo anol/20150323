@@ -34,6 +34,7 @@ public:
 	virtual ~pwm_stepper();
 	void Initialize();
 	void Diag();
+	void Direction( bool bForward );
 	void Move(uint32_t nSteps);
 	void Stop(bool bHard);
 	void OnInterrupt();
@@ -42,6 +43,7 @@ public:
 	int Set(const char* zName, uint32_t nFieldValue);
 
 private:
+	int32_t m_nRelativeSteps;
 	int32_t m_nSteps;
 	int32_t m_nSpeed;
 	int32_t m_nStartSpeed;
@@ -49,6 +51,7 @@ private:
 	int32_t m_nAcceleration;
 	int32_t m_nDeceleration;
 	Phase m_nPhase;
+	bool m_bDirectionForward;
 };
 } /* namespace aeo1 */
 //--------------------------------

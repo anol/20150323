@@ -162,9 +162,11 @@ void drv8711::Move(int32_t nSteps) {
 		nSteps = -nSteps;
 		nControlRegister &= ~(0x007);
 		nControlRegister |= 0x005;
+		m_oPwmStepper.Direction(false);
 		UARTprintf("Reverse %d u-steps\n", nSteps);
 	} else {
 		nControlRegister |= 0x007;
+		m_oPwmStepper.Direction(true);
 		UARTprintf("Forward %d u-steps\n", nSteps);
 	}
 	m_oSsiDrv8711.Write(0, nControlRegister);
@@ -243,7 +245,9 @@ void drv8711::DiagExtra() {
 	uint32_t nMode = drv8711_registers_GetValue("mode", nReg0);
 	uint32_t nTorque = drv8711_registers_GetValue("torque", nReg1);
 	uint32_t nPeriod = m_oPwmStepper.Get("pwmtarget");
+	uint32_t nPwmRel = m_oPwmStepper.Get("pwmrel");
 	uint32_t nClock = SysCtlClockGet();
+	UARTprintf("Relative step number = %d\n", nPwmRel);
 	if (nIsGain && nRsense) {
 		int nIfs = (nTorque * 275000) / (nIsGain * nRsense);
 		UARTprintf("Torque = %d, IsGain = %d, Rsense = %d\n", nTorque, nIsGain,
