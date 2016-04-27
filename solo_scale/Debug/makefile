@@ -125,37 +125,37 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXE_OUTPUTS += \
-solo_scale.out \
+just_scales.out \
 
 EXE_OUTPUTS__QUOTED += \
-"solo_scale.out" \
+"just_scales.out" \
 
 BIN_OUTPUTS += \
-solo_scale.bin \
+just_scales.bin \
 
 BIN_OUTPUTS__QUOTED += \
-"solo_scale.bin" \
+"just_scales.bin" \
 
 
 # All Target
-all: solo_scale.out
+all: just_scales.out
 
 dependents:
 	-cd C:/Users/Anders/git/20150323/aeo1_drivers/Debug && $(MAKE) clean all
 	-cd C:/Users/Anders/git/20150323/tiva_utils/Debug && $(MAKE) clean all
 
 # Tool invocations
-solo_scale.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS) C:/Users/Anders/git/20150323/aeo1_drivers/Debug/aeo1_drivers.lib C:/Users/Anders/git/20150323/tiva_utils/Debug/tiva_utils.lib
+just_scales.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS) C:/Users/Anders/git/20150323/aeo1_drivers/Debug/aeo1_drivers.lib C:/Users/Anders/git/20150323/tiva_utils/Debug/tiva_utils.lib
 	@echo 'Building target: $@'
 	@echo 'Invoking: ARM Linker'
-	"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 --abi=eabi -me -g --gcc --define=ccs="ccs" --define=PART_TM4C123GH6PM --define=TARGET_IS_TM4C123_RB1 --define=UART_BUFFERED --define="ProjName=solo_scale" --display_error_number --diag_warning=225 --diag_wrap=off -z -m"solo_scale.map" --heap_size=0 --stack_size=512 -i"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/lib" -i"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/include" --reread_libs --warn_sections --display_error_number --diag_wrap=off --xml_link_info="solo_scale_linkInfo.xml" --rom_model -o "solo_scale.out" $(ORDERED_OBJS)
+	"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 --abi=eabi -me -g --gcc --define=ccs="ccs" --define=PART_TM4C123GH6PM --define=TARGET_IS_TM4C123_RB1 --define=UART_BUFFERED --define="ProjName=just_scales" --diag_wrap=off --display_error_number --diag_warning=225 -z -m"just_scales.map" --heap_size=0 --stack_size=512 -i"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/lib" -i"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/include" --reread_libs --display_error_number --diag_wrap=off --warn_sections --xml_link_info="just_scales_linkInfo.xml" --rom_model -o "just_scales.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	@$(MAKE) --no-print-directory post-build
 
-solo_scale.bin: $(EXE_OUTPUTS)
+just_scales.bin: $(EXE_OUTPUTS)
 	@echo 'Invoking: ARM Hex Utility'
-	"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/bin/armhex"  -o "solo_scale.bin" $(EXE_OUTPUTS__QUOTED)
+	"C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/bin/armhex"  -o "just_scales.bin" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $@'
 	@echo ' '
 	@$(MAKE) --no-print-directory post-build
@@ -170,7 +170,7 @@ clean:
 	-@echo ' '
 
 post-build:
-	-"C:/ti/ccsv6/utils/tiobj2bin/tiobj2bin" "solo_scale.out" "solo_scale.bin" "C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/bin/armofd" "C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/bin/armhex" "C:/ti/ccsv6/utils/tiobj2bin/mkhex4bin"
+	-"C:/ti/ccsv6/utils/tiobj2bin/tiobj2bin" "just_scales.out" "just_scales.bin" "C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/bin/armofd" "C:/ti/ccsv6/tools/compiler/ti-cgt-arm_5.2.7/bin/armhex" "C:/ti/ccsv6/utils/tiobj2bin/mkhex4bin"
 	-@echo ' '
 
 .PHONY: all clean dependents
