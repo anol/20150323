@@ -122,9 +122,9 @@ static int GetFieldValue(int nValue, int nPosition, int nSize) {
 static int SetFieldValue(int nTargetValue, int nSourceValue, int nPosition,
 		int nSize) {
 	if ((0 <= nSize) && (nSize < (sizeof(DRV8711_Masks) / sizeof(int)))) {
-		int nMask = (DRV8711_Masks[nSize] >> nPosition);
+		int nMask = (DRV8711_Masks[nSize] << nPosition);
 		// Prepare the source
-		nSourceValue >>= nPosition;
+		nSourceValue <<= nPosition;
 		nSourceValue &= nMask;
 		// Prepare the target
 		nTargetValue &= ~(nMask);
@@ -175,6 +175,7 @@ int drv8711_registers_GetRegisterNumber(const char* zName) {
 //--------------------------------
 int drv8711_registers_SetFieldValue(const char* zName, uint32_t& rRegisterValue,
 		const char* zValue) {
+	int nStatus = -5;
 	int nIndex = 0;
 	int nSize = 0;
 	int nPosition = 0;
@@ -183,13 +184,16 @@ int drv8711_registers_SetFieldValue(const char* zName, uint32_t& rRegisterValue,
 		if (0 == strcmp(DRV8711_Fields[nIndex].zName, zName)) {
 			nSize = DRV8711_Fields[nIndex].nSize;
 			nPosition = DRV8711_Fields[nIndex].nPosition;
-			rRegisterValue = SetFieldValue(rRegisterValue, nValue, nPosition,
-					nSize);
+			nValue = SetFieldValue(rRegisterValue, nValue, nPosition, nSize);
+			if (0 <= nValue) {
+				nStatus = 0;
+				rRegisterValue = nValue;
+			}
 		} else {
 			nIndex++;
 		}
 	}
-	return nSize ? 0 : -1;
+	return nSize ? nStatus : -1;
 }
 //--------------------------------
 int drv8711_registers_GetFieldValue(const char* zName, int nRegisterValue,
