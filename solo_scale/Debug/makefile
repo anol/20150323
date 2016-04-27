@@ -141,8 +141,8 @@ BIN_OUTPUTS__QUOTED += \
 all: just_scales.out
 
 dependents:
-	-cd C:/Users/Anders/git/20150323/aeo1_drivers/Debug && $(MAKE) clean all
-	-cd C:/Users/Anders/git/20150323/tiva_utils/Debug && $(MAKE) clean all
+	-cd C:/Users/Anders/git/20150323/aeo1_drivers/Debug && $(MAKE) all
+	-cd C:/Users/Anders/git/20150323/tiva_utils/Debug && $(MAKE) all
 
 # Tool invocations
 just_scales.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS) C:/Users/Anders/git/20150323/aeo1_drivers/Debug/aeo1_drivers.lib C:/Users/Anders/git/20150323/tiva_utils/Debug/tiva_utils.lib

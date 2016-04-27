@@ -24,8 +24,10 @@
 #include "driverlib/uart.h"
 #include "driverlib/qei.h"
 //--------------------------------
+#include "uartstdio.h"
 #include "qei_sensor.h"
 #include "ssi_display.h"
+//--------------------------------
 #include "primary_activity.h"
 //--------------------------------
 primary_activity::primary_activity() :
@@ -103,7 +105,7 @@ bool primary_activity::CheckInputs(int& rCount, bool bButton,
 		nTempCount = 0;
 		bZero = true;
 	} else {
-		nCount = 0;
+		nTempCount = 0;
 	}
 	// Return both results
 	rCount = nTempCount;
