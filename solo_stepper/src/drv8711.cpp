@@ -244,23 +244,26 @@ void drv8711::DiagExtra() {
 	uint32_t nIsGain = drv8711_registers_GetValue("isgain", nReg0);
 	uint32_t nMode = drv8711_registers_GetValue("mode", nReg0);
 	uint32_t nTorque = drv8711_registers_GetValue("torque", nReg1);
-	uint32_t nPeriod = m_oPwmStepper.Get("pwmtarget");
+	uint32_t nPwmStart = m_oPwmStepper.Get("pwmstart");
+	uint32_t nPwmTarget = m_oPwmStepper.Get("pwmtarget");
 	uint32_t nPwmRel = m_oPwmStepper.Get("pwmrel");
 	uint32_t nClock = SysCtlClockGet();
 	UARTprintf("Relative step number = %d\n", nPwmRel);
 	if (nIsGain && nRsense) {
-		int nIfs = (nTorque * 275000) / (nIsGain * nRsense);
+		int nIfs = (nTorque * 2750) / (nIsGain * nRsense);
 		UARTprintf("Torque = %d, IsGain = %d, Rsense = %d\n", nTorque, nIsGain,
 				nRsense);
 		UARTprintf("Target full-scale current = %d.%02d A\n", nIfs / 100,
 				nIfs % 100);
 	}
 	if (nMode) {
-		int nSteps = nClock / nPeriod;
+		int nSteps = nClock / nPwmTarget;
 		int nRpm = (60 * nSteps) / (200 * nMode); // 60 sec/min, 200 steps per revolution
-		UARTprintf("Clock = %d, Period = %d, Mode = 1/%d\n", nClock, nPeriod,
-				nMode);
-		UARTprintf("Sustained speed = %4d RPM, %d s/s \n", nRpm, nSteps);
+		UARTprintf("Clock = %d Hz, Start = %d us, Target = %d us\n", nClock,
+				(1000 * nPwmStart) / (nClock / 1000),
+				(1000 * nPwmTarget) / (nClock / 1000));
+		UARTprintf("Target speed (Mode 1/%d) = %4d RPM, %d s/s \n", nMode, nRpm,
+				nSteps);
 	}
 	if (nReg7) {
 		PrintStatus(nReg7);
