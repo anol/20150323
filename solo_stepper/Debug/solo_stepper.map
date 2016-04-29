@@ -1,35 +1,35 @@
 ******************************************************************************
                   TI ARM Linker PC v5.2.7                      
 ******************************************************************************
->> Linked Fri Apr 29 10:22:20 2016
+>> Linked Fri Apr 29 10:45:56 2016
 
 OUTPUT FILE NAME:   <solo_stepper.out>
-ENTRY POINT SYMBOL: "_c_int00"  address: 00004d41
+ENTRY POINT SYMBOL: "_c_int00"  address: 00004d81
 
 
 MEMORY CONFIGURATION
 
          name            origin    length      used     unused   attr    fill
 ----------------------  --------  ---------  --------  --------  ----  --------
-  FLASH                 00000000   00040000  00006648  000399b8  R  X
-  SRAM                  20000000   00008000  00000be9  00007417  RW X
+  FLASH                 00000000   00040000  00006680  00039980  R  X
+  SRAM                  20000000   00008000  00000bf1  0000740f  RW X
 
 
 SEGMENT ALLOCATION MAP
 
 run origin  load origin   length   init length attrs members
 ----------  ----------- ---------- ----------- ----- -------
-00000000    00000000    00006648   00006648    r-x
+00000000    00000000    00006680   00006680    r-x
   00000000    00000000    0000026c   0000026c    r-- .intvecs
-  0000026c    0000026c    00005250   00005250    r-x .text
-  000054bc    000054bc    00000fd8   00000fd8    r-- .const
-  00006494    00006494    00000004   00000004    r-- .init_array
-  00006498    00006498    000001b0   000001b0    r-- .cinit
-20000000    20000000    00000bf0   00000000    rw-
-  20000000    20000000    000007fd   00000000    rw- .bss
-  20000800    20000800    00000200   00000000    rw- .stack
-  20000a00    20000a00    000001e4   00000000    rw- .data
-  20000be8    20000be8    00000008   00000000    rw- .sysmem
+  0000026c    0000026c    00005288   00005288    r-x .text
+  000054f4    000054f4    00000fd8   00000fd8    r-- .const
+  000064cc    000064cc    00000004   00000004    r-- .init_array
+  000064d0    000064d0    000001b0   000001b0    r-- .cinit
+20000000    20000000    00000bf8   00000000    rw-
+  20000000    20000000    00000805   00000000    rw- .bss
+  20000808    20000808    00000200   00000000    rw- .stack
+  20000a08    20000a08    000001e4   00000000    rw- .data
+  20000bf0    20000bf0    00000008   00000000    rw- .sysmem
 
 
 SECTION ALLOCATION MAP
@@ -40,7 +40,7 @@ section   page    origin      length       input sections
 .intvecs   0    00000000    0000026c     
                   00000000    0000026c     tm4c123gh6pm_startup_ccs.obj (.intvecs)
 
-.text      0    0000026c    00005250     
+.text      0    0000026c    00005288     
                   0000026c    00000c84     tiva_utils.lib : ustdlib.obj (.text)
                   00000ef0    00000860                    : uartstdio.obj (.text)
                   00001750    000007c8     drv8711.obj (.text)
@@ -51,245 +51,245 @@ section   page    origin      length       input sections
                   00003750    000003dc     rtsv7M4_T_le_v4SPD16_eabi.lib : memory.obj (.text)
                   00003b2c    000003bf     drv8711_registers.obj (.text)
                   00003eeb    00000001     --HOLE-- [fill = 0]
-                  00003eec    000002e8     aeo1_drivers.lib : ssi_drv8711.obj (.text)
-                  000041d4    000001f4                      : adc_potmeter.obj (.text)
-                  000043c8    00000132     driverlib.lib : gpio.obj (.text:GPIOPadConfigSet)
-                  000044fa    00000002     rtsv7M4_T_le_v4SPD16_eabi.lib : i_div0.obj (.text)
-                  000044fc    00000110     driverlib.lib : sysctl.obj (.text:SysCtlClockGet)
-                  0000460c    000000f4                   : sysctl.obj (.text:SysCtlClockSet)
-                  00004700    000000f4     rtsv7M4_T_le_v4SPD16_eabi.lib : dtor_list.obj (.text)
-                  000047f4    000000bc                                   : typeinfo_.obj (.text)
-                  000048b0    000000ac     tiva_utils.lib : cmdline.obj (.text)
-                  0000495c    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.obj (.text)
-                  000049f8    0000007a     driverlib.lib : adc.obj (.text:ADCSequenceStepConfigure)
-                  00004a72    0000007a     rtsv7M4_T_le_v4SPD16_eabi.lib : memset_t2.obj (.text)
-                  00004aec    0000006c                                   : autoinit.obj (.text)
-                  00004b58    0000006a                                   : copy_decompress_rle.obj (.text)
-                  00004bc2    00000002     --HOLE-- [fill = 0]
-                  00004bc4    00000068     driverlib.lib : interrupt.obj (.text:IntDisable)
-                  00004c2c    00000068                   : interrupt.obj (.text:IntEnable)
-                  00004c94    00000056                   : gpio.obj (.text:GPIOIntTypeSet)
-                  00004cea    00000056     rtsv7M4_T_le_v4SPD16_eabi.lib : ltoa.obj (.text)
-                  00004d40    00000050                                   : boot.obj (.text)
-                  00004d90    0000004c                                   : cpy_tbl.obj (.text)
-                  00004ddc    00000048     driverlib.lib : gpio.obj (.text:GPIOPinConfigure)
-                  00004e24    00000046                   : uart.obj (.text:UARTConfigSetExpClk)
-                  00004e6a    00000002     --HOLE-- [fill = 0]
-                  00004e6c    00000044     rtsv7M4_T_le_v4SPD16_eabi.lib : exit.obj (.text)
-                  00004eb0    00000040                                   : u_divt2.obj (.text)
-                  00004ef0    0000003e     driverlib.lib : adc.obj (.text:ADCSequenceConfigure)
-                  00004f2e    0000003c                   : ssi.obj (.text:SSIConfigSetExpClk)
-                  00004f6a    00000002     --HOLE-- [fill = 0]
-                  00004f6c    00000038                   : sysctl.obj (.text:SysCtlPeripheralPresent)
-                  00004fa4    00000034                   : sysctl.obj (.text:SysCtlPeripheralEnable)
-                  00004fd8    00000034     rtsv7M4_T_le_v4SPD16_eabi.lib : strstr.obj (.text)
-                  0000500c    0000002e     driverlib.lib : adc.obj (.text:ADCIntStatus)
-                  0000503a    0000002a                   : gpio.obj (.text:GPIODirModeSet)
-                  00005064    00000026     rtsv7M4_T_le_v4SPD16_eabi.lib : strncmp.obj (.text)
-                  0000508a    00000022     driverlib.lib : pwm.obj (.text:PWMGenConfigure)
-                  000050ac    00000020                   : uart.obj (.text:UARTDisable)
-                  000050cc    0000001e                   : adc.obj (.text:ADCSequenceDataGet)
-                  000050ea    0000001e                   : pwm.obj (.text:PWMPulseWidthSet)
-                  00005108    00000018                   : adc.obj (.text:ADCClockConfigSet)
-                  00005120    00000018                   : adc.obj (.text:ADCProcessorTrigger)
-                  00005138    00000018                   : gpio.obj (.text:GPIOPinTypeGPIOOutput)
-                  00005150    00000018     rtsv7M4_T_le_v4SPD16_eabi.lib : args_main.obj (.text)
-                  00005168    00000018                                   : strcmp.obj (.text)
-                  00005180    00000016                                   : strchr.obj (.text)
-                  00005196    00000002     --HOLE-- [fill = 0]
-                  00005198    00000014     driverlib.lib : fpu.obj (.text:FPUStackingEnable)
-                  000051ac    00000014                   : sysctl.obj (.text:SysCtlPWMClockSet)
-                  000051c0    00000014                   : systick.obj (.text:SysTickEnable)
-                  000051d4    00000014                   : systick.obj (.text:SysTickIntEnable)
-                  000051e8    00000014                   : uart.obj (.text:UARTEnable)
-                  000051fc    00000014     rtsv7M4_T_le_v4SPD16_eabi.lib : _lock.obj (.text)
-                  00005210    00000014                                   : strlen.obj (.text)
-                  00005224    00000012     driverlib.lib : gpio.obj (.text:GPIOPinTypeADC)
-                  00005236    00000012                   : gpio.obj (.text:GPIOPinTypeGPIOInput)
-                  00005248    00000012                   : gpio.obj (.text:GPIOPinTypePWM)
-                  0000525a    00000012                   : gpio.obj (.text:GPIOPinTypeSSI)
-                  0000526c    00000012                   : gpio.obj (.text:GPIOPinTypeUART)
-                  0000527e    00000012                   : pwm.obj (.text:PWMOutputState)
-                  00005290    00000012                   : ssi.obj (.text:SSIDataGetNonBlocking)
-                  000052a2    00000010                   : adc.obj (.text:ADCIntEnable)
-                  000052b2    00000002     --HOLE-- [fill = 0]
-                  000052b4    00000010                   : fpu.obj (.text:FPUEnable)
-                  000052c4    00000010                   : interrupt.obj (.text:IntMasterDisable)
-                  000052d4    00000010                   : interrupt.obj (.text:IntMasterEnable)
-                  000052e4    00000010                   : pwm.obj (.text:PWMGenPeriodSet)
-                  000052f4    00000010                   : systick.obj (.text:SysTickPeriodSet)
-                  00005304    0000000e                   : adc.obj (.text:ADCHardwareOversampleConfigure)
-                  00005312    0000000e                   : adc.obj (.text:ADCIntDisable)
-                  00005320    0000000e                   : adc.obj (.text:ADCSequenceDisable)
-                  0000532e    0000000e                   : adc.obj (.text:ADCSequenceEnable)
-                  0000533c    0000000e                   : gpio.obj (.text:GPIOIntDisable)
-                  0000534a    0000000e                   : ssi.obj (.text:SSIDataPutNonBlocking)
-                  00005358    0000000e                   : uart.obj (.text:UARTCharGetNonBlocking)
-                  00005366    0000000e                   : uart.obj (.text:UARTCharPutNonBlocking)
-                  00005374    0000000e                   : uart.obj (.text:UARTCharsAvail)
-                  00005382    0000000e                   : uart.obj (.text:UARTSpaceAvail)
-                  00005390    0000000e     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_none.obj (.text:decompress:none)
-                  0000539e    0000000c     driverlib.lib : cpu.obj (.text:CPUcpsid)
-                  000053aa    0000000c                   : cpu.obj (.text:CPUcpsie)
-                  000053b6    0000000c                   : gpio.obj (.text:GPIOIntEnable)
-                  000053c2    0000000c                   : pwm.obj (.text:PWMGenDisable)
-                  000053ce    0000000c                   : pwm.obj (.text:PWMGenEnable)
-                  000053da    0000000c                   : ssi.obj (.text:SSIDataGet)
-                  000053e6    0000000c     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_zero_init.obj (.text:decompress:ZI)
-                  000053f2    0000000c     tm4c123gh6pm_startup_ccs.obj (.text)
-                  000053fe    0000000a     driverlib.lib : adc.obj (.text:ADCIntClear)
-                  00005408    0000000a                   : pwm.obj (.text:PWMGenIntTrigEnable)
-                  00005412    0000000a                   : ssi.obj (.text:SSIDataPut)
-                  0000541c    0000000a                   : ssi.obj (.text:SSIDisable)
-                  00005426    0000000a                   : ssi.obj (.text:SSIEnable)
-                  00005430    0000000a                   : ssi.obj (.text:SSIIntDisable)
-                  0000543a    0000000a                   : ssi.obj (.text:SSIIntStatus)
-                  00005444    0000000a                   : uart.obj (.text:UARTIntDisable)
-                  0000544e    0000000a                   : uart.obj (.text:UARTIntStatus)
-                  00005458    0000000a     aeo1_drivers.lib : ssi_drv8711.obj (.text:_ZN4aeo114ssi_peripheral4OnRxEv)
-                  00005462    0000000a                      : ssi_drv8711.obj (.text:_ZN4aeo114ssi_peripheral4OnTxEv)
-                  0000546c    00000008     driverlib.lib : pwm.obj (.text:PWMIntEnable)
-                  00005474    00000008                   : ssi.obj (.text:SSIIntEnable)
-                  0000547c    00000008                   : uart.obj (.text:UARTIntEnable)
-                  00005484    00000008     rtsv7M4_T_le_v4SPD16_eabi.lib : delete.obj (.text)
-                  0000548c    00000006     driverlib.lib : gpio.obj (.text:GPIOPinWrite)
-                  00005492    00000006                   : pwm.obj (.text:PWMGenIntClear)
-                  00005498    00000006                   : sysctl.obj (.text:SysCtlDelay)
-                  0000549e    00000006                   : uart.obj (.text:UARTClockSourceSet)
-                  000054a4    00000006                   : uart.obj (.text:UARTFIFOLevelSet)
-                  000054aa    00000006     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_rle.obj (.text:decompress:rle24)
-                  000054b0    00000004     driverlib.lib : ssi.obj (.text:SSIIntClear)
-                  000054b4    00000004                   : uart.obj (.text:UARTIntClear)
-                  000054b8    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.obj (.text)
+                  00003eec    00000328     aeo1_drivers.lib : ssi_drv8711.obj (.text)
+                  00004214    000001f4                      : adc_potmeter.obj (.text)
+                  00004408    00000132     driverlib.lib : gpio.obj (.text:GPIOPadConfigSet)
+                  0000453a    00000002     rtsv7M4_T_le_v4SPD16_eabi.lib : i_div0.obj (.text)
+                  0000453c    00000110     driverlib.lib : sysctl.obj (.text:SysCtlClockGet)
+                  0000464c    000000f4                   : sysctl.obj (.text:SysCtlClockSet)
+                  00004740    000000f4     rtsv7M4_T_le_v4SPD16_eabi.lib : dtor_list.obj (.text)
+                  00004834    000000bc                                   : typeinfo_.obj (.text)
+                  000048f0    000000ac     tiva_utils.lib : cmdline.obj (.text)
+                  0000499c    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.obj (.text)
+                  00004a38    0000007a     driverlib.lib : adc.obj (.text:ADCSequenceStepConfigure)
+                  00004ab2    0000007a     rtsv7M4_T_le_v4SPD16_eabi.lib : memset_t2.obj (.text)
+                  00004b2c    0000006c                                   : autoinit.obj (.text)
+                  00004b98    0000006a                                   : copy_decompress_rle.obj (.text)
+                  00004c02    00000002     --HOLE-- [fill = 0]
+                  00004c04    00000068     driverlib.lib : interrupt.obj (.text:IntDisable)
+                  00004c6c    00000068                   : interrupt.obj (.text:IntEnable)
+                  00004cd4    00000056                   : gpio.obj (.text:GPIOIntTypeSet)
+                  00004d2a    00000056     rtsv7M4_T_le_v4SPD16_eabi.lib : ltoa.obj (.text)
+                  00004d80    00000050                                   : boot.obj (.text)
+                  00004dd0    0000004c                                   : cpy_tbl.obj (.text)
+                  00004e1c    00000048     driverlib.lib : gpio.obj (.text:GPIOPinConfigure)
+                  00004e64    00000046                   : uart.obj (.text:UARTConfigSetExpClk)
+                  00004eaa    00000002     --HOLE-- [fill = 0]
+                  00004eac    00000044     rtsv7M4_T_le_v4SPD16_eabi.lib : exit.obj (.text)
+                  00004ef0    00000040                                   : u_divt2.obj (.text)
+                  00004f30    0000003e     driverlib.lib : adc.obj (.text:ADCSequenceConfigure)
+                  00004f6e    0000003c                   : ssi.obj (.text:SSIConfigSetExpClk)
+                  00004faa    00000002     --HOLE-- [fill = 0]
+                  00004fac    00000038                   : sysctl.obj (.text:SysCtlPeripheralPresent)
+                  00004fe4    00000034                   : sysctl.obj (.text:SysCtlPeripheralEnable)
+                  00005018    00000034     rtsv7M4_T_le_v4SPD16_eabi.lib : strstr.obj (.text)
+                  0000504c    0000002e     driverlib.lib : adc.obj (.text:ADCIntStatus)
+                  0000507a    0000002a                   : gpio.obj (.text:GPIODirModeSet)
+                  000050a4    00000026     rtsv7M4_T_le_v4SPD16_eabi.lib : strncmp.obj (.text)
+                  000050ca    00000022     driverlib.lib : pwm.obj (.text:PWMGenConfigure)
+                  000050ec    00000020                   : uart.obj (.text:UARTDisable)
+                  0000510c    0000001e                   : adc.obj (.text:ADCSequenceDataGet)
+                  0000512a    0000001e                   : pwm.obj (.text:PWMPulseWidthSet)
+                  00005148    00000018                   : adc.obj (.text:ADCClockConfigSet)
+                  00005160    00000018                   : adc.obj (.text:ADCProcessorTrigger)
+                  00005178    00000018                   : gpio.obj (.text:GPIOPinTypeGPIOOutput)
+                  00005190    00000018     rtsv7M4_T_le_v4SPD16_eabi.lib : args_main.obj (.text)
+                  000051a8    00000018                                   : strcmp.obj (.text)
+                  000051c0    00000016                                   : strchr.obj (.text)
+                  000051d6    00000002     --HOLE-- [fill = 0]
+                  000051d8    00000014     driverlib.lib : fpu.obj (.text:FPUStackingEnable)
+                  000051ec    00000014                   : sysctl.obj (.text:SysCtlPWMClockSet)
+                  00005200    00000014                   : systick.obj (.text:SysTickEnable)
+                  00005214    00000014                   : systick.obj (.text:SysTickIntEnable)
+                  00005228    00000014                   : uart.obj (.text:UARTEnable)
+                  0000523c    00000014     rtsv7M4_T_le_v4SPD16_eabi.lib : _lock.obj (.text)
+                  00005250    00000014                                   : strlen.obj (.text)
+                  00005264    00000012     driverlib.lib : gpio.obj (.text:GPIOPinTypeADC)
+                  00005276    00000012                   : gpio.obj (.text:GPIOPinTypeGPIOInput)
+                  00005288    00000012                   : gpio.obj (.text:GPIOPinTypePWM)
+                  0000529a    00000012                   : gpio.obj (.text:GPIOPinTypeSSI)
+                  000052ac    00000012                   : gpio.obj (.text:GPIOPinTypeUART)
+                  000052be    00000012                   : pwm.obj (.text:PWMOutputState)
+                  000052d0    00000012                   : ssi.obj (.text:SSIDataGetNonBlocking)
+                  000052e2    00000010                   : adc.obj (.text:ADCIntEnable)
+                  000052f2    00000002     --HOLE-- [fill = 0]
+                  000052f4    00000010                   : fpu.obj (.text:FPUEnable)
+                  00005304    00000010                   : interrupt.obj (.text:IntMasterDisable)
+                  00005314    00000010                   : interrupt.obj (.text:IntMasterEnable)
+                  00005324    00000010                   : pwm.obj (.text:PWMGenPeriodSet)
+                  00005334    00000010                   : systick.obj (.text:SysTickPeriodSet)
+                  00005344    0000000e                   : adc.obj (.text:ADCHardwareOversampleConfigure)
+                  00005352    0000000e                   : adc.obj (.text:ADCIntDisable)
+                  00005360    0000000e                   : adc.obj (.text:ADCSequenceDisable)
+                  0000536e    0000000e                   : adc.obj (.text:ADCSequenceEnable)
+                  0000537c    0000000e                   : ssi.obj (.text:SSIDataPutNonBlocking)
+                  0000538a    0000000e                   : uart.obj (.text:UARTCharGetNonBlocking)
+                  00005398    0000000e                   : uart.obj (.text:UARTCharPutNonBlocking)
+                  000053a6    0000000e                   : uart.obj (.text:UARTCharsAvail)
+                  000053b4    0000000e                   : uart.obj (.text:UARTSpaceAvail)
+                  000053c2    0000000e     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_none.obj (.text:decompress:none)
+                  000053d0    0000000c     driverlib.lib : cpu.obj (.text:CPUcpsid)
+                  000053dc    0000000c                   : cpu.obj (.text:CPUcpsie)
+                  000053e8    0000000c                   : gpio.obj (.text:GPIOIntEnable)
+                  000053f4    0000000c                   : pwm.obj (.text:PWMGenDisable)
+                  00005400    0000000c                   : pwm.obj (.text:PWMGenEnable)
+                  0000540c    0000000c                   : ssi.obj (.text:SSIDataGet)
+                  00005418    0000000c     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_zero_init.obj (.text:decompress:ZI)
+                  00005424    0000000c     tm4c123gh6pm_startup_ccs.obj (.text)
+                  00005430    0000000a     driverlib.lib : adc.obj (.text:ADCIntClear)
+                  0000543a    0000000a                   : pwm.obj (.text:PWMGenIntTrigEnable)
+                  00005444    0000000a                   : ssi.obj (.text:SSIDataPut)
+                  0000544e    0000000a                   : ssi.obj (.text:SSIDisable)
+                  00005458    0000000a                   : ssi.obj (.text:SSIEnable)
+                  00005462    0000000a                   : ssi.obj (.text:SSIIntDisable)
+                  0000546c    0000000a                   : ssi.obj (.text:SSIIntStatus)
+                  00005476    0000000a                   : uart.obj (.text:UARTIntDisable)
+                  00005480    0000000a                   : uart.obj (.text:UARTIntStatus)
+                  0000548a    0000000a     aeo1_drivers.lib : ssi_drv8711.obj (.text:_ZN4aeo114ssi_peripheral4OnRxEv)
+                  00005494    0000000a                      : ssi_drv8711.obj (.text:_ZN4aeo114ssi_peripheral4OnTxEv)
+                  0000549e    00000008     driverlib.lib : pwm.obj (.text:PWMIntEnable)
+                  000054a6    00000008                   : ssi.obj (.text:SSIIntEnable)
+                  000054ae    00000008                   : uart.obj (.text:UARTIntEnable)
+                  000054b6    00000008     rtsv7M4_T_le_v4SPD16_eabi.lib : delete.obj (.text)
+                  000054be    00000006     driverlib.lib : gpio.obj (.text:GPIOIntClear)
+                  000054c4    00000006                   : gpio.obj (.text:GPIOPinWrite)
+                  000054ca    00000006                   : pwm.obj (.text:PWMGenIntClear)
+                  000054d0    00000006                   : sysctl.obj (.text:SysCtlDelay)
+                  000054d6    00000006                   : uart.obj (.text:UARTClockSourceSet)
+                  000054dc    00000006                   : uart.obj (.text:UARTFIFOLevelSet)
+                  000054e2    00000006     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_rle.obj (.text:decompress:rle24)
+                  000054e8    00000004     driverlib.lib : ssi.obj (.text:SSIIntClear)
+                  000054ec    00000004                   : uart.obj (.text:UARTIntClear)
+                  000054f0    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.obj (.text)
 
-.const     0    000054bc    00000fd8     
-                  000054bc    0000054a     drv8711_registers.obj (.const:.string)
-                  00005a06    00000002     rtsv7M4_T_le_v4SPD16_eabi.lib : typeinfo_.obj (.const:.typeinfo:_ZTSe)
-                  00005a08    00000294     drv8711_registers.obj (.const:DRV8711_Fields)
-                  00005c9c    000001bc     main.obj (.const:.string)
-                  00005e58    00000090     driverlib.lib : gpio.obj (.const:g_pui32GPIOBaseAddrs)
-                  00005ee8    00000080     esp8266.obj (.const:_ZN4aeo112InitCommandsE)
-                  00005f68    00000076     esp8266.obj (.const:.string)
-                  00005fde    00000002     --HOLE-- [fill = 0]
-                  00005fe0    00000070     driverlib.lib : interrupt.obj (.const)
-                  00006050    0000006c                   : sysctl.obj (.const:g_pui32Xtals)
-                  000060bc    00000048     drv8711.obj (.const:$P$T0$1)
-                  00006104    00000030     drv8711_registers.obj (.const:DRV8711_Masks)
-                  00006134    00000030     tiva_utils.lib : ustdlib.obj (.const:g_psDaysToMonth)
-                  00006164    00000028     rtsv7M4_T_le_v4SPD16_eabi.lib : typeinfo_.obj (.const:.typeinfo:_ZTSN10__cxxabiv123__fundamental_type_infoE)
-                  0000618c    00000028     aeo1_drivers.lib : ssi_drv8711.obj (.const:_ZTVN4aeo111ssi_drv8711E)
-                  000061b4    00000028                      : ssi_peripheral.obj (.const:_ZTVN4aeo114ssi_peripheralE)
-                  000061dc    00000028     tiva_utils.lib : uartstdio.obj (.const)
-                  00006204    00000025     rtsv7M4_T_le_v4SPD16_eabi.lib : typeinfo_.obj (.const:.typeinfo:_ZTSN10__cxxabiv120__si_class_type_infoE)
-                  00006229    00000024                                   : typeinfo_.obj (.const:.typeinfo:_ZTSN10__cxxabiv119__pointer_type_infoE)
-                  0000624d    00000022                                   : typeinfo_.obj (.const:.typeinfo:_ZTSN10__cxxabiv117__class_type_infoE)
-                  0000626f    00000022                                   : typeinfo_.obj (.const:.typeinfo:_ZTSN10__cxxabiv117__pbase_type_infoE)
-                  00006291    00000003     --HOLE-- [fill = 0]
-                  00006294    00000020     drv8711.obj (.const)
-                  000062b4    0000001c     tiva_utils.lib : ustdlib.obj (.const)
-                  000062d0    00000018     aeo1_drivers.lib : ssi_peripheral.obj (.const:.typeinfo:_ZTSN4aeo114ssi_peripheralE)
-                  000062e8    00000016                      : adc_potmeter.obj (.const:.typeinfo:_ZTSN4aeo112adc_potmeterE)
-                  000062fe    00000015                      : pwm_stepper.obj (.const:.typeinfo:_ZTSN4aeo111pwm_stepperE)
-                  00006313    00000015                      : ssi_drv8711.obj (.const:.typeinfo:_ZTSN4aeo111ssi_drv8711E)
-                  00006328    00000012     tiva_utils.lib : uartstdio.obj (.const:.string)
-                  0000633a    00000002     --HOLE-- [fill = 0]
-                  0000633c    00000012                    : ustdlib.obj (.const:.string)
-                  0000634e    00000002     --HOLE-- [fill = 0]
-                  00006350    00000010     rtsv7M4_T_le_v4SPD16_eabi.lib : typeinfo_.obj (.const:.typeinfo:_ZTIPKe)
-                  00006360    00000010     drv8711.obj (.const:.typeinfo:_ZTSN4aeo17drv8711E)
-                  00006370    00000010     esp8266.obj (.const:.typeinfo:_ZTSN4aeo17esp8266E)
-                  00006380    00000010     rtsv7M4_T_le_v4SPD16_eabi.lib : typeinfo_.obj (.const:_ZTVN10__cxxabiv117__class_type_infoE)
-                  00006390    00000010                                   : typeinfo_.obj (.const:_ZTVN10__cxxabiv119__pointer_type_infoE)
-                  000063a0    00000010                                   : typeinfo_.obj (.const:_ZTVN10__cxxabiv120__si_class_type_infoE)
-                  000063b0    00000010                                   : typeinfo_.obj (.const:_ZTVN10__cxxabiv123__fundamental_type_infoE)
-                  000063c0    00000010     aeo1_drivers.lib : pwm_stepper.obj (.const:_ZTVN4aeo111pwm_stepperE)
-                  000063d0    00000010                      : adc_potmeter.obj (.const:_ZTVN4aeo112adc_potmeterE)
-                  000063e0    00000010     drv8711.obj (.const:_ZTVN4aeo17drv8711E)
-                  000063f0    00000010     esp8266.obj (.const:_ZTVN4aeo17esp8266E)
-                  00006400    0000000d     rtsv7M4_T_le_v4SPD16_eabi.lib : typeinfo_.obj (.const:.typeinfo:_ZTSSt9type_info)
-                  0000640d    00000003     --HOLE-- [fill = 0]
-                  00006410    0000000c                                   : typeinfo_.obj (.const:.typeinfo:_ZTIN10__cxxabiv117__class_type_infoE)
-                  0000641c    0000000c                                   : typeinfo_.obj (.const:.typeinfo:_ZTIN10__cxxabiv117__pbase_type_infoE)
-                  00006428    0000000c                                   : typeinfo_.obj (.const:.typeinfo:_ZTIN10__cxxabiv119__pointer_type_infoE)
-                  00006434    0000000c                                   : typeinfo_.obj (.const:.typeinfo:_ZTIN10__cxxabiv120__si_class_type_infoE)
-                  00006440    0000000c                                   : typeinfo_.obj (.const:.typeinfo:_ZTIN10__cxxabiv123__fundamental_type_infoE)
-                  0000644c    0000000c     aeo1_drivers.lib : ssi_drv8711.obj (.const:.typeinfo:_ZTIN4aeo111ssi_drv8711E)
-                  00006458    00000008                      : pwm_stepper.obj (.const:.typeinfo:_ZTIN4aeo111pwm_stepperE)
-                  00006460    00000008                      : adc_potmeter.obj (.const:.typeinfo:_ZTIN4aeo112adc_potmeterE)
-                  00006468    00000008                      : ssi_peripheral.obj (.const:.typeinfo:_ZTIN4aeo114ssi_peripheralE)
-                  00006470    00000008     drv8711.obj (.const:.typeinfo:_ZTIN4aeo17drv8711E)
-                  00006478    00000008     esp8266.obj (.const:.typeinfo:_ZTIN4aeo17esp8266E)
-                  00006480    00000008     rtsv7M4_T_le_v4SPD16_eabi.lib : typeinfo_.obj (.const:.typeinfo:_ZTISt9type_info)
-                  00006488    00000008                                   : typeinfo_.obj (.const:.typeinfo:_ZTIe)
-                  00006490    00000004                                   : typeinfo_.obj (.const:.typeinfo:_ZTSPKe)
+.const     0    000054f4    00000fd8     
+                  000054f4    0000054a     drv8711_registers.obj (.const:.string)
+                  00005a3e    00000002     rtsv7M4_T_le_v4SPD16_eabi.lib : typeinfo_.obj (.const:.typeinfo:_ZTSe)
+                  00005a40    00000294     drv8711_registers.obj (.const:DRV8711_Fields)
+                  00005cd4    000001bc     main.obj (.const:.string)
+                  00005e90    00000090     driverlib.lib : gpio.obj (.const:g_pui32GPIOBaseAddrs)
+                  00005f20    00000080     esp8266.obj (.const:_ZN4aeo112InitCommandsE)
+                  00005fa0    00000076     esp8266.obj (.const:.string)
+                  00006016    00000002     --HOLE-- [fill = 0]
+                  00006018    00000070     driverlib.lib : interrupt.obj (.const)
+                  00006088    0000006c                   : sysctl.obj (.const:g_pui32Xtals)
+                  000060f4    00000048     drv8711.obj (.const:$P$T0$1)
+                  0000613c    00000030     drv8711_registers.obj (.const:DRV8711_Masks)
+                  0000616c    00000030     tiva_utils.lib : ustdlib.obj (.const:g_psDaysToMonth)
+                  0000619c    00000028     rtsv7M4_T_le_v4SPD16_eabi.lib : typeinfo_.obj (.const:.typeinfo:_ZTSN10__cxxabiv123__fundamental_type_infoE)
+                  000061c4    00000028     aeo1_drivers.lib : ssi_drv8711.obj (.const:_ZTVN4aeo111ssi_drv8711E)
+                  000061ec    00000028                      : ssi_peripheral.obj (.const:_ZTVN4aeo114ssi_peripheralE)
+                  00006214    00000028     tiva_utils.lib : uartstdio.obj (.const)
+                  0000623c    00000025     rtsv7M4_T_le_v4SPD16_eabi.lib : typeinfo_.obj (.const:.typeinfo:_ZTSN10__cxxabiv120__si_class_type_infoE)
+                  00006261    00000024                                   : typeinfo_.obj (.const:.typeinfo:_ZTSN10__cxxabiv119__pointer_type_infoE)
+                  00006285    00000022                                   : typeinfo_.obj (.const:.typeinfo:_ZTSN10__cxxabiv117__class_type_infoE)
+                  000062a7    00000022                                   : typeinfo_.obj (.const:.typeinfo:_ZTSN10__cxxabiv117__pbase_type_infoE)
+                  000062c9    00000003     --HOLE-- [fill = 0]
+                  000062cc    00000020     drv8711.obj (.const)
+                  000062ec    0000001c     tiva_utils.lib : ustdlib.obj (.const)
+                  00006308    00000018     aeo1_drivers.lib : ssi_peripheral.obj (.const:.typeinfo:_ZTSN4aeo114ssi_peripheralE)
+                  00006320    00000016                      : adc_potmeter.obj (.const:.typeinfo:_ZTSN4aeo112adc_potmeterE)
+                  00006336    00000015                      : pwm_stepper.obj (.const:.typeinfo:_ZTSN4aeo111pwm_stepperE)
+                  0000634b    00000015                      : ssi_drv8711.obj (.const:.typeinfo:_ZTSN4aeo111ssi_drv8711E)
+                  00006360    00000012     tiva_utils.lib : uartstdio.obj (.const:.string)
+                  00006372    00000002     --HOLE-- [fill = 0]
+                  00006374    00000012                    : ustdlib.obj (.const:.string)
+                  00006386    00000002     --HOLE-- [fill = 0]
+                  00006388    00000010     rtsv7M4_T_le_v4SPD16_eabi.lib : typeinfo_.obj (.const:.typeinfo:_ZTIPKe)
+                  00006398    00000010     drv8711.obj (.const:.typeinfo:_ZTSN4aeo17drv8711E)
+                  000063a8    00000010     esp8266.obj (.const:.typeinfo:_ZTSN4aeo17esp8266E)
+                  000063b8    00000010     rtsv7M4_T_le_v4SPD16_eabi.lib : typeinfo_.obj (.const:_ZTVN10__cxxabiv117__class_type_infoE)
+                  000063c8    00000010                                   : typeinfo_.obj (.const:_ZTVN10__cxxabiv119__pointer_type_infoE)
+                  000063d8    00000010                                   : typeinfo_.obj (.const:_ZTVN10__cxxabiv120__si_class_type_infoE)
+                  000063e8    00000010                                   : typeinfo_.obj (.const:_ZTVN10__cxxabiv123__fundamental_type_infoE)
+                  000063f8    00000010     aeo1_drivers.lib : pwm_stepper.obj (.const:_ZTVN4aeo111pwm_stepperE)
+                  00006408    00000010                      : adc_potmeter.obj (.const:_ZTVN4aeo112adc_potmeterE)
+                  00006418    00000010     drv8711.obj (.const:_ZTVN4aeo17drv8711E)
+                  00006428    00000010     esp8266.obj (.const:_ZTVN4aeo17esp8266E)
+                  00006438    0000000d     rtsv7M4_T_le_v4SPD16_eabi.lib : typeinfo_.obj (.const:.typeinfo:_ZTSSt9type_info)
+                  00006445    00000003     --HOLE-- [fill = 0]
+                  00006448    0000000c                                   : typeinfo_.obj (.const:.typeinfo:_ZTIN10__cxxabiv117__class_type_infoE)
+                  00006454    0000000c                                   : typeinfo_.obj (.const:.typeinfo:_ZTIN10__cxxabiv117__pbase_type_infoE)
+                  00006460    0000000c                                   : typeinfo_.obj (.const:.typeinfo:_ZTIN10__cxxabiv119__pointer_type_infoE)
+                  0000646c    0000000c                                   : typeinfo_.obj (.const:.typeinfo:_ZTIN10__cxxabiv120__si_class_type_infoE)
+                  00006478    0000000c                                   : typeinfo_.obj (.const:.typeinfo:_ZTIN10__cxxabiv123__fundamental_type_infoE)
+                  00006484    0000000c     aeo1_drivers.lib : ssi_drv8711.obj (.const:.typeinfo:_ZTIN4aeo111ssi_drv8711E)
+                  00006490    00000008                      : pwm_stepper.obj (.const:.typeinfo:_ZTIN4aeo111pwm_stepperE)
+                  00006498    00000008                      : adc_potmeter.obj (.const:.typeinfo:_ZTIN4aeo112adc_potmeterE)
+                  000064a0    00000008                      : ssi_peripheral.obj (.const:.typeinfo:_ZTIN4aeo114ssi_peripheralE)
+                  000064a8    00000008     drv8711.obj (.const:.typeinfo:_ZTIN4aeo17drv8711E)
+                  000064b0    00000008     esp8266.obj (.const:.typeinfo:_ZTIN4aeo17esp8266E)
+                  000064b8    00000008     rtsv7M4_T_le_v4SPD16_eabi.lib : typeinfo_.obj (.const:.typeinfo:_ZTISt9type_info)
+                  000064c0    00000008                                   : typeinfo_.obj (.const:.typeinfo:_ZTIe)
+                  000064c8    00000004                                   : typeinfo_.obj (.const:.typeinfo:_ZTSPKe)
 
 .init_array 
-*          0    00006494    00000004     
-                  00006494    00000004     main.obj (.init_array)
+*          0    000064cc    00000004     
+                  000064cc    00000004     main.obj (.init_array)
 
-.cinit     0    00006498    000001b0     
-                  00006498    00000188     (.cinit..data.load) [load image, compression = rle]
-                  00006620    0000000c     (__TI_handler_table)
-                  0000662c    00000004     --HOLE-- [fill = 0]
-                  00006630    00000008     (.cinit..bss.load) [load image, compression = zero_init]
-                  00006638    00000010     (__TI_cinit_table)
+.cinit     0    000064d0    000001b0     
+                  000064d0    00000188     (.cinit..data.load) [load image, compression = rle]
+                  00006658    0000000c     (__TI_handler_table)
+                  00006664    00000004     --HOLE-- [fill = 0]
+                  00006668    00000008     (.cinit..bss.load) [load image, compression = zero_init]
+                  00006670    00000010     (__TI_cinit_table)
 
-.bss       0    20000000    000007fd     UNINITIALIZED
+.bss       0    20000000    00000805     UNINITIALIZED
                   20000000    00000400     tiva_utils.lib : uartstdio.obj (.bss:g_pcUARTTxBuffer)
                   20000400    00000218     main.obj (.bss:g_oEsp8266)
-                  20000618    000000b4     main.obj (.bss:g_oDrv8711)
-                  200006cc    00000080     tiva_utils.lib : uartstdio.obj (.bss:g_pcUARTRxBuffer)
-                  2000074c    00000080     main.obj (.bss:g_zInput)
-                  200007cc    00000024     tiva_utils.lib : cmdline.obj (.bss:g_ppcArgv)
-                  200007f0    00000004     (.common:_ZSt16__dummy_typeinfo)
-                  200007f4    00000004     (.common:__dso_handle)
-                  200007f8    00000004     (.common:g_ui32PortNum)
-                  200007fc    00000001     (.common:g_bDisableEcho)
+                  20000618    000000bc     main.obj (.bss:g_oDrv8711)
+                  200006d4    00000080     tiva_utils.lib : uartstdio.obj (.bss:g_pcUARTRxBuffer)
+                  20000754    00000080     main.obj (.bss:g_zInput)
+                  200007d4    00000024     tiva_utils.lib : cmdline.obj (.bss:g_ppcArgv)
+                  200007f8    00000004     (.common:_ZSt16__dummy_typeinfo)
+                  200007fc    00000004     (.common:__dso_handle)
+                  20000800    00000004     (.common:g_ui32PortNum)
+                  20000804    00000001     (.common:g_bDisableEcho)
 
 .TI.noinit 
 *          0    20000000    00000000     UNINITIALIZED
 
-.stack     0    20000800    00000200     UNINITIALIZED
-                  20000800    00000200     --HOLE--
+.stack     0    20000808    00000200     UNINITIALIZED
+                  20000808    00000200     --HOLE--
 
-.data      0    20000a00    000001e4     UNINITIALIZED
-                  20000a00    000000a8     main.obj (.data:g_psCmdTable)
-                  20000aa8    00000034     aeo1_drivers.lib : ssi_peripheral.obj (.data:_ZN4aeo118SSI0_SpecificationE)
-                  20000adc    00000034                      : ssi_peripheral.obj (.data:_ZN4aeo118SSI1_SpecificationE)
-                  20000b10    00000034                      : ssi_peripheral.obj (.data:_ZN4aeo118SSI2_SpecificationE)
-                  20000b44    00000034                      : ssi_peripheral.obj (.data:_ZN4aeo118SSI3_SpecificationE)
-                  20000b78    00000015     tiva_utils.lib : uartstdio.obj (.data)
-                  20000b8d    00000001     main.obj (.data)
-                  20000b8e    00000002     --HOLE--
-                  20000b90    00000010     aeo1_drivers.lib : adc_potmeter.obj (.data)
-                  20000ba0    00000010                      : ssi_peripheral.obj (.data)
-                  20000bb0    0000000c     rtsv7M4_T_le_v4SPD16_eabi.lib : memory.obj (.data)
-                  20000bbc    00000008                                   : _lock.obj (.data)
-                  20000bc4    00000008                                   : exit.obj (.data)
-                  20000bcc    00000004     aeo1_drivers.lib : pwm_stepper.obj (.data)
-                  20000bd0    00000004                      : ssi_drv8711.obj (.data)
-                  20000bd4    00000004     esp8266.obj (.data)
-                  20000bd8    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : dtor_list.obj (.data)
-                  20000bdc    00000004                                   : stkdepth_vars.obj (.data)
-                  20000be0    00000004     tiva_utils.lib : ustdlib.obj (.data)
+.data      0    20000a08    000001e4     UNINITIALIZED
+                  20000a08    000000a8     main.obj (.data:g_psCmdTable)
+                  20000ab0    00000034     aeo1_drivers.lib : ssi_peripheral.obj (.data:_ZN4aeo118SSI0_SpecificationE)
+                  20000ae4    00000034                      : ssi_peripheral.obj (.data:_ZN4aeo118SSI1_SpecificationE)
+                  20000b18    00000034                      : ssi_peripheral.obj (.data:_ZN4aeo118SSI2_SpecificationE)
+                  20000b4c    00000034                      : ssi_peripheral.obj (.data:_ZN4aeo118SSI3_SpecificationE)
+                  20000b80    00000015     tiva_utils.lib : uartstdio.obj (.data)
+                  20000b95    00000001     main.obj (.data)
+                  20000b96    00000002     --HOLE--
+                  20000b98    00000010     aeo1_drivers.lib : adc_potmeter.obj (.data)
+                  20000ba8    00000010                      : ssi_peripheral.obj (.data)
+                  20000bb8    0000000c     rtsv7M4_T_le_v4SPD16_eabi.lib : memory.obj (.data)
+                  20000bc4    00000008                                   : _lock.obj (.data)
+                  20000bcc    00000008                                   : exit.obj (.data)
+                  20000bd4    00000004     aeo1_drivers.lib : pwm_stepper.obj (.data)
+                  20000bd8    00000004                      : ssi_drv8711.obj (.data)
+                  20000bdc    00000004     esp8266.obj (.data)
+                  20000be0    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : dtor_list.obj (.data)
+                  20000be4    00000004                                   : stkdepth_vars.obj (.data)
+                  20000be8    00000004     tiva_utils.lib : ustdlib.obj (.data)
 
 .TI.persistent 
-*          0    20000a00    00000000     UNINITIALIZED
+*          0    20000a08    00000000     UNINITIALIZED
 
-.sysmem    0    20000be8    00000008     UNINITIALIZED
-                  20000be8    00000008     rtsv7M4_T_le_v4SPD16_eabi.lib : memory.obj (.sysmem)
+.sysmem    0    20000bf0    00000008     UNINITIALIZED
+                  20000bf0    00000008     rtsv7M4_T_le_v4SPD16_eabi.lib : memory.obj (.sysmem)
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 00006638 records: 2, size/record: 8, table size: 16
-	.data: load addr=00006498, load size=00000188 bytes, run addr=20000a00, run size=000001e4 bytes, compression=rle
-	.bss: load addr=00006630, load size=00000008 bytes, run addr=20000000, run size=000007fd bytes, compression=zero_init
+__TI_cinit_table @ 00006670 records: 2, size/record: 8, table size: 16
+	.data: load addr=000064d0, load size=00000188 bytes, run addr=20000a08, run size=000001e4 bytes, compression=rle
+	.bss: load addr=00006668, load size=00000008 bytes, run addr=20000000, run size=00000805 bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 00006620 records: 3, size/record: 4, table size: 12
+__TI_handler_table @ 00006658 records: 3, size/record: 4, table size: 12
 	index: 0, handler: __TI_decompress_rle24
 	index: 1, handler: __TI_decompress_none
 	index: 2, handler: __TI_zero_init
@@ -299,42 +299,42 @@ GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name
 
 address   name                                              
 -------   ----                                              
-00005109  ADCClockConfigSet                                 
-00005305  ADCHardwareOversampleConfigure                    
-000053ff  ADCIntClear                                       
-00005313  ADCIntDisable                                     
-000052a3  ADCIntEnable                                      
-0000500d  ADCIntStatus                                      
-00005121  ADCProcessorTrigger                               
-00004ef1  ADCSequenceConfigure                              
-000050cd  ADCSequenceDataGet                                
-00005321  ADCSequenceDisable                                
-0000532f  ADCSequenceEnable                                 
-000049f9  ADCSequenceStepConfigure                          
-00004e6d  C$$EXIT                                           
-0000539f  CPUcpsid                                          
-000053ab  CPUcpsie                                          
-000048b1  CmdLineProcess                                    
-000052b5  FPUEnable                                         
-00005199  FPUStackingEnable                                 
-0000503b  GPIODirModeSet                                    
-0000533d  GPIOIntDisable                                    
-000053b7  GPIOIntEnable                                     
-00004c95  GPIOIntTypeSet                                    
-000043c9  GPIOPadConfigSet                                  
-00004ddd  GPIOPinConfigure                                  
-00005225  GPIOPinTypeADC                                    
-00005237  GPIOPinTypeGPIOInput                              
-00005139  GPIOPinTypeGPIOOutput                             
-00005249  GPIOPinTypePWM                                    
-0000525b  GPIOPinTypeSSI                                    
-0000526d  GPIOPinTypeUART                                   
-0000548d  GPIOPinWrite                                      
-00004bc5  IntDisable                                        
-00004c2d  IntEnable                                         
-000052c5  IntMasterDisable                                  
-000052d5  IntMasterEnable                                   
-000041d5  OnADCInterrupt                                    
+00005149  ADCClockConfigSet                                 
+00005345  ADCHardwareOversampleConfigure                    
+00005431  ADCIntClear                                       
+00005353  ADCIntDisable                                     
+000052e3  ADCIntEnable                                      
+0000504d  ADCIntStatus                                      
+00005161  ADCProcessorTrigger                               
+00004f31  ADCSequenceConfigure                              
+0000510d  ADCSequenceDataGet                                
+00005361  ADCSequenceDisable                                
+0000536f  ADCSequenceEnable                                 
+00004a39  ADCSequenceStepConfigure                          
+00004ead  C$$EXIT                                           
+000053d1  CPUcpsid                                          
+000053dd  CPUcpsie                                          
+000048f1  CmdLineProcess                                    
+000052f5  FPUEnable                                         
+000051d9  FPUStackingEnable                                 
+0000507b  GPIODirModeSet                                    
+000054bf  GPIOIntClear                                      
+000053e9  GPIOIntEnable                                     
+00004cd5  GPIOIntTypeSet                                    
+00004409  GPIOPadConfigSet                                  
+00004e1d  GPIOPinConfigure                                  
+00005265  GPIOPinTypeADC                                    
+00005277  GPIOPinTypeGPIOInput                              
+00005179  GPIOPinTypeGPIOOutput                             
+00005289  GPIOPinTypePWM                                    
+0000529b  GPIOPinTypeSSI                                    
+000052ad  GPIOPinTypeUART                                   
+000054c5  GPIOPinWrite                                      
+00004c05  IntDisable                                        
+00004c6d  IntEnable                                         
+00005305  IntMasterDisable                                  
+00005315  IntMasterEnable                                   
+00004215  OnADCInterrupt                                    
 00003eed  OnGPIOBInterrupt                                  
 00003f09  OnGPIOEInterrupt                                  
 0000321d  OnPWM1Gen1Interrupt                               
@@ -342,57 +342,57 @@ address   name
 00002cdf  OnSSI1Interrupt                                   
 00002cf9  OnSSI2Interrupt                                   
 00002d13  OnSSI3Interrupt                                   
-0000508b  PWMGenConfigure                                   
-000053c3  PWMGenDisable                                     
-000053cf  PWMGenEnable                                      
-00005493  PWMGenIntClear                                    
-00005409  PWMGenIntTrigEnable                               
-000052e5  PWMGenPeriodSet                                   
-0000546d  PWMIntEnable                                      
-0000527f  PWMOutputState                                    
-000050eb  PWMPulseWidthSet                                  
-000053f3  ResetISR                                          
-00006494  SHT$$INIT_ARRAY$$Base                             
-00006498  SHT$$INIT_ARRAY$$Limit                            
-00004f2f  SSIConfigSetExpClk                                
-000053db  SSIDataGet                                        
-00005291  SSIDataGetNonBlocking                             
-00005413  SSIDataPut                                        
-0000534b  SSIDataPutNonBlocking                             
-0000541d  SSIDisable                                        
-00005427  SSIEnable                                         
-000054b1  SSIIntClear                                       
-00005431  SSIIntDisable                                     
-00005475  SSIIntEnable                                      
-0000543b  SSIIntStatus                                      
-000044fd  SysCtlClockGet                                    
-0000460d  SysCtlClockSet                                    
-00005499  SysCtlDelay                                       
-000051ad  SysCtlPWMClockSet                                 
-00004fa5  SysCtlPeripheralEnable                            
-00004f6d  SysCtlPeripheralPresent                           
-000051c1  SysTickEnable                                     
-000051d5  SysTickIntEnable                                  
+000050cb  PWMGenConfigure                                   
+000053f5  PWMGenDisable                                     
+00005401  PWMGenEnable                                      
+000054cb  PWMGenIntClear                                    
+0000543b  PWMGenIntTrigEnable                               
+00005325  PWMGenPeriodSet                                   
+0000549f  PWMIntEnable                                      
+000052bf  PWMOutputState                                    
+0000512b  PWMPulseWidthSet                                  
+00005425  ResetISR                                          
+000064cc  SHT$$INIT_ARRAY$$Base                             
+000064d0  SHT$$INIT_ARRAY$$Limit                            
+00004f6f  SSIConfigSetExpClk                                
+0000540d  SSIDataGet                                        
+000052d1  SSIDataGetNonBlocking                             
+00005445  SSIDataPut                                        
+0000537d  SSIDataPutNonBlocking                             
+0000544f  SSIDisable                                        
+00005459  SSIEnable                                         
+000054e9  SSIIntClear                                       
+00005463  SSIIntDisable                                     
+000054a7  SSIIntEnable                                      
+0000546d  SSIIntStatus                                      
+0000453d  SysCtlClockGet                                    
+0000464d  SysCtlClockSet                                    
+000054d1  SysCtlDelay                                       
+000051ed  SysCtlPWMClockSet                                 
+00004fe5  SysCtlPeripheralEnable                            
+00004fad  SysCtlPeripheralPresent                           
+00005201  SysTickEnable                                     
+00005215  SysTickIntEnable                                  
 00002919  SysTickIntHandler                                 
-000052f5  SysTickPeriodSet                                  
-00005359  UARTCharGetNonBlocking                            
-00005367  UARTCharPutNonBlocking                            
-00005375  UARTCharsAvail                                    
-0000549f  UARTClockSourceSet                                
-00004e25  UARTConfigSetExpClk                               
-000050ad  UARTDisable                                       
+00005335  SysTickPeriodSet                                  
+0000538b  UARTCharGetNonBlocking                            
+00005399  UARTCharPutNonBlocking                            
+000053a7  UARTCharsAvail                                    
+000054d7  UARTClockSourceSet                                
+00004e65  UARTConfigSetExpClk                               
+000050ed  UARTDisable                                       
 000015c9  UARTEchoSet                                       
-000051e9  UARTEnable                                        
-000054a5  UARTFIFOLevelSet                                  
+00005229  UARTEnable                                        
+000054dd  UARTFIFOLevelSet                                  
 00001573  UARTFlushRx                                       
 00001593  UARTFlushTx                                       
-000054b5  UARTIntClear                                      
-00005445  UARTIntDisable                                    
-0000547d  UARTIntEnable                                     
-0000544f  UARTIntStatus                                     
+000054ed  UARTIntClear                                      
+00005477  UARTIntDisable                                    
+000054af  UARTIntEnable                                     
+00005481  UARTIntStatus                                     
 00001519  UARTPeek                                          
 000014f7  UARTRxBytesAvail                                  
-00005383  UARTSpaceAvail                                    
+000053b5  UARTSpaceAvail                                    
 00000fdd  UARTStdioConfig                                   
 000015f5  UARTStdioIntHandler                               
 00001505  UARTTxBytesFree                                   
@@ -420,36 +420,36 @@ address   name
 0000285b  _Z9CMD_noerriPPc                                  
 0000284d  _Z9CMD_resetiPPc                                  
 000027ff  _Z9CMD_sleepiPPc                                  
-000048a1  _ZN10__cxxabiv116__enum_type_infoD0Ev             
-0000489f  _ZN10__cxxabiv116__enum_type_infoD1Ev             
-0000489f  _ZN10__cxxabiv116__enum_type_infoD2Ev             
-00004897  _ZN10__cxxabiv117__array_type_infoD0Ev            
-00004895  _ZN10__cxxabiv117__array_type_infoD1Ev            
-00004895  _ZN10__cxxabiv117__array_type_infoD2Ev            
-0000488d  _ZN10__cxxabiv117__class_type_infoD0Ev            
-0000488b  _ZN10__cxxabiv117__class_type_infoD1Ev            
-0000488b  _ZN10__cxxabiv117__class_type_infoD2Ev            
-00004883  _ZN10__cxxabiv117__pbase_type_infoD0Ev            
-00004881  _ZN10__cxxabiv117__pbase_type_infoD1Ev            
-00004881  _ZN10__cxxabiv117__pbase_type_infoD2Ev            
-00004879  _ZN10__cxxabiv119__pointer_type_infoD0Ev          
-00004877  _ZN10__cxxabiv119__pointer_type_infoD1Ev          
-00004877  _ZN10__cxxabiv119__pointer_type_infoD2Ev          
-0000486f  _ZN10__cxxabiv120__function_type_infoD0Ev         
-0000486d  _ZN10__cxxabiv120__function_type_infoD1Ev         
-0000486d  _ZN10__cxxabiv120__function_type_infoD2Ev         
-00004865  _ZN10__cxxabiv120__si_class_type_infoD0Ev         
-00004863  _ZN10__cxxabiv120__si_class_type_infoD1Ev         
-00004863  _ZN10__cxxabiv120__si_class_type_infoD2Ev         
-0000485b  _ZN10__cxxabiv121__vmi_class_type_infoD0Ev        
-00004859  _ZN10__cxxabiv121__vmi_class_type_infoD1Ev        
-00004859  _ZN10__cxxabiv121__vmi_class_type_infoD2Ev        
-00004851  _ZN10__cxxabiv123__fundamental_type_infoD0Ev      
-0000484f  _ZN10__cxxabiv123__fundamental_type_infoD1Ev      
-0000484f  _ZN10__cxxabiv123__fundamental_type_infoD2Ev      
-00004847  _ZN10__cxxabiv129__pointer_to_member_type_infoD0Ev
-00004845  _ZN10__cxxabiv129__pointer_to_member_type_infoD1Ev
-00004845  _ZN10__cxxabiv129__pointer_to_member_type_infoD2Ev
+000048e1  _ZN10__cxxabiv116__enum_type_infoD0Ev             
+000048df  _ZN10__cxxabiv116__enum_type_infoD1Ev             
+000048df  _ZN10__cxxabiv116__enum_type_infoD2Ev             
+000048d7  _ZN10__cxxabiv117__array_type_infoD0Ev            
+000048d5  _ZN10__cxxabiv117__array_type_infoD1Ev            
+000048d5  _ZN10__cxxabiv117__array_type_infoD2Ev            
+000048cd  _ZN10__cxxabiv117__class_type_infoD0Ev            
+000048cb  _ZN10__cxxabiv117__class_type_infoD1Ev            
+000048cb  _ZN10__cxxabiv117__class_type_infoD2Ev            
+000048c3  _ZN10__cxxabiv117__pbase_type_infoD0Ev            
+000048c1  _ZN10__cxxabiv117__pbase_type_infoD1Ev            
+000048c1  _ZN10__cxxabiv117__pbase_type_infoD2Ev            
+000048b9  _ZN10__cxxabiv119__pointer_type_infoD0Ev          
+000048b7  _ZN10__cxxabiv119__pointer_type_infoD1Ev          
+000048b7  _ZN10__cxxabiv119__pointer_type_infoD2Ev          
+000048af  _ZN10__cxxabiv120__function_type_infoD0Ev         
+000048ad  _ZN10__cxxabiv120__function_type_infoD1Ev         
+000048ad  _ZN10__cxxabiv120__function_type_infoD2Ev         
+000048a5  _ZN10__cxxabiv120__si_class_type_infoD0Ev         
+000048a3  _ZN10__cxxabiv120__si_class_type_infoD1Ev         
+000048a3  _ZN10__cxxabiv120__si_class_type_infoD2Ev         
+0000489b  _ZN10__cxxabiv121__vmi_class_type_infoD0Ev        
+00004899  _ZN10__cxxabiv121__vmi_class_type_infoD1Ev        
+00004899  _ZN10__cxxabiv121__vmi_class_type_infoD2Ev        
+00004891  _ZN10__cxxabiv123__fundamental_type_infoD0Ev      
+0000488f  _ZN10__cxxabiv123__fundamental_type_infoD1Ev      
+0000488f  _ZN10__cxxabiv123__fundamental_type_infoD2Ev      
+00004887  _ZN10__cxxabiv129__pointer_to_member_type_infoD0Ev
+00004885  _ZN10__cxxabiv129__pointer_to_member_type_infoD1Ev
+00004885  _ZN10__cxxabiv129__pointer_to_member_type_infoD2Ev
 000032ad  _ZN4aeo111pwm_stepper10InitializeEv               
 00003411  _ZN4aeo111pwm_stepper11OnInterruptEv              
 00003527  _ZN4aeo111pwm_stepper3GetEPKc                     
@@ -464,35 +464,35 @@ address   name
 00003297  _ZN4aeo111pwm_stepperD0Ev                         
 0000328b  _ZN4aeo111pwm_stepperD1Ev                         
 0000328b  _ZN4aeo111pwm_stepperD2Ev                         
-00003f6f  _ZN4aeo111ssi_drv871110InitializeEv               
-0000417d  _ZN4aeo111ssi_drv871111GetRegisterEj              
-00004099  _ZN4aeo111ssi_drv871115OnGpioInterruptENS0_5EventE
-0000403b  _ZN4aeo111ssi_drv87114DiagEv                      
-000040cd  _ZN4aeo111ssi_drv87114ReadEj                      
-0000406b  _ZN4aeo111ssi_drv87115ResetEv                     
-0000404d  _ZN4aeo111ssi_drv87115SleepEb                     
-0000412f  _ZN4aeo111ssi_drv87115WriteEjj                    
+00003f7b  _ZN4aeo111ssi_drv871110InitializeEv               
+000041a5  _ZN4aeo111ssi_drv871111GetRegisterEj              
+000040bd  _ZN4aeo111ssi_drv871115OnGpioInterruptENS0_5EventE
+00004051  _ZN4aeo111ssi_drv87114DiagEv                      
+000040f5  _ZN4aeo111ssi_drv87114ReadEj                      
+0000408f  _ZN4aeo111ssi_drv87115ResetEv                     
+00004071  _ZN4aeo111ssi_drv87115SleepEb                     
+00004157  _ZN4aeo111ssi_drv87115WriteEjj                    
 00003f25  _ZN4aeo111ssi_drv8711C1Ev                         
 00003f25  _ZN4aeo111ssi_drv8711C2Ev                         
-00003f59  _ZN4aeo111ssi_drv8711D0Ev                         
-00003f4b  _ZN4aeo111ssi_drv8711D1Ev                         
-00003f4b  _ZN4aeo111ssi_drv8711D2Ev                         
-0000423f  _ZN4aeo112adc_potmeter10InitializeEv              
-20000b90  _ZN4aeo112adc_potmeter10m_nCounterE               
-000042bb  _ZN4aeo112adc_potmeter11OnInterruptEv             
-20000b98  _ZN4aeo112adc_potmeter14m_nReadCounterE           
-00004365  _ZN4aeo112adc_potmeter15GetErrorCounterEv         
-20000b94  _ZN4aeo112adc_potmeter15m_nErrorCounterE          
-20000b9c  _ZN4aeo112adc_potmeter16m_pTheOneAndOnlyE         
-0000437d  _ZN4aeo112adc_potmeter4DiagEv                     
-00004337  _ZN4aeo112adc_potmeter7TriggerEv                  
-00004345  _ZN4aeo112adc_potmeter8GetValueEv                 
-0000429f  _ZN4aeo112adc_potmeter9TerminateEv                
-000041e7  _ZN4aeo112adc_potmeterC1Ev                        
-000041e7  _ZN4aeo112adc_potmeterC2Ev                        
-00004229  _ZN4aeo112adc_potmeterD0Ev                        
-00004205  _ZN4aeo112adc_potmeterD1Ev                        
-00004205  _ZN4aeo112adc_potmeterD2Ev                        
+00003f65  _ZN4aeo111ssi_drv8711D0Ev                         
+00003f57  _ZN4aeo111ssi_drv8711D1Ev                         
+00003f57  _ZN4aeo111ssi_drv8711D2Ev                         
+0000427f  _ZN4aeo112adc_potmeter10InitializeEv              
+20000b98  _ZN4aeo112adc_potmeter10m_nCounterE               
+000042fb  _ZN4aeo112adc_potmeter11OnInterruptEv             
+20000ba0  _ZN4aeo112adc_potmeter14m_nReadCounterE           
+000043a5  _ZN4aeo112adc_potmeter15GetErrorCounterEv         
+20000b9c  _ZN4aeo112adc_potmeter15m_nErrorCounterE          
+20000ba4  _ZN4aeo112adc_potmeter16m_pTheOneAndOnlyE         
+000043bd  _ZN4aeo112adc_potmeter4DiagEv                     
+00004377  _ZN4aeo112adc_potmeter7TriggerEv                  
+00004385  _ZN4aeo112adc_potmeter8GetValueEv                 
+000042df  _ZN4aeo112adc_potmeter9TerminateEv                
+00004227  _ZN4aeo112adc_potmeterC1Ev                        
+00004227  _ZN4aeo112adc_potmeterC2Ev                        
+00004269  _ZN4aeo112adc_potmeterD0Ev                        
+00004245  _ZN4aeo112adc_potmeterD1Ev                        
+00004245  _ZN4aeo112adc_potmeterD2Ev                        
 00002df9  _ZN4aeo114ssi_peripheral10InitializeEv            
 000030f7  _ZN4aeo114ssi_peripheral10LoadTxFIFOEv            
 00002f41  _ZN4aeo114ssi_peripheral11OnInterruptEv           
@@ -500,18 +500,18 @@ address   name
 000030df  _ZN4aeo114ssi_peripheral3GetEv                    
 000030cb  _ZN4aeo114ssi_peripheral3PutEj                    
 00002fe1  _ZN4aeo114ssi_peripheral4DiagEv                   
-00005459  _ZN4aeo114ssi_peripheral4OnRxEv                   
-00005463  _ZN4aeo114ssi_peripheral4OnTxEv                   
+0000548b  _ZN4aeo114ssi_peripheral4OnRxEv                   
+00005495  _ZN4aeo114ssi_peripheral4OnTxEv                   
 0000306f  _ZN4aeo114ssi_peripheral9TerminateEv              
 00002d2d  _ZN4aeo114ssi_peripheralC1ENS0_9device_idEjb      
 00002d2d  _ZN4aeo114ssi_peripheralC2ENS0_9device_idEjb      
 00002de3  _ZN4aeo114ssi_peripheralD0Ev                      
 00002dcf  _ZN4aeo114ssi_peripheralD1Ev                      
 00002dcf  _ZN4aeo114ssi_peripheralD2Ev                      
-20000aa8  _ZN4aeo118SSI0_SpecificationE                     
-20000adc  _ZN4aeo118SSI1_SpecificationE                     
-20000b10  _ZN4aeo118SSI2_SpecificationE                     
-20000b44  _ZN4aeo118SSI3_SpecificationE                     
+20000ab0  _ZN4aeo118SSI0_SpecificationE                     
+20000ae4  _ZN4aeo118SSI1_SpecificationE                     
+20000b18  _ZN4aeo118SSI2_SpecificationE                     
+20000b4c  _ZN4aeo118SSI3_SpecificationE                     
 0000179d  _ZN4aeo17drv871110InitializeEv                    
 00001b71  _ZN4aeo17drv871110SetDefaultEv                    
 000019ed  _ZN4aeo17drv871111ClearFaultsEv                   
@@ -552,125 +552,125 @@ address   name
 00001f87  _ZN4aeo17esp8266D0Ev                              
 00001f7b  _ZN4aeo17esp8266D1Ev                              
 00001f7b  _ZN4aeo17esp8266D2Ev                              
-00004807  _ZNKSt9type_info4nameEv                           
-00004837  _ZNKSt9type_info6beforeERKS_                      
-00004821  _ZNKSt9type_infoeqERKS_                           
-0000480b  _ZNKSt9type_infoneERKS_                           
-000047ff  _ZNSt9type_infoD0Ev                               
-000047fd  _ZNSt9type_infoD1Ev                               
-000047fd  _ZNSt9type_infoD2Ev                               
-200007f0  _ZSt16__dummy_typeinfo                            
-000047f5  _ZSt21__gen_dummy_typeinfosv                      
-00006410  _ZTIN10__cxxabiv117__class_type_infoE             
-0000641c  _ZTIN10__cxxabiv117__pbase_type_infoE             
-00006428  _ZTIN10__cxxabiv119__pointer_type_infoE           
-00006434  _ZTIN10__cxxabiv120__si_class_type_infoE          
-00006440  _ZTIN10__cxxabiv123__fundamental_type_infoE       
-00006458  _ZTIN4aeo111pwm_stepperE                          
-0000644c  _ZTIN4aeo111ssi_drv8711E                          
-00006460  _ZTIN4aeo112adc_potmeterE                         
-00006468  _ZTIN4aeo114ssi_peripheralE                       
-00006470  _ZTIN4aeo17drv8711E                               
-00006478  _ZTIN4aeo17esp8266E                               
-00006350  _ZTIPKe                                           
-00006480  _ZTISt9type_info                                  
-00006488  _ZTIe                                             
-0000624d  _ZTSN10__cxxabiv117__class_type_infoE             
-0000626f  _ZTSN10__cxxabiv117__pbase_type_infoE             
-00006229  _ZTSN10__cxxabiv119__pointer_type_infoE           
-00006204  _ZTSN10__cxxabiv120__si_class_type_infoE          
-00006164  _ZTSN10__cxxabiv123__fundamental_type_infoE       
-000062fe  _ZTSN4aeo111pwm_stepperE                          
-00006313  _ZTSN4aeo111ssi_drv8711E                          
-000062e8  _ZTSN4aeo112adc_potmeterE                         
-000062d0  _ZTSN4aeo114ssi_peripheralE                       
-00006360  _ZTSN4aeo17drv8711E                               
-00006370  _ZTSN4aeo17esp8266E                               
-00006490  _ZTSPKe                                           
-00006400  _ZTSSt9type_info                                  
-00005a06  _ZTSe                                             
-00006380  _ZTVN10__cxxabiv117__class_type_infoE             
-00006390  _ZTVN10__cxxabiv119__pointer_type_infoE           
-000063a0  _ZTVN10__cxxabiv120__si_class_type_infoE          
-000063b0  _ZTVN10__cxxabiv123__fundamental_type_infoE       
-000063c0  _ZTVN4aeo111pwm_stepperE                          
-0000618c  _ZTVN4aeo111ssi_drv8711E                          
-000063d0  _ZTVN4aeo112adc_potmeterE                         
-000061b4  _ZTVN4aeo114ssi_peripheralE                       
-000063e0  _ZTVN4aeo17drv8711E                               
-000063f0  _ZTVN4aeo17esp8266E                               
-00005485  _ZdlPv                                            
-20000a00  __STACK_END                                       
+00004847  _ZNKSt9type_info4nameEv                           
+00004877  _ZNKSt9type_info6beforeERKS_                      
+00004861  _ZNKSt9type_infoeqERKS_                           
+0000484b  _ZNKSt9type_infoneERKS_                           
+0000483f  _ZNSt9type_infoD0Ev                               
+0000483d  _ZNSt9type_infoD1Ev                               
+0000483d  _ZNSt9type_infoD2Ev                               
+200007f8  _ZSt16__dummy_typeinfo                            
+00004835  _ZSt21__gen_dummy_typeinfosv                      
+00006448  _ZTIN10__cxxabiv117__class_type_infoE             
+00006454  _ZTIN10__cxxabiv117__pbase_type_infoE             
+00006460  _ZTIN10__cxxabiv119__pointer_type_infoE           
+0000646c  _ZTIN10__cxxabiv120__si_class_type_infoE          
+00006478  _ZTIN10__cxxabiv123__fundamental_type_infoE       
+00006490  _ZTIN4aeo111pwm_stepperE                          
+00006484  _ZTIN4aeo111ssi_drv8711E                          
+00006498  _ZTIN4aeo112adc_potmeterE                         
+000064a0  _ZTIN4aeo114ssi_peripheralE                       
+000064a8  _ZTIN4aeo17drv8711E                               
+000064b0  _ZTIN4aeo17esp8266E                               
+00006388  _ZTIPKe                                           
+000064b8  _ZTISt9type_info                                  
+000064c0  _ZTIe                                             
+00006285  _ZTSN10__cxxabiv117__class_type_infoE             
+000062a7  _ZTSN10__cxxabiv117__pbase_type_infoE             
+00006261  _ZTSN10__cxxabiv119__pointer_type_infoE           
+0000623c  _ZTSN10__cxxabiv120__si_class_type_infoE          
+0000619c  _ZTSN10__cxxabiv123__fundamental_type_infoE       
+00006336  _ZTSN4aeo111pwm_stepperE                          
+0000634b  _ZTSN4aeo111ssi_drv8711E                          
+00006320  _ZTSN4aeo112adc_potmeterE                         
+00006308  _ZTSN4aeo114ssi_peripheralE                       
+00006398  _ZTSN4aeo17drv8711E                               
+000063a8  _ZTSN4aeo17esp8266E                               
+000064c8  _ZTSPKe                                           
+00006438  _ZTSSt9type_info                                  
+00005a3e  _ZTSe                                             
+000063b8  _ZTVN10__cxxabiv117__class_type_infoE             
+000063c8  _ZTVN10__cxxabiv119__pointer_type_infoE           
+000063d8  _ZTVN10__cxxabiv120__si_class_type_infoE          
+000063e8  _ZTVN10__cxxabiv123__fundamental_type_infoE       
+000063f8  _ZTVN4aeo111pwm_stepperE                          
+000061c4  _ZTVN4aeo111ssi_drv8711E                          
+00006408  _ZTVN4aeo112adc_potmeterE                         
+000061ec  _ZTVN4aeo114ssi_peripheralE                       
+00006418  _ZTVN4aeo17drv8711E                               
+00006428  _ZTVN4aeo17esp8266E                               
+000054b7  _ZdlPv                                            
+20000a08  __STACK_END                                       
 00000200  __STACK_SIZE                                      
-20000a00  __STACK_TOP                                       
+20000a08  __STACK_TOP                                       
 00000008  __SYSMEM_SIZE                                     
-00006638  __TI_CINIT_Base                                   
-00006648  __TI_CINIT_Limit                                  
-00006620  __TI_Handler_Table_Base                           
-0000662c  __TI_Handler_Table_Limit                          
-00004aed  __TI_auto_init                                    
-20000bc4  __TI_cleanup_ptr                                  
-00005391  __TI_decompress_none                              
-000054ab  __TI_decompress_rle24                             
-20000bc8  __TI_dtors_ptr                                    
+00006670  __TI_CINIT_Base                                   
+00006680  __TI_CINIT_Limit                                  
+00006658  __TI_Handler_Table_Base                           
+00006664  __TI_Handler_Table_Limit                          
+00004b2d  __TI_auto_init                                    
+20000bcc  __TI_cleanup_ptr                                  
+000053c3  __TI_decompress_none                              
+000054e3  __TI_decompress_rle24                             
+20000bd0  __TI_dtors_ptr                                    
 00000000  __TI_static_base__                                
-000053e7  __TI_zero_init                                    
-00004757  __aeabi_atexit                                    
-000044fb  __aeabi_idiv0                                     
-00004a73  __aeabi_memclr                                    
-00004a73  __aeabi_memclr4                                   
-00004a73  __aeabi_memclr8                                   
-0000495d  __aeabi_memcpy                                    
-0000495d  __aeabi_memcpy4                                   
-0000495d  __aeabi_memcpy8                                   
-00004a75  __aeabi_memset                                    
-00004a75  __aeabi_memset4                                   
-00004a75  __aeabi_memset8                                   
-00004eb1  __aeabi_uidiv                                     
-00004eb1  __aeabi_uidivmod                                  
+00005419  __TI_zero_init                                    
+00004797  __aeabi_atexit                                    
+0000453b  __aeabi_idiv0                                     
+00004ab3  __aeabi_memclr                                    
+00004ab3  __aeabi_memclr4                                   
+00004ab3  __aeabi_memclr8                                   
+0000499d  __aeabi_memcpy                                    
+0000499d  __aeabi_memcpy4                                   
+0000499d  __aeabi_memcpy8                                   
+00004ab5  __aeabi_memset                                    
+00004ab5  __aeabi_memset4                                   
+00004ab5  __aeabi_memset8                                   
+00004ef1  __aeabi_uidiv                                     
+00004ef1  __aeabi_uidivmod                                  
 ffffffff  __binit__                                         
 ffffffff  __c_args__                                        
-0000479b  __cxa_atexit                                      
-00004701  __cxa_finalize                                    
-00004743  __cxa_ia64_exit                                   
-200007f4  __dso_handle                                      
-20000800  __stack                                           
+000047db  __cxa_atexit                                      
+00004741  __cxa_finalize                                    
+00004783  __cxa_ia64_exit                                   
+200007fc  __dso_handle                                      
+20000808  __stack                                           
 00002bd9  __sti___8_main_cpp_779587d3                       
-00005151  _args_main                                        
-00004d41  _c_int00                                          
-20000bbc  _lock                                             
-0000520b  _nop                                              
-00005203  _register_lock                                    
-000051fd  _register_unlock                                  
-20000be8  _sys_memory                                       
-000054b9  _system_pre_init                                  
-20000bc0  _unlock                                           
-00004e71  abort                                             
-00004749  atexit                                            
+00005191  _args_main                                        
+00004d81  _c_int00                                          
+20000bc4  _lock                                             
+0000524b  _nop                                              
+00005243  _register_lock                                    
+0000523d  _register_unlock                                  
+20000bf0  _sys_memory                                       
+000054f1  _system_pre_init                                  
+20000bc8  _unlock                                           
+00004eb1  abort                                             
+00004789  atexit                                            
 ffffffff  binit                                             
 00003af9  calloc                                            
-00004d91  copy_in                                           
+00004dd1  copy_in                                           
 00001f19  esp8266_UARTIntHandler                            
-00004e79  exit                                              
+00004eb9  exit                                              
 00003847  free                                              
 20000618  g_oDrv8711                                        
 20000400  g_oEsp8266                                        
 00000000  g_pfnVectors                                      
-20000a00  g_psCmdTable                                      
-00004ceb  ltoa                                              
+20000a08  g_psCmdTable                                      
+00004d2b  ltoa                                              
 00002bcb  main                                              
-20000bdc  main_func_sp                                      
+20000be4  main_func_sp                                      
 000037df  malloc                                            
 00003a15  memalign                                          
-0000495d  memcpy                                            
-00004a7b  memset                                            
+0000499d  memcpy                                            
+00004abb  memset                                            
 00003751  minit                                             
 00003909  realloc                                           
-00005181  strchr                                            
-00005169  strcmp                                            
-00005211  strlen                                            
-00005065  strncmp                                           
-00004fd9  strstr                                            
+000051c1  strchr                                            
+000051a9  strcmp                                            
+00005251  strlen                                            
+000050a5  strncmp                                           
+00005019  strstr                                            
 00000751  ulocaltime                                        
 0000094f  umktime                                           
 00000ec9  urand                                             
@@ -831,253 +831,253 @@ address   name
 00003f09  OnGPIOEInterrupt                                  
 00003f25  _ZN4aeo111ssi_drv8711C1Ev                         
 00003f25  _ZN4aeo111ssi_drv8711C2Ev                         
-00003f4b  _ZN4aeo111ssi_drv8711D1Ev                         
-00003f4b  _ZN4aeo111ssi_drv8711D2Ev                         
-00003f59  _ZN4aeo111ssi_drv8711D0Ev                         
-00003f6f  _ZN4aeo111ssi_drv871110InitializeEv               
-0000403b  _ZN4aeo111ssi_drv87114DiagEv                      
-0000404d  _ZN4aeo111ssi_drv87115SleepEb                     
-0000406b  _ZN4aeo111ssi_drv87115ResetEv                     
-00004099  _ZN4aeo111ssi_drv871115OnGpioInterruptENS0_5EventE
-000040cd  _ZN4aeo111ssi_drv87114ReadEj                      
-0000412f  _ZN4aeo111ssi_drv87115WriteEjj                    
-0000417d  _ZN4aeo111ssi_drv871111GetRegisterEj              
-000041d5  OnADCInterrupt                                    
-000041e7  _ZN4aeo112adc_potmeterC1Ev                        
-000041e7  _ZN4aeo112adc_potmeterC2Ev                        
-00004205  _ZN4aeo112adc_potmeterD1Ev                        
-00004205  _ZN4aeo112adc_potmeterD2Ev                        
-00004229  _ZN4aeo112adc_potmeterD0Ev                        
-0000423f  _ZN4aeo112adc_potmeter10InitializeEv              
-0000429f  _ZN4aeo112adc_potmeter9TerminateEv                
-000042bb  _ZN4aeo112adc_potmeter11OnInterruptEv             
-00004337  _ZN4aeo112adc_potmeter7TriggerEv                  
-00004345  _ZN4aeo112adc_potmeter8GetValueEv                 
-00004365  _ZN4aeo112adc_potmeter15GetErrorCounterEv         
-0000437d  _ZN4aeo112adc_potmeter4DiagEv                     
-000043c9  GPIOPadConfigSet                                  
-000044fb  __aeabi_idiv0                                     
-000044fd  SysCtlClockGet                                    
-0000460d  SysCtlClockSet                                    
-00004701  __cxa_finalize                                    
-00004743  __cxa_ia64_exit                                   
-00004749  atexit                                            
-00004757  __aeabi_atexit                                    
-0000479b  __cxa_atexit                                      
-000047f5  _ZSt21__gen_dummy_typeinfosv                      
-000047fd  _ZNSt9type_infoD1Ev                               
-000047fd  _ZNSt9type_infoD2Ev                               
-000047ff  _ZNSt9type_infoD0Ev                               
-00004807  _ZNKSt9type_info4nameEv                           
-0000480b  _ZNKSt9type_infoneERKS_                           
-00004821  _ZNKSt9type_infoeqERKS_                           
-00004837  _ZNKSt9type_info6beforeERKS_                      
-00004845  _ZN10__cxxabiv129__pointer_to_member_type_infoD1Ev
-00004845  _ZN10__cxxabiv129__pointer_to_member_type_infoD2Ev
-00004847  _ZN10__cxxabiv129__pointer_to_member_type_infoD0Ev
-0000484f  _ZN10__cxxabiv123__fundamental_type_infoD1Ev      
-0000484f  _ZN10__cxxabiv123__fundamental_type_infoD2Ev      
-00004851  _ZN10__cxxabiv123__fundamental_type_infoD0Ev      
-00004859  _ZN10__cxxabiv121__vmi_class_type_infoD1Ev        
-00004859  _ZN10__cxxabiv121__vmi_class_type_infoD2Ev        
-0000485b  _ZN10__cxxabiv121__vmi_class_type_infoD0Ev        
-00004863  _ZN10__cxxabiv120__si_class_type_infoD1Ev         
-00004863  _ZN10__cxxabiv120__si_class_type_infoD2Ev         
-00004865  _ZN10__cxxabiv120__si_class_type_infoD0Ev         
-0000486d  _ZN10__cxxabiv120__function_type_infoD1Ev         
-0000486d  _ZN10__cxxabiv120__function_type_infoD2Ev         
-0000486f  _ZN10__cxxabiv120__function_type_infoD0Ev         
-00004877  _ZN10__cxxabiv119__pointer_type_infoD1Ev          
-00004877  _ZN10__cxxabiv119__pointer_type_infoD2Ev          
-00004879  _ZN10__cxxabiv119__pointer_type_infoD0Ev          
-00004881  _ZN10__cxxabiv117__pbase_type_infoD1Ev            
-00004881  _ZN10__cxxabiv117__pbase_type_infoD2Ev            
-00004883  _ZN10__cxxabiv117__pbase_type_infoD0Ev            
-0000488b  _ZN10__cxxabiv117__class_type_infoD1Ev            
-0000488b  _ZN10__cxxabiv117__class_type_infoD2Ev            
-0000488d  _ZN10__cxxabiv117__class_type_infoD0Ev            
-00004895  _ZN10__cxxabiv117__array_type_infoD1Ev            
-00004895  _ZN10__cxxabiv117__array_type_infoD2Ev            
-00004897  _ZN10__cxxabiv117__array_type_infoD0Ev            
-0000489f  _ZN10__cxxabiv116__enum_type_infoD1Ev             
-0000489f  _ZN10__cxxabiv116__enum_type_infoD2Ev             
-000048a1  _ZN10__cxxabiv116__enum_type_infoD0Ev             
-000048b1  CmdLineProcess                                    
-0000495d  __aeabi_memcpy                                    
-0000495d  __aeabi_memcpy4                                   
-0000495d  __aeabi_memcpy8                                   
-0000495d  memcpy                                            
-000049f9  ADCSequenceStepConfigure                          
-00004a73  __aeabi_memclr                                    
-00004a73  __aeabi_memclr4                                   
-00004a73  __aeabi_memclr8                                   
-00004a75  __aeabi_memset                                    
-00004a75  __aeabi_memset4                                   
-00004a75  __aeabi_memset8                                   
-00004a7b  memset                                            
-00004aed  __TI_auto_init                                    
-00004bc5  IntDisable                                        
-00004c2d  IntEnable                                         
-00004c95  GPIOIntTypeSet                                    
-00004ceb  ltoa                                              
-00004d41  _c_int00                                          
-00004d91  copy_in                                           
-00004ddd  GPIOPinConfigure                                  
-00004e25  UARTConfigSetExpClk                               
-00004e6d  C$$EXIT                                           
-00004e71  abort                                             
-00004e79  exit                                              
-00004eb1  __aeabi_uidiv                                     
-00004eb1  __aeabi_uidivmod                                  
-00004ef1  ADCSequenceConfigure                              
-00004f2f  SSIConfigSetExpClk                                
-00004f6d  SysCtlPeripheralPresent                           
-00004fa5  SysCtlPeripheralEnable                            
-00004fd9  strstr                                            
-0000500d  ADCIntStatus                                      
-0000503b  GPIODirModeSet                                    
-00005065  strncmp                                           
-0000508b  PWMGenConfigure                                   
-000050ad  UARTDisable                                       
-000050cd  ADCSequenceDataGet                                
-000050eb  PWMPulseWidthSet                                  
-00005109  ADCClockConfigSet                                 
-00005121  ADCProcessorTrigger                               
-00005139  GPIOPinTypeGPIOOutput                             
-00005151  _args_main                                        
-00005169  strcmp                                            
-00005181  strchr                                            
-00005199  FPUStackingEnable                                 
-000051ad  SysCtlPWMClockSet                                 
-000051c1  SysTickEnable                                     
-000051d5  SysTickIntEnable                                  
-000051e9  UARTEnable                                        
-000051fd  _register_unlock                                  
-00005203  _register_lock                                    
-0000520b  _nop                                              
-00005211  strlen                                            
-00005225  GPIOPinTypeADC                                    
-00005237  GPIOPinTypeGPIOInput                              
-00005249  GPIOPinTypePWM                                    
-0000525b  GPIOPinTypeSSI                                    
-0000526d  GPIOPinTypeUART                                   
-0000527f  PWMOutputState                                    
-00005291  SSIDataGetNonBlocking                             
-000052a3  ADCIntEnable                                      
-000052b5  FPUEnable                                         
-000052c5  IntMasterDisable                                  
-000052d5  IntMasterEnable                                   
-000052e5  PWMGenPeriodSet                                   
-000052f5  SysTickPeriodSet                                  
-00005305  ADCHardwareOversampleConfigure                    
-00005313  ADCIntDisable                                     
-00005321  ADCSequenceDisable                                
-0000532f  ADCSequenceEnable                                 
-0000533d  GPIOIntDisable                                    
-0000534b  SSIDataPutNonBlocking                             
-00005359  UARTCharGetNonBlocking                            
-00005367  UARTCharPutNonBlocking                            
-00005375  UARTCharsAvail                                    
-00005383  UARTSpaceAvail                                    
-00005391  __TI_decompress_none                              
-0000539f  CPUcpsid                                          
-000053ab  CPUcpsie                                          
-000053b7  GPIOIntEnable                                     
-000053c3  PWMGenDisable                                     
-000053cf  PWMGenEnable                                      
-000053db  SSIDataGet                                        
-000053e7  __TI_zero_init                                    
-000053f3  ResetISR                                          
-000053ff  ADCIntClear                                       
-00005409  PWMGenIntTrigEnable                               
-00005413  SSIDataPut                                        
-0000541d  SSIDisable                                        
-00005427  SSIEnable                                         
-00005431  SSIIntDisable                                     
-0000543b  SSIIntStatus                                      
-00005445  UARTIntDisable                                    
-0000544f  UARTIntStatus                                     
-00005459  _ZN4aeo114ssi_peripheral4OnRxEv                   
-00005463  _ZN4aeo114ssi_peripheral4OnTxEv                   
-0000546d  PWMIntEnable                                      
-00005475  SSIIntEnable                                      
-0000547d  UARTIntEnable                                     
-00005485  _ZdlPv                                            
-0000548d  GPIOPinWrite                                      
-00005493  PWMGenIntClear                                    
-00005499  SysCtlDelay                                       
-0000549f  UARTClockSourceSet                                
-000054a5  UARTFIFOLevelSet                                  
-000054ab  __TI_decompress_rle24                             
-000054b1  SSIIntClear                                       
-000054b5  UARTIntClear                                      
-000054b9  _system_pre_init                                  
-00005a06  _ZTSe                                             
-00006164  _ZTSN10__cxxabiv123__fundamental_type_infoE       
-0000618c  _ZTVN4aeo111ssi_drv8711E                          
-000061b4  _ZTVN4aeo114ssi_peripheralE                       
-00006204  _ZTSN10__cxxabiv120__si_class_type_infoE          
-00006229  _ZTSN10__cxxabiv119__pointer_type_infoE           
-0000624d  _ZTSN10__cxxabiv117__class_type_infoE             
-0000626f  _ZTSN10__cxxabiv117__pbase_type_infoE             
-000062d0  _ZTSN4aeo114ssi_peripheralE                       
-000062e8  _ZTSN4aeo112adc_potmeterE                         
-000062fe  _ZTSN4aeo111pwm_stepperE                          
-00006313  _ZTSN4aeo111ssi_drv8711E                          
-00006350  _ZTIPKe                                           
-00006360  _ZTSN4aeo17drv8711E                               
-00006370  _ZTSN4aeo17esp8266E                               
-00006380  _ZTVN10__cxxabiv117__class_type_infoE             
-00006390  _ZTVN10__cxxabiv119__pointer_type_infoE           
-000063a0  _ZTVN10__cxxabiv120__si_class_type_infoE          
-000063b0  _ZTVN10__cxxabiv123__fundamental_type_infoE       
-000063c0  _ZTVN4aeo111pwm_stepperE                          
-000063d0  _ZTVN4aeo112adc_potmeterE                         
-000063e0  _ZTVN4aeo17drv8711E                               
-000063f0  _ZTVN4aeo17esp8266E                               
-00006400  _ZTSSt9type_info                                  
-00006410  _ZTIN10__cxxabiv117__class_type_infoE             
-0000641c  _ZTIN10__cxxabiv117__pbase_type_infoE             
-00006428  _ZTIN10__cxxabiv119__pointer_type_infoE           
-00006434  _ZTIN10__cxxabiv120__si_class_type_infoE          
-00006440  _ZTIN10__cxxabiv123__fundamental_type_infoE       
-0000644c  _ZTIN4aeo111ssi_drv8711E                          
-00006458  _ZTIN4aeo111pwm_stepperE                          
-00006460  _ZTIN4aeo112adc_potmeterE                         
-00006468  _ZTIN4aeo114ssi_peripheralE                       
-00006470  _ZTIN4aeo17drv8711E                               
-00006478  _ZTIN4aeo17esp8266E                               
-00006480  _ZTISt9type_info                                  
-00006488  _ZTIe                                             
-00006490  _ZTSPKe                                           
-00006494  SHT$$INIT_ARRAY$$Base                             
-00006498  SHT$$INIT_ARRAY$$Limit                            
-00006620  __TI_Handler_Table_Base                           
-0000662c  __TI_Handler_Table_Limit                          
-00006638  __TI_CINIT_Base                                   
-00006648  __TI_CINIT_Limit                                  
+00003f57  _ZN4aeo111ssi_drv8711D1Ev                         
+00003f57  _ZN4aeo111ssi_drv8711D2Ev                         
+00003f65  _ZN4aeo111ssi_drv8711D0Ev                         
+00003f7b  _ZN4aeo111ssi_drv871110InitializeEv               
+00004051  _ZN4aeo111ssi_drv87114DiagEv                      
+00004071  _ZN4aeo111ssi_drv87115SleepEb                     
+0000408f  _ZN4aeo111ssi_drv87115ResetEv                     
+000040bd  _ZN4aeo111ssi_drv871115OnGpioInterruptENS0_5EventE
+000040f5  _ZN4aeo111ssi_drv87114ReadEj                      
+00004157  _ZN4aeo111ssi_drv87115WriteEjj                    
+000041a5  _ZN4aeo111ssi_drv871111GetRegisterEj              
+00004215  OnADCInterrupt                                    
+00004227  _ZN4aeo112adc_potmeterC1Ev                        
+00004227  _ZN4aeo112adc_potmeterC2Ev                        
+00004245  _ZN4aeo112adc_potmeterD1Ev                        
+00004245  _ZN4aeo112adc_potmeterD2Ev                        
+00004269  _ZN4aeo112adc_potmeterD0Ev                        
+0000427f  _ZN4aeo112adc_potmeter10InitializeEv              
+000042df  _ZN4aeo112adc_potmeter9TerminateEv                
+000042fb  _ZN4aeo112adc_potmeter11OnInterruptEv             
+00004377  _ZN4aeo112adc_potmeter7TriggerEv                  
+00004385  _ZN4aeo112adc_potmeter8GetValueEv                 
+000043a5  _ZN4aeo112adc_potmeter15GetErrorCounterEv         
+000043bd  _ZN4aeo112adc_potmeter4DiagEv                     
+00004409  GPIOPadConfigSet                                  
+0000453b  __aeabi_idiv0                                     
+0000453d  SysCtlClockGet                                    
+0000464d  SysCtlClockSet                                    
+00004741  __cxa_finalize                                    
+00004783  __cxa_ia64_exit                                   
+00004789  atexit                                            
+00004797  __aeabi_atexit                                    
+000047db  __cxa_atexit                                      
+00004835  _ZSt21__gen_dummy_typeinfosv                      
+0000483d  _ZNSt9type_infoD1Ev                               
+0000483d  _ZNSt9type_infoD2Ev                               
+0000483f  _ZNSt9type_infoD0Ev                               
+00004847  _ZNKSt9type_info4nameEv                           
+0000484b  _ZNKSt9type_infoneERKS_                           
+00004861  _ZNKSt9type_infoeqERKS_                           
+00004877  _ZNKSt9type_info6beforeERKS_                      
+00004885  _ZN10__cxxabiv129__pointer_to_member_type_infoD1Ev
+00004885  _ZN10__cxxabiv129__pointer_to_member_type_infoD2Ev
+00004887  _ZN10__cxxabiv129__pointer_to_member_type_infoD0Ev
+0000488f  _ZN10__cxxabiv123__fundamental_type_infoD1Ev      
+0000488f  _ZN10__cxxabiv123__fundamental_type_infoD2Ev      
+00004891  _ZN10__cxxabiv123__fundamental_type_infoD0Ev      
+00004899  _ZN10__cxxabiv121__vmi_class_type_infoD1Ev        
+00004899  _ZN10__cxxabiv121__vmi_class_type_infoD2Ev        
+0000489b  _ZN10__cxxabiv121__vmi_class_type_infoD0Ev        
+000048a3  _ZN10__cxxabiv120__si_class_type_infoD1Ev         
+000048a3  _ZN10__cxxabiv120__si_class_type_infoD2Ev         
+000048a5  _ZN10__cxxabiv120__si_class_type_infoD0Ev         
+000048ad  _ZN10__cxxabiv120__function_type_infoD1Ev         
+000048ad  _ZN10__cxxabiv120__function_type_infoD2Ev         
+000048af  _ZN10__cxxabiv120__function_type_infoD0Ev         
+000048b7  _ZN10__cxxabiv119__pointer_type_infoD1Ev          
+000048b7  _ZN10__cxxabiv119__pointer_type_infoD2Ev          
+000048b9  _ZN10__cxxabiv119__pointer_type_infoD0Ev          
+000048c1  _ZN10__cxxabiv117__pbase_type_infoD1Ev            
+000048c1  _ZN10__cxxabiv117__pbase_type_infoD2Ev            
+000048c3  _ZN10__cxxabiv117__pbase_type_infoD0Ev            
+000048cb  _ZN10__cxxabiv117__class_type_infoD1Ev            
+000048cb  _ZN10__cxxabiv117__class_type_infoD2Ev            
+000048cd  _ZN10__cxxabiv117__class_type_infoD0Ev            
+000048d5  _ZN10__cxxabiv117__array_type_infoD1Ev            
+000048d5  _ZN10__cxxabiv117__array_type_infoD2Ev            
+000048d7  _ZN10__cxxabiv117__array_type_infoD0Ev            
+000048df  _ZN10__cxxabiv116__enum_type_infoD1Ev             
+000048df  _ZN10__cxxabiv116__enum_type_infoD2Ev             
+000048e1  _ZN10__cxxabiv116__enum_type_infoD0Ev             
+000048f1  CmdLineProcess                                    
+0000499d  __aeabi_memcpy                                    
+0000499d  __aeabi_memcpy4                                   
+0000499d  __aeabi_memcpy8                                   
+0000499d  memcpy                                            
+00004a39  ADCSequenceStepConfigure                          
+00004ab3  __aeabi_memclr                                    
+00004ab3  __aeabi_memclr4                                   
+00004ab3  __aeabi_memclr8                                   
+00004ab5  __aeabi_memset                                    
+00004ab5  __aeabi_memset4                                   
+00004ab5  __aeabi_memset8                                   
+00004abb  memset                                            
+00004b2d  __TI_auto_init                                    
+00004c05  IntDisable                                        
+00004c6d  IntEnable                                         
+00004cd5  GPIOIntTypeSet                                    
+00004d2b  ltoa                                              
+00004d81  _c_int00                                          
+00004dd1  copy_in                                           
+00004e1d  GPIOPinConfigure                                  
+00004e65  UARTConfigSetExpClk                               
+00004ead  C$$EXIT                                           
+00004eb1  abort                                             
+00004eb9  exit                                              
+00004ef1  __aeabi_uidiv                                     
+00004ef1  __aeabi_uidivmod                                  
+00004f31  ADCSequenceConfigure                              
+00004f6f  SSIConfigSetExpClk                                
+00004fad  SysCtlPeripheralPresent                           
+00004fe5  SysCtlPeripheralEnable                            
+00005019  strstr                                            
+0000504d  ADCIntStatus                                      
+0000507b  GPIODirModeSet                                    
+000050a5  strncmp                                           
+000050cb  PWMGenConfigure                                   
+000050ed  UARTDisable                                       
+0000510d  ADCSequenceDataGet                                
+0000512b  PWMPulseWidthSet                                  
+00005149  ADCClockConfigSet                                 
+00005161  ADCProcessorTrigger                               
+00005179  GPIOPinTypeGPIOOutput                             
+00005191  _args_main                                        
+000051a9  strcmp                                            
+000051c1  strchr                                            
+000051d9  FPUStackingEnable                                 
+000051ed  SysCtlPWMClockSet                                 
+00005201  SysTickEnable                                     
+00005215  SysTickIntEnable                                  
+00005229  UARTEnable                                        
+0000523d  _register_unlock                                  
+00005243  _register_lock                                    
+0000524b  _nop                                              
+00005251  strlen                                            
+00005265  GPIOPinTypeADC                                    
+00005277  GPIOPinTypeGPIOInput                              
+00005289  GPIOPinTypePWM                                    
+0000529b  GPIOPinTypeSSI                                    
+000052ad  GPIOPinTypeUART                                   
+000052bf  PWMOutputState                                    
+000052d1  SSIDataGetNonBlocking                             
+000052e3  ADCIntEnable                                      
+000052f5  FPUEnable                                         
+00005305  IntMasterDisable                                  
+00005315  IntMasterEnable                                   
+00005325  PWMGenPeriodSet                                   
+00005335  SysTickPeriodSet                                  
+00005345  ADCHardwareOversampleConfigure                    
+00005353  ADCIntDisable                                     
+00005361  ADCSequenceDisable                                
+0000536f  ADCSequenceEnable                                 
+0000537d  SSIDataPutNonBlocking                             
+0000538b  UARTCharGetNonBlocking                            
+00005399  UARTCharPutNonBlocking                            
+000053a7  UARTCharsAvail                                    
+000053b5  UARTSpaceAvail                                    
+000053c3  __TI_decompress_none                              
+000053d1  CPUcpsid                                          
+000053dd  CPUcpsie                                          
+000053e9  GPIOIntEnable                                     
+000053f5  PWMGenDisable                                     
+00005401  PWMGenEnable                                      
+0000540d  SSIDataGet                                        
+00005419  __TI_zero_init                                    
+00005425  ResetISR                                          
+00005431  ADCIntClear                                       
+0000543b  PWMGenIntTrigEnable                               
+00005445  SSIDataPut                                        
+0000544f  SSIDisable                                        
+00005459  SSIEnable                                         
+00005463  SSIIntDisable                                     
+0000546d  SSIIntStatus                                      
+00005477  UARTIntDisable                                    
+00005481  UARTIntStatus                                     
+0000548b  _ZN4aeo114ssi_peripheral4OnRxEv                   
+00005495  _ZN4aeo114ssi_peripheral4OnTxEv                   
+0000549f  PWMIntEnable                                      
+000054a7  SSIIntEnable                                      
+000054af  UARTIntEnable                                     
+000054b7  _ZdlPv                                            
+000054bf  GPIOIntClear                                      
+000054c5  GPIOPinWrite                                      
+000054cb  PWMGenIntClear                                    
+000054d1  SysCtlDelay                                       
+000054d7  UARTClockSourceSet                                
+000054dd  UARTFIFOLevelSet                                  
+000054e3  __TI_decompress_rle24                             
+000054e9  SSIIntClear                                       
+000054ed  UARTIntClear                                      
+000054f1  _system_pre_init                                  
+00005a3e  _ZTSe                                             
+0000619c  _ZTSN10__cxxabiv123__fundamental_type_infoE       
+000061c4  _ZTVN4aeo111ssi_drv8711E                          
+000061ec  _ZTVN4aeo114ssi_peripheralE                       
+0000623c  _ZTSN10__cxxabiv120__si_class_type_infoE          
+00006261  _ZTSN10__cxxabiv119__pointer_type_infoE           
+00006285  _ZTSN10__cxxabiv117__class_type_infoE             
+000062a7  _ZTSN10__cxxabiv117__pbase_type_infoE             
+00006308  _ZTSN4aeo114ssi_peripheralE                       
+00006320  _ZTSN4aeo112adc_potmeterE                         
+00006336  _ZTSN4aeo111pwm_stepperE                          
+0000634b  _ZTSN4aeo111ssi_drv8711E                          
+00006388  _ZTIPKe                                           
+00006398  _ZTSN4aeo17drv8711E                               
+000063a8  _ZTSN4aeo17esp8266E                               
+000063b8  _ZTVN10__cxxabiv117__class_type_infoE             
+000063c8  _ZTVN10__cxxabiv119__pointer_type_infoE           
+000063d8  _ZTVN10__cxxabiv120__si_class_type_infoE          
+000063e8  _ZTVN10__cxxabiv123__fundamental_type_infoE       
+000063f8  _ZTVN4aeo111pwm_stepperE                          
+00006408  _ZTVN4aeo112adc_potmeterE                         
+00006418  _ZTVN4aeo17drv8711E                               
+00006428  _ZTVN4aeo17esp8266E                               
+00006438  _ZTSSt9type_info                                  
+00006448  _ZTIN10__cxxabiv117__class_type_infoE             
+00006454  _ZTIN10__cxxabiv117__pbase_type_infoE             
+00006460  _ZTIN10__cxxabiv119__pointer_type_infoE           
+0000646c  _ZTIN10__cxxabiv120__si_class_type_infoE          
+00006478  _ZTIN10__cxxabiv123__fundamental_type_infoE       
+00006484  _ZTIN4aeo111ssi_drv8711E                          
+00006490  _ZTIN4aeo111pwm_stepperE                          
+00006498  _ZTIN4aeo112adc_potmeterE                         
+000064a0  _ZTIN4aeo114ssi_peripheralE                       
+000064a8  _ZTIN4aeo17drv8711E                               
+000064b0  _ZTIN4aeo17esp8266E                               
+000064b8  _ZTISt9type_info                                  
+000064c0  _ZTIe                                             
+000064c8  _ZTSPKe                                           
+000064cc  SHT$$INIT_ARRAY$$Base                             
+000064d0  SHT$$INIT_ARRAY$$Limit                            
+00006658  __TI_Handler_Table_Base                           
+00006664  __TI_Handler_Table_Limit                          
+00006670  __TI_CINIT_Base                                   
+00006680  __TI_CINIT_Limit                                  
 20000400  g_oEsp8266                                        
 20000618  g_oDrv8711                                        
-200007f0  _ZSt16__dummy_typeinfo                            
-200007f4  __dso_handle                                      
-20000800  __stack                                           
-20000a00  __STACK_END                                       
-20000a00  __STACK_TOP                                       
-20000a00  g_psCmdTable                                      
-20000aa8  _ZN4aeo118SSI0_SpecificationE                     
-20000adc  _ZN4aeo118SSI1_SpecificationE                     
-20000b10  _ZN4aeo118SSI2_SpecificationE                     
-20000b44  _ZN4aeo118SSI3_SpecificationE                     
-20000b90  _ZN4aeo112adc_potmeter10m_nCounterE               
-20000b94  _ZN4aeo112adc_potmeter15m_nErrorCounterE          
-20000b98  _ZN4aeo112adc_potmeter14m_nReadCounterE           
-20000b9c  _ZN4aeo112adc_potmeter16m_pTheOneAndOnlyE         
-20000bbc  _lock                                             
-20000bc0  _unlock                                           
-20000bc4  __TI_cleanup_ptr                                  
-20000bc8  __TI_dtors_ptr                                    
-20000bdc  main_func_sp                                      
-20000be8  _sys_memory                                       
+200007f8  _ZSt16__dummy_typeinfo                            
+200007fc  __dso_handle                                      
+20000808  __stack                                           
+20000a08  __STACK_END                                       
+20000a08  __STACK_TOP                                       
+20000a08  g_psCmdTable                                      
+20000ab0  _ZN4aeo118SSI0_SpecificationE                     
+20000ae4  _ZN4aeo118SSI1_SpecificationE                     
+20000b18  _ZN4aeo118SSI2_SpecificationE                     
+20000b4c  _ZN4aeo118SSI3_SpecificationE                     
+20000b98  _ZN4aeo112adc_potmeter10m_nCounterE               
+20000b9c  _ZN4aeo112adc_potmeter15m_nErrorCounterE          
+20000ba0  _ZN4aeo112adc_potmeter14m_nReadCounterE           
+20000ba4  _ZN4aeo112adc_potmeter16m_pTheOneAndOnlyE         
+20000bc4  _lock                                             
+20000bc8  _unlock                                           
+20000bcc  __TI_cleanup_ptr                                  
+20000bd0  __TI_dtors_ptr                                    
+20000be4  main_func_sp                                      
+20000bf0  _sys_memory                                       
 ffffffff  __binit__                                         
 ffffffff  __c_args__                                        
 ffffffff  binit                                             

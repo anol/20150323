@@ -32,6 +32,8 @@ public:
 	uint32_t Write(uint32_t nRegister, uint32_t nValue);
 	uint32_t GetRegister(uint32_t nRegister);
 private:
+	uint32_t m_nStallCounter;
+	uint32_t m_nFaultCounter;
 	uint32_t m_nRegister[NumberOfRegisters];
 };
 //--------------------------------
