@@ -41,7 +41,7 @@ static const drv8711_registerset RegisterSet_Alpha = {
 //--------------------------------
 static const drv8711_registerset RegisterSet_Guide = {
 
-0xC11, //850 ns dead time, gain of 5, internal stall detect, 1/4 step, enable
+        0xC19, //850 ns dead time, gain of 5, internal stall detect, 1/8 step, enable
 		0x1A0, // 100-us sample
 		0x032, // Internal indexer, 25 us off time
 		0x100, // Adaptive blanking, 1-us current blanking
