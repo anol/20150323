@@ -235,7 +235,7 @@ void drv8711::PrintAllRegisters() {
 }
 //--------------------------------
 // nTorque = 255 & (256 * nIsGain * (nRsense * 1000) * nIfs / 2750 );
-// nIfs = ( nTorque * 2750 ) / ( nIsGain * (nRsense * 1000))
+// nIfs = ( nTorque * 2750 ) / ( 256 * nIsGain * (nRsense * 1000))
 void drv8711::DiagExtra() {
 	const int nRsense = 50; // nRsense * 1000
 	int nReg0 = m_oSsiDrv8711.GetRegister(0);
@@ -250,7 +250,7 @@ void drv8711::DiagExtra() {
 	uint32_t nClock = SysCtlClockGet();
 	UARTprintf("Relative step number = %d\n", nPwmRel);
 	if (nIsGain && nRsense) {
-		int nIfs = (nTorque * 2750) / (nIsGain * nRsense);
+		int nIfs = (nTorque * 2750) / (nIsGain * nRsense * 256);
 		UARTprintf("Torque = %d, IsGain = %d, Rsense = %d\n", nTorque, nIsGain,
 				nRsense);
 		UARTprintf("Target full-scale current = %d.%02d A\n", nIfs / 100,

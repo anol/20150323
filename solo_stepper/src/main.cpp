@@ -248,6 +248,7 @@ static void Initialize() {
 	UARTprintf("\n\n");
 	UARTprintf(STRINGIZE(ProjName) " " __DATE__ " " __TIME__);
 	UARTprintf("\n\n");
+
 	if (g_oEsp8266.Initialize()) {
 		GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3,
 		GPIO_PIN_3);

@@ -1,7 +1,7 @@
 ******************************************************************************
                   TI ARM Linker PC v5.2.7                      
 ******************************************************************************
->> Linked Thu Apr 28 11:38:07 2016
+>> Linked Fri Apr 29 10:17:09 2016
 
 OUTPUT FILE NAME:   <solo_stepper.out>
 ENTRY POINT SYMBOL: "_c_int00"  address: 00004d41
@@ -513,10 +513,10 @@ address   name
 20000b10  _ZN4aeo118SSI2_SpecificationE                     
 20000b44  _ZN4aeo118SSI3_SpecificationE                     
 0000179d  _ZN4aeo17drv871110InitializeEv                    
-00001b6f  _ZN4aeo17drv871110SetDefaultEv                    
+00001b71  _ZN4aeo17drv871110SetDefaultEv                    
 000019ed  _ZN4aeo17drv871111ClearFaultsEv                   
-00001cd5  _ZN4aeo17drv871111PrintStatusEj                   
-00001bc1  _ZN4aeo17drv871116ReadAllRegistersEv              
+00001ce1  _ZN4aeo17drv871111PrintStatusEj                   
+00001bc3  _ZN4aeo17drv871116ReadAllRegistersEv              
 00001c29  _ZN4aeo17drv871117PrintAllRegistersEv             
 0000181b  _ZN4aeo17drv87113GetEPKcPci                       
 00001889  _ZN4aeo17drv87113SetEPKcS2_                       
@@ -743,10 +743,10 @@ address   name
 000019ed  _ZN4aeo17drv871111ClearFaultsEv                   
 00001a09  _ZN4aeo17drv87115ResetEv                          
 00001a3d  _ZN4aeo17drv87119DiagExtraEv                      
-00001b6f  _ZN4aeo17drv871110SetDefaultEv                    
-00001bc1  _ZN4aeo17drv871116ReadAllRegistersEv              
+00001b71  _ZN4aeo17drv871110SetDefaultEv                    
+00001bc3  _ZN4aeo17drv871116ReadAllRegistersEv              
 00001c29  _ZN4aeo17drv871117PrintAllRegistersEv             
-00001cd5  _ZN4aeo17drv871111PrintStatusEj                   
+00001ce1  _ZN4aeo17drv871111PrintStatusEj                   
 00001f19  esp8266_UARTIntHandler                            
 00001f4b  _ZN4aeo17esp8266C1Ev                              
 00001f4b  _ZN4aeo17esp8266C2Ev                              
