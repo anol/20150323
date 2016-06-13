@@ -44,6 +44,7 @@
 #include "primary_activity.h"
 //--------------------------------
 extern primary_activity g_oPrimaryActivity;
+extern void PrintProgramInfo();
 //--------------------------------
 //*****************************************************************************
 //
@@ -60,6 +61,8 @@ tCmdLineEntry g_psCmdTable[] = {
 { "sety", CMD_sety, " : Set the Y value" },
 
 { "diag", CMD_diag, " : Show diagnostic information" },
+
+{ "ver", CMD_ver, " : Show program info" },
 
 { 0, 0, 0 } };
 
@@ -103,6 +106,11 @@ int CMD_sety(int argc, char **argv) {
 //--------------------------------
 int CMD_diag(int argc, char **argv) {
 	g_oPrimaryActivity.Diag();
+	return (0);
+}
+//--------------------------------
+int CMD_ver(int argc, char **argv) {
+	PrintProgramInfo();
 	return (0);
 }
 //--------------------------------

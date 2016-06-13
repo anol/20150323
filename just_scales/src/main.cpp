@@ -102,7 +102,7 @@ static void MainLoop() {
 	}
 }
 //--------------------------------
-static void PrintProgramInfo() {
+extern void PrintProgramInfo() {
 	UARTprintf("\n\n");
 	UARTprintf(STRINGIZE(ProjName) " " __DATE__ " " __TIME__);
 	UARTprintf("\n\n>");
