@@ -41,13 +41,13 @@ primary_activity::~primary_activity() {
 }
 //--------------------------------
 static void SetupInput() {
-	// PB3, X-Button
+	// PB3, Y-Button
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
 	GPIOPinTypeGPIOInput(GPIO_PORTB_BASE, GPIO_PIN_3);
 	GPIOPadConfigSet(GPIO_PORTB_BASE, GPIO_PIN_3,
 	GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU);
 	// PC4, IDX1, Y-Index
-	// PC7, Y-Button
+	// PC7, X-Button
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
 	GPIOPinTypeGPIOInput(GPIO_PORTC_BASE, GPIO_PIN_4 | GPIO_PIN_7);
 	GPIOPadConfigSet(GPIO_PORTC_BASE, GPIO_PIN_4 | GPIO_PIN_7,
@@ -59,20 +59,20 @@ static void SetupInput() {
 	GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU);
 }
 //--------------------------------
-static bool GetButton_X() {
+static bool GetButton_Y() {
 	return GPIOPinRead(GPIO_PORTB_BASE, GPIO_PIN_3) ? false : true;
 }
 //--------------------------------
-static bool GetButton_Y() {
+static bool GetButton_X() {
 	return GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_7) ? false : true;
 }
 //--------------------------------
 static bool GetIndex_X() {
-	return GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_4) ? true : false;
+	return GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_4) ? false : true;
 }
 //--------------------------------
 static bool GetIndex_Y() {
-	return GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4) ? true : false;
+	return GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4) ? false : true;
 }
 //--------------------------------
 void primary_activity::Initialize() {
